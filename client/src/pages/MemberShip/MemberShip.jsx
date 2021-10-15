@@ -1,11 +1,14 @@
+import Title from '@/components/Title';
 import MemberShipContainer from '@/containers/MemberShipContainer';
 import React from 'react';
+import Layout from '@/components/Layout';
 
 const MemberShip = () => {
   return (
-    <div>
+    <Layout>
+      <Title>회원가입</Title>
       <MemberShipContainer />
-    </div>
+    </Layout>
   );
 };
 

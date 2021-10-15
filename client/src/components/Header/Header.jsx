@@ -38,25 +38,25 @@ const Container = styled.header`
   position: relative;
   display: flex;
   justify-content: center;
-  font-size: 45rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  transition: font-size 0.5s ease-in;
+  /* transition: font-size 0.5s ease-in; */
   background: ${({ theme }) => `${theme.magacoffeColor}`};
   color: ${({ theme }) => `${theme.whiteColor}`};
 
   & > div {
-    padding: 20rem;
+    padding: 1rem;
   }
 
   @media ${({ theme }) => theme.tabletS} {
-    font-size: 40rem;
+    font-size: 2rem;
     justify-content: flex-end;
   }
 
   @media ${({ theme }) => theme.mobile} {
-    font-size: 30rem;
+    /* font-size: 1.5rem; */
     & > div {
-      padding: 30rem;
+      padding: 1.5rem;
     }
   }
 `;
@@ -65,15 +65,15 @@ const Hamburger = styled.div`
   position: relative;
   margin: auto;
   z-index: 1;
-  width: 33rem;
+  width: 1.65rem;
   -webkit-user-select: none;
   user-select: none;
 
   & > span {
     display: block;
     width: 100%;
-    height: 4rem;
-    margin-bottom: 5px;
+    height: 0.2rem;
+    margin-bottom: 0.4rem;
     position: relative;
     background: ${({ theme }) => theme.whiteColor};
     border-radius: 3px;
@@ -95,7 +95,7 @@ const Hamburger = styled.div`
   & > input {
     display: block;
     width: 100%;
-    height: 25rem;
+    height: 1.25rem;
     position: absolute;
     cursor: pointer;
     margin: 0;
@@ -104,14 +104,21 @@ const Hamburger = styled.div`
 
     &:checked ~ span {
       opacity: 1;
-      transform: rotate(45deg) translate(-1rem, -0.5rem);
+      transform: rotate(45deg) translate(3px, -0.5px);
       background: #232323;
       &:nth-child(3) {
         opacity: 0;
         transform: translateX(100%);
       }
       &:nth-child(4) {
-        transform: rotate(-45deg) translate(0, 0px);
+        transform: rotate(-45deg) translate(4px, 0.5px);
+      }
+
+      @media ${({ theme }) => theme.mobile} {
+        transform: rotate(45deg) translate(2px, -1px);
+        &:nth-child(4) {
+          transform: rotate(-45deg) translate(4px, 0px);
+        }
       }
     }
     &:checked ~ label > ul {
@@ -127,7 +134,7 @@ const Hamburger = styled.div`
 const Nav = styled.nav`
   position: absolute;
   display: flex;
-  left: 20rem;
+  left: 1rem;
   top: 0;
   bottom: 0;
 `;
@@ -143,12 +150,12 @@ const Manu = styled.label`
   transition: opacity 1s cubic-bezier(0.77, 0.2, 0.05, 1);
   & > ul {
     position: absolute;
-    width: 300rem;
-    padding: 50rem;
-    padding-top: 125rem;
+    width: 15rem;
+    padding: 2.5rem;
+    padding-top: 6.25rem;
     height: 100vh;
     background: ${({ theme }) => theme.magacoffeColor};
-    font-size: 30rem;
+    font-size: 1.5rem;
     list-style-type: none;
     -webkit-font-smoothing: antialiased;
     transform-origin: 0% 0%;
@@ -156,7 +163,7 @@ const Manu = styled.label`
     transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
     @media ${({ theme }) => theme.mobile} {
-      width: 200px;
+      width: 15rem;
     }
 
     & > a {
@@ -168,7 +175,7 @@ const Manu = styled.label`
       }
       & > li {
         padding: 10px 0;
-        font-size: 20rem;
+        font-size: 1rem;
       }
     }
   }
