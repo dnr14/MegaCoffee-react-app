@@ -17,7 +17,10 @@ nav,section {
   display: block;
 }
 html{
-  font-size: 1px;
+  font-size: 20px;
+  @media ${({ theme }) => theme.mobile} {
+    font-size: 25px;
+  }
 }
 body {
   line-height: 1;
