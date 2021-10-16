@@ -1,0 +1,51 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    },
+    "sourceType": "module",
+    "requireConfigFile": false
+  },
+  "ignorePatterns": "node_modules",
+  "rules": {
+    // 확장자로 js와 jsx 둘다 허용하도록 수정
+    "react/jsx-filename-extension": [1, { "extensions": ["js", "jsx"] }],
+    "react/prop-types": ["off"],
+    "react/jsx-props-no-spreading":["off"],
+    // key 배열 idx 못쓰는 규칙 해제
+    "react/no-array-index-key":["off"],
+    // hooks의 의존성배열이 충분하지 않을때 강제로 의존성을 추가하는 규칙을 완화
+    "react-hooks/exhaustive-deps": ["warn"],
+    // 화살표 함수의 파라미터가 하나일때 괄호 생략
+    "arrow-parens": ["warn", "as-needed"],
+    // 사용하지 않는 변수가 있을때 빌드에러
+    "no-unused-vars": ["warn"],
+    // 콘솔을 쓰면 에러가 나던 규칙 경고
+    "no-console":"warn",
+    // export const 문을 쓸때 에러를 내는 규칙 해제
+    "import/prefer-default-export": ["off"],
+    "jsx-a11y/no-autofocus": "off",
+    "import/no-unresolved": "off",
+    "import/extensions":"off",
+    "spaced-comment": ["error", "always"] ,
+    // 함수 평가전에 호출 금지 규칙 
+    // 다른 함수 안에서 호출은 가능하도록 해제
+    "no-use-before-define": ["error", { "variables": false }]
+  }
+}
