@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 
 const FormLabel = ({ children, ...rest }) => {
   return <Label {...rest}>{children}</Label>;
 };
 
-const Label = styled.label``;
+const Label = styled.label`
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 0.5rem;
+  cursor: pointer;
+`;
 
-export default FormLabel;
+export default memo(FormLabel);
