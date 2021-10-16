@@ -9,55 +9,14 @@
   },
   "author": "",
   "license": "ISC",
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:jsx-a11y/recommended"
-    ],
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-      "ecmaFeatures": {
-        "modules": true,
-        "jsx": true
-      },
-      "sourceType": "module",
-      "requireConfigFile": false,
-      "babelOptions": {
-        "presets": [
-          "@babel/preset-react"
-        ]
-      }
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "ignorePatterns": "node_modules",
-    "rules": {
-      "react-hooks/exhaustive-deps": "off",
-      "jsx-a11y/no-autofocus": "off",
-      "no-unused-vars": [
-        "error",
-        {
-          "varsIgnorePattern": "_"
-        }
-      ]
-    }
-  },
   "prettier": {
     "printWidth": 80,
+    "tabWidth": 2,
     "useTabs": false,
     "singleQuote": true,
     "quoteProps": "consistent",
+    "bracketSpacing": true,
+    "semi": true,
     "endOfLine": "auto",
     "arrowParens": "avoid"
   },
@@ -75,6 +34,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
+    "@babel/eslint-parser": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-react": "^7.14.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
@@ -88,10 +48,12 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
     "prettier": "2.4.1",
     "react-refresh": "^0.10.0",
+    "url-loader": "^4.1.1",
     "webpack": "^5.58.2",
     "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.3.1"
