@@ -7,7 +7,7 @@ const Bottom = () => {
 
 const Footer = styled.footer`
   min-height: 5rem;
-  background-color: ${({ theme }) => theme.magacoffeColor};
+  background-color: ${({ theme }) => theme.color.magacoffeColor};
 `;
 
 export default Bottom;

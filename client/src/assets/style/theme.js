@@ -1,25 +1,27 @@
-const size = {
-  mobile: '770px',
-  tabletS: '1023px',
-  tabletM: '1220px',
-  tabletL: '1280px',
-  laptop: '1460px',
-  desktop: '1700px',
+export const size = {
+  pc: '75em', // 1200px
+  tab: '56.25em', // 900px
+  mobile: '31.25em', // 500px
+  mobileS: '23.125em', // 370px
 };
 
 const theme = {
-  magacoffeColor: '#ff9f43',
-  backgroundColor: '#f7fbff',
-  whiteColor: '#fff',
-  shadowColor: 'rgba(45, 52, 54,0.5)',
+  color: {
+    magacoffeColor: '#ff9f43',
+    white1: '#f7fbff',
+    white2: '#fff',
+    red1: '#e74c3c',
+    green1: '#2ecc71',
+    shadowColor: 'rgba(45, 52, 54,0.5)',
+  },
+  media: {
+    pc: `@media screen and (max-width: ${size.pc})`,
+    tab: `@media screen and (max-width: ${size.tab})`,
+    mobile: `@media screen and (max-width: ${size.mobile})`,
+    mobileS: `@media screen and (max-width: ${size.mobileS})`,
+  },
   borderRadius: '5px',
   maxWidth: '1100px',
-  mobile: `(max-width: ${size.mobile})`,
-  tabletS: `(max-width: ${size.tabletS})`,
-  tabletM: `(max-width: ${size.tabletM})`,
-  tabletL: `(max-width: ${size.tabletL})`,
-  laptop: `(min-width: ${size.laptop})`,
-  desktop: `(min-width: ${size.desktop})`,
 };
 
 export default theme;

@@ -1,7 +1,7 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import Routers from './Routers';
 import Top from './pages/Top/Top';
-import { BrowserRouter } from 'react-router-dom';
 import Bottom from './pages/Bottom/Bottom';
 
 const App = () => {

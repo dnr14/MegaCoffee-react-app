@@ -6,7 +6,7 @@ import Layout from '@/components/Layout';
 const MemberShip = () => {
   return (
     <Layout>
-      <Title>회원가입</Title>
+      <Title>Mega Coffee 회원가입</Title>
       <MemberShipContainer />
     </Layout>
   );

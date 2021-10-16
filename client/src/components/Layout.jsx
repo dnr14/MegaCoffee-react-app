@@ -10,11 +10,12 @@ const Layout = ({ children }) => {
     </main>
   );
 };
+
 const Container = styled.div`
   max-width: ${({ theme }) => theme.maxWidth};
+  padding-bottom: 1px;
   margin: 0 auto;
   width: 50%;
-  margin-bottom: 3rem;
 
   @media ${({ theme }) => theme.mobile} {
     width: 70%;

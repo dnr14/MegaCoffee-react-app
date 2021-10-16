@@ -41,20 +41,19 @@ const Container = styled.header`
   font-size: 2.5rem;
   font-weight: bold;
   /* transition: font-size 0.5s ease-in; */
-  background: ${({ theme }) => `${theme.magacoffeColor}`};
-  color: ${({ theme }) => `${theme.whiteColor}`};
+  background: ${({ theme }) => `${theme.color.magacoffeColor}`};
+  color: ${({ theme }) => `${theme.color.white1}`};
 
   & > div {
     padding: 1rem;
   }
 
-  @media ${({ theme }) => theme.tabletS} {
+  ${({ theme }) => theme.media.tab} {
     font-size: 2rem;
     justify-content: flex-end;
   }
 
-  @media ${({ theme }) => theme.mobile} {
-    /* font-size: 1.5rem; */
+  ${({ theme }) => theme.media.mobile} {
     & > div {
       padding: 1.5rem;
     }
@@ -75,7 +74,7 @@ const Hamburger = styled.div`
     height: 0.2rem;
     margin-bottom: 0.4rem;
     position: relative;
-    background: ${({ theme }) => theme.whiteColor};
+    background: ${({ theme }) => theme.color.white1};
     border-radius: 3px;
     z-index: 1;
     transform-origin: 4px 0px;
@@ -114,7 +113,7 @@ const Hamburger = styled.div`
         transform: rotate(-45deg) translate(4px, 0.5px);
       }
 
-      @media ${({ theme }) => theme.mobile} {
+      ${({ theme }) => theme.media.mobile} {
         transform: rotate(45deg) translate(2px, -1px);
         &:nth-child(4) {
           transform: rotate(-45deg) translate(4px, 0px);
@@ -154,7 +153,7 @@ const Manu = styled.label`
     padding: 2.5rem;
     padding-top: 6.25rem;
     height: 100vh;
-    background: ${({ theme }) => theme.magacoffeColor};
+    background: ${({ theme }) => theme.color.magacoffeColor};
     font-size: 1.5rem;
     list-style-type: none;
     -webkit-font-smoothing: antialiased;
@@ -162,7 +161,7 @@ const Manu = styled.label`
     transform: translate(-100%, 0);
     transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
-    @media ${({ theme }) => theme.mobile} {
+    ${({ theme }) => theme.mobile} {
       width: 15rem;
     }
 

@@ -8,6 +8,7 @@ const Form = ({ children, ...rest }) => {
 const StyledForm = styled.form`
   display: flex;
   margin-top: 1.5rem;
+  margin-bottom: 3rem;
   flex-direction: column;
   gap: 1rem;
 

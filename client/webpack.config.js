@@ -2,7 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const port = process.env.PORT || 3000;
+
+const port = 3000;
 
 const RESOLVE = {
   extensions: ['.js', '.jsx'],
@@ -43,18 +44,31 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg|webp)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: '[hash].[ext]',
+              limit: 1000,
+            },
+          },
+        ],
+      },
     ],
   },
 
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
+      favicon: null,
     }),
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
   ],
   devServer: {
-    port: port,
+    port,
     hot: true,
     open: true,
     historyApiFallback: {
