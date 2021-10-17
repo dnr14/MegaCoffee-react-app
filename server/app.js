@@ -7,6 +7,7 @@ db();
 app.use(logger());
 app.use(express.json());
 app.use("/api/users", require("./routers/users"));
+app.use("/api/auth", require("./routers/auth"));
 app.use("*", (_, res) => res.send("404 not found"));
 
 app.listen(PORT, () =>
