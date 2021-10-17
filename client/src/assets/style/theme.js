@@ -8,6 +8,7 @@ export const size = {
 const theme = {
   color: {
     magacoffeColor: '#ff9f43',
+    black1: '#000',
     white1: '#f7fbff',
     white2: '#fff',
     red1: '#e74c3c',

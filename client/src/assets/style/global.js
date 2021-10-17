@@ -18,7 +18,7 @@ nav,section {
 }
 html{
   font-size: 20px;
-  @media ${({ theme }) => theme.mobile} {
+  ${({ theme }) => theme.media.mobile} {
     font-size: 25px;
   }
 }
@@ -52,5 +52,13 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+#root{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
 `;
 export default GlobalStyle;
