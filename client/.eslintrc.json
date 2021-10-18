@@ -14,7 +14,7 @@
     "plugin:jsx-a11y/recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 9,
+    "ecmaVersion": 2020,
     "ecmaFeatures": {
       "modules": true,
       "jsx": true

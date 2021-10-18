@@ -74,5 +74,8 @@ module.exports = {
     historyApiFallback: {
       disableDotRule: true,
     },
+    proxy: {
+      '/api': 'http://localhost:5000',
+    },
   },
 };
