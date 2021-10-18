@@ -56,7 +56,7 @@ Modal.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
-  ]).isRequired,
+  ]),
 };
 
 const StyledWrapper = styled.div`
@@ -96,7 +96,7 @@ const StyledWrapper = styled.div`
     transition: transform 0.5s ease-in;
     transform: translateY(100px);
 
-    width: 10rem;
+    width: 20rem;
     padding: 1rem;
     border-radius: 10px;
     background-color: ${({ theme }) => theme.color.magacoffeColor};
@@ -114,6 +114,10 @@ const StyledWrapper = styled.div`
       font-weight: 600;
       text-align: center;
       line-height: 2rem;
+    }
+
+    ${({ theme }) => theme.media.mobile} {
+      width: 10rem;
     }
   }
 `;

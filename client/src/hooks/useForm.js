@@ -112,7 +112,7 @@ const useForm = () => {
 
   const handleClick = useCallback(e => dispatch(resetAction(e.target.id)), []);
 
-  const handleChange = e => {
+  const handleChange = useCallback(e => {
     const { target } = e;
     const { value, id } = target;
     let result;
@@ -122,11 +122,11 @@ const useForm = () => {
         dispatch(idAddAction(result));
         return;
       case ENUM.pwd:
-        result = pwdValidation(form.pwdConfirm.data, value);
+        result = pwdValidation(value);
         dispatch(pwdAddAction(result));
         return;
       case ENUM.pwdConfirm:
-        result = pwdConfirmValidation(form.pwd.data, value);
+        result = pwdConfirmValidation(value);
         dispatch(pwdConfirmAddAction(result));
         return;
       case ENUM.birthDay:
@@ -144,7 +144,7 @@ const useForm = () => {
       default:
         throw new Error('Name not Found');
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (
@@ -217,7 +217,7 @@ const idValidation = value => {
   return isSuccess(value);
 };
 // 비밀번호 검사
-const pwdValidation = (pwdConfirm, value) => {
+const pwdValidation = (value, pwdConfirm) => {
   const prevValue = value.slice(0, -1);
   if (validations.maxLengthCheck(value, PWD_MAX_LENG)) {
     return isError(prevValue, ERROR_MESSAGES.maxLengthCheck(PWD_MAX_LENG));
@@ -234,7 +234,7 @@ const pwdValidation = (pwdConfirm, value) => {
   return isSuccess(value);
 };
 // 비밀번호재확인 검사
-const pwdConfirmValidation = (pwd, value) => {
+const pwdConfirmValidation = (value, pwd) => {
   const prevValue = value.slice(0, -1);
   if (validations.maxLengthCheck(value, PWD_MAX_LENG)) {
     return isError(prevValue, ERROR_MESSAGES.maxLengthCheck(PWD_MAX_LENG));
