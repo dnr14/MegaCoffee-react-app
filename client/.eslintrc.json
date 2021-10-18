@@ -46,6 +46,7 @@
     "spaced-comment": ["error", "always"] ,
     // 함수 평가전에 호출 금지 규칙 
     // 다른 함수 안에서 호출은 가능하도록 해제
+    "no-shadow":["off"],
     "no-use-before-define": ["error", { "variables": false }]
   }
 }
