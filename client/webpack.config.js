@@ -28,8 +28,10 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-react', '@babel/preset-env'],
+          plugins: ['@babel/plugin-transform-runtime', 'react-refresh/babel'],
         },
       },
 
@@ -73,6 +75,9 @@ module.exports = {
     open: true,
     historyApiFallback: {
       disableDotRule: true,
+    },
+    proxy: {
+      '/api': 'http://localhost:5000',
     },
   },
 };

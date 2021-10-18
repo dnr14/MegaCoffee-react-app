@@ -1,6 +1,6 @@
+import React from 'react';
 import Title from '@/components/Title';
 import MemberShipContainer from '@/containers/MemberShipContainer';
-import React from 'react';
 import Layout from '@/components/Layout';
 
 const MemberShip = () => {
