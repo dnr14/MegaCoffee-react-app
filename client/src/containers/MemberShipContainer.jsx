@@ -38,11 +38,8 @@ const MemberShipContainer = () => {
           <span>모두 채워주세요.</span>
         </div>
       </>,
-      <>
-        <div>{error?.message}</div>
-      </>,
     ],
-    [error]
+    []
   );
 
   const els = useMemo(() => {
@@ -120,10 +117,14 @@ const MemberShipContainer = () => {
 
   useEffect(() => {
     if (error) {
-      setMessage(messages[2]);
+      setMessage(
+        <>
+          <div>{error.message}</div>
+        </>
+      );
       setIsOpen(prevState => !prevState);
     }
-  }, [error, messages]);
+  }, [error]);
 
   useEffect(() => {
     if (success) {

@@ -1,4 +1,5 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import FormLabel from '@/components/FormLabel';
 import FormInput from '@/components/FormInput';
@@ -6,11 +7,43 @@ import Button from '@/components/Button';
 import Form from '@/components/Form';
 import useForm from '@/hooks/useForm';
 import Error from '@/components/Error';
-import Cancel from '@/components/Cancel';
+import Relative from '@/components/Relative';
+import { emptyCheck } from '@/utils/validations';
+import Modal from '@/components/Modal';
+import useFetch from '@/hooks/useFetch';
+import { login } from '@/api/auth';
+import Loading from '@/components/Loading';
 
 const LoginContainer = () => {
-  const { form, handleChange, handleClick, dispatch } = useForm(false);
+  const history = useHistory();
+  const { form, handleChange, handleClick } = useForm(false);
+  const { state, callApi } = useFetch();
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState(null);
   const { id, pwd } = form;
+  const { loading, success, error } = state;
+
+  const messages = useMemo(
+    () => [
+      <>
+        <div>
+          <span>에러가 있습니다.</span>
+        </div>
+        <div>
+          <span>수정 해주세요.</span>
+        </div>
+      </>,
+      <>
+        <div>
+          <span>빈칸이 있습니다.</span>
+        </div>
+        <div>
+          <span>모두 채워주세요.</span>
+        </div>
+      </>,
+    ],
+    []
+  );
 
   const els = [
     {
@@ -37,34 +70,74 @@ const LoginContainer = () => {
     },
   ];
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    const { id, pwd } = form;
+    if (id.error || pwd.error) {
+      setMessage(messages[0]);
+      setIsOpen(prevState => !prevState);
+      return;
+    }
+    if (emptyCheck(id.data) || emptyCheck(pwd.data)) {
+      setMessage(messages[1]);
+      setIsOpen(prevState => !prevState);
+      return;
+    }
+
+    callApi(() => login(id.data, pwd.data));
+  };
+
+  useEffect(() => {
+    if (error) {
+      setMessage(
+        <>
+          <div>{error.message}</div>
+        </>
+      );
+      setIsOpen(prevState => !prevState);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      history.push('/home');
+    }
+  }, [success, history, form]);
+
   return (
-    <LoginForm>
-      {els.map((el, idx) => {
-        return (
-          <div key={idx}>
-            <LoginLabel htmlFor={el.props.id}>{el.name}</LoginLabel>
-            <div style={{ position: 'relative' }}>
-              <LoginInput {...el.props} />
-              {form[el.props.id].data && (
-                <Cancel id={el.props.id} onClick={handleClick} />
+    <>
+      <Loading loading={loading} />
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+        {message}
+      </Modal>
+      <LoginForm onSubmit={handleSubmit}>
+        {els.map((el, idx) => {
+          return (
+            <div key={idx}>
+              <LoginLabel htmlFor={el.props.id}>{el.name}</LoginLabel>
+              <Relative>
+                <LoginInput {...el.props} />
+                {form[el.props.id].data && (
+                  <Relative.Cancel id={el.props.id} onClick={handleClick} />
+                )}
+              </Relative>
+              {form[el.props.id].error && (
+                <Error>{form[el.props.id].error}</Error>
               )}
             </div>
-            {form[el.props.id].error && (
-              <Error>{form[el.props.id].error}</Error>
-            )}
-          </div>
-        );
-      })}
-      <div>
-        <LoginButton
-          disabled={
-            !id.data || !pwd.data || pwd.error || id.error ? true : false
-          }
-        >
-          로그인
-        </LoginButton>
-      </div>
-    </LoginForm>
+          );
+        })}
+        <div>
+          <LoginButton
+            disabled={
+              !id.data || !pwd.data || pwd.error || id.error ? true : false
+            }
+          >
+            로그인
+          </LoginButton>
+        </div>
+      </LoginForm>
+    </>
   );
 };
 
