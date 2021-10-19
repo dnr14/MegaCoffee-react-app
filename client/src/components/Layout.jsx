@@ -17,8 +17,11 @@ const Container = styled.div`
   margin: 0 auto;
   width: 50%;
 
-  @media ${({ theme }) => theme.mobile} {
+  ${({ theme }) => theme.media.mobile} {
     width: 70%;
+  }
+  ${({ theme }) => theme.media.mobileS} {
+    width: 90%;
   }
 `;
 

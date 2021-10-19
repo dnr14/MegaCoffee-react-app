@@ -130,7 +130,7 @@ const MemberShipContainer = () => {
     if (success) {
       history.push('/welcome', {
         props: {
-          id: form.id,
+          id: form.id.data,
         },
       });
     }

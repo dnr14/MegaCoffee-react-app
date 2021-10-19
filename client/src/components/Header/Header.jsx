@@ -13,9 +13,9 @@ const Header = ({ links, toggle, handleClick, handleChange }) => {
             checked={toggle}
             onChange={handleChange}
           />
-          <span></span>
-          <span></span>
-          <span></span>
+          <span />
+          <span />
+          <span />
           <Manu htmlFor="checkbox">
             <ul onClick={handleClick}>
               {links.map((el, idx) => (
@@ -56,6 +56,7 @@ const Container = styled.header`
   ${({ theme }) => theme.media.mobile} {
     & > div {
       padding: 1.5rem;
+      text-align: end;
     }
   }
 `;

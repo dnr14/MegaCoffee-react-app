@@ -8,6 +8,7 @@ const Error = ({ children }) => {
 const Span = styled.span`
   color: ${({ theme }) => theme.color.red1};
   font-size: 0.8rem;
+  line-height: 1rem;
   ${({ theme }) => theme.media.tab} {
     font-size: 0.7rem;
   }

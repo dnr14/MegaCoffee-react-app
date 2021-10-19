@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Button = ({ children, ...rest }) => {
   return (
@@ -22,6 +22,11 @@ const StyledButton = styled.button`
   box-shadow: 2px 5px 5px ${({ theme }) => theme.color.shadowColor};
   background-color: ${({ theme }) => theme.color.magacoffeColor};
   color: ${({ theme }) => theme.color.white1};
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.5;
+    `}
 
   :hover {
     animation-duration: 2s;
