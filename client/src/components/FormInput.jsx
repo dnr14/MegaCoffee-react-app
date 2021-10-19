@@ -29,11 +29,9 @@ const StyledInput = styled.input`
         border: 1px solid ${theme.color.red1};
       `;
     }
-    if (!error) {
-      return css`
-        border: 1px solid ${theme.color.green1};
-      `;
-    }
+    return css`
+      border: 1px solid ${theme.color.green1};
+    `;
   }};
 
   &::placeholder {

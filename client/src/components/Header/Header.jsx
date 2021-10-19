@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Header = ({ links, toggle, handleClick, handleChange }) => {
   return (
@@ -13,15 +13,15 @@ const Header = ({ links, toggle, handleClick, handleChange }) => {
             checked={toggle}
             onChange={handleChange}
           />
-          <span></span>
-          <span></span>
-          <span></span>
+          <span />
+          <span />
+          <span />
           <Manu htmlFor="checkbox">
             <ul onClick={handleClick}>
               {links.map((el, idx) => (
-                <Link to={el.path} key={idx}>
+                <NavLink to={el.path} key={idx} activeClassName="active" exact>
                   <li>{el.name}</li>
-                </Link>
+                </NavLink>
               ))}
             </ul>
           </Manu>
@@ -56,6 +56,7 @@ const Container = styled.header`
   ${({ theme }) => theme.media.mobile} {
     & > div {
       padding: 1.5rem;
+      text-align: end;
     }
   }
 `;
@@ -145,8 +146,12 @@ const Manu = styled.label`
   top: 0;
   margin: 0;
   opacity: 0;
-  background-color: rgba(30, 39, 46, 0.5);
+  background: ${({ theme }) => theme.color.shadowColor};
   transition: opacity 1s cubic-bezier(0.77, 0.2, 0.05, 1);
+  .active {
+    color: ${({ theme }) => theme.color.white1};
+  }
+
   & > ul {
     position: absolute;
     width: 15rem;
@@ -170,7 +175,7 @@ const Manu = styled.label`
       transition: color 0.3s ease;
 
       &:hover {
-        color: tomato;
+        color: ${({ theme }) => theme.color.white1};
       }
       & > li {
         padding: 10px 0;

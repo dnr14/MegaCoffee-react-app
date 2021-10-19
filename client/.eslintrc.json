@@ -28,6 +28,12 @@
     "react/jsx-filename-extension": [1, { "extensions": ["js", "jsx"] }],
     "react/prop-types": ["off"],
     "react/jsx-props-no-spreading":["off"],
+    // onclick 이벤트를 쓰는 요소에는 키보드 이벤트가 있어야된다는 규칙
+    "jsx-a11y/click-events-have-key-events":"off",
+    // 삼항연산자 규칙
+    "no-unneeded-ternary":"off",
+    //비대화형 HTML 요소에 이벤트 허용 x
+    "jsx-a11y/no-noninteractive-element-interactions":"off",
     // key 배열 idx 못쓰는 규칙 해제
     "react/no-array-index-key":["off"],
     // hooks의 의존성배열이 충분하지 않을때 강제로 의존성을 추가하는 규칙을 완화
@@ -41,6 +47,7 @@
     // export const 문을 쓸때 에러를 내는 규칙 해제
     "import/prefer-default-export": ["off"],
     "jsx-a11y/no-autofocus": "off",
+    "jsx-a11y/accessible-emoji":"off",
     "import/no-unresolved": "off",
     "import/extensions":"off",
     "spaced-comment": ["error", "always"] ,

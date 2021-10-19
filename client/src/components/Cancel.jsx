@@ -26,6 +26,7 @@ const Span = styled.span`
   transition: background-color 0.35s ease-in;
   &:hover {
     background-color: ${({ theme }) => theme.color.red1};
+    opacity: 0.5;
     box-shadow: 2px 2px 0px ${({ theme }) => theme.color.shadowColor};
   }
 `;

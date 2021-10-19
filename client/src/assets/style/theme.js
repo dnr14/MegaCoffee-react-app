@@ -8,10 +8,12 @@ export const size = {
 const theme = {
   color: {
     magacoffeColor: '#ff9f43',
+    coffee1: '#572526',
     black1: '#000',
     white1: '#f7fbff',
     white2: '#fff',
     red1: '#e74c3c',
+    red2: '#572526',
     green1: '#2ecc71',
     shadowColor: 'rgba(45, 52, 54,0.5)',
   },
@@ -21,7 +23,8 @@ const theme = {
     mobile: `@media screen and (max-width: ${size.mobile})`,
     mobileS: `@media screen and (max-width: ${size.mobileS})`,
   },
-  borderRadius: '5px',
+  borderRadius1: '5px',
+  borderRadius2: '20px',
   maxWidth: '1100px',
 };
 

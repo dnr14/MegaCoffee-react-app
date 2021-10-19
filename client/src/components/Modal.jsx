@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import Button from '@/components/Button';
 
-const Modal = ({ isOpne, backgroundTransparent, setIsOpne, children }) => {
+const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
   const [visible, setVisible] = useState(false);
   const close = useRef(false);
 
@@ -14,25 +14,25 @@ const Modal = ({ isOpne, backgroundTransparent, setIsOpne, children }) => {
   };
 
   useEffect(() => {
-    if (!visible && isOpne && !close.current) {
+    if (!visible && isOpen && !close.current) {
       setTimeout(() => setVisible(true), 500);
     } else if (close.current) {
-      setTimeout(() => setIsOpne(false), 500);
+      setTimeout(() => setIsOpen(false), 500);
       close.current = false;
     }
-  }, [visible, isOpne, setIsOpne]);
+  }, [visible, isOpen, setIsOpen]);
 
   useEffect(() => {
-    if (isOpne) {
+    if (isOpen) {
       document.body.style.overflowY = 'hidden';
     }
 
     return () => {
       document.body.removeAttribute('style');
     };
-  }, [isOpne]);
+  }, [isOpen]);
 
-  if (!isOpne) return null;
+  if (!isOpen) return null;
 
   return createPortal(
     <StyledWrapper
@@ -51,8 +51,9 @@ const Modal = ({ isOpne, backgroundTransparent, setIsOpne, children }) => {
 };
 
 Modal.propTypes = {
-  isOpne: PropTypes.bool.isRequired,
-  setIsOpne: PropTypes.func,
+  backgroundTransparent: PropTypes.bool,
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
