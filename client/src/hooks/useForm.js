@@ -107,44 +107,47 @@ const reducer = (state, action) => {
   }
 };
 
-const useForm = () => {
+const useForm = (isConfirmPasswordCheck = true) => {
   const [form, dispatch] = useReducer(reducer, INIT);
 
   const handleClick = useCallback(e => dispatch(resetAction(e.target.id)), []);
 
-  const handleChange = useCallback(e => {
-    const { target } = e;
-    const { value, id } = target;
-    let result;
-    switch (id) {
-      case ENUM.id:
-        result = idValidation(value);
-        dispatch(idAddAction(result));
-        return;
-      case ENUM.pwd:
-        result = pwdValidation(value);
-        dispatch(pwdAddAction(result));
-        return;
-      case ENUM.pwdConfirm:
-        result = pwdConfirmValidation(value);
-        dispatch(pwdConfirmAddAction(result));
-        return;
-      case ENUM.birthDay:
-        result = birthDayValidation(value);
-        dispatch(birthDayAddACtion(result));
-        return;
-      case ENUM.name:
-        result = nameValidation(value);
-        dispatch(nameAddAction(result));
-        return;
-      case ENUM.email:
-        result = emailValidation(value);
-        dispatch(emailAddAction(result));
-        return;
-      default:
-        throw new Error('Name not Found');
-    }
-  }, []);
+  const handleChange = useCallback(
+    e => {
+      const { target } = e;
+      const { value, id } = target;
+      let result;
+      switch (id) {
+        case ENUM.id:
+          result = idValidation(value);
+          dispatch(idAddAction(result));
+          return;
+        case ENUM.pwd:
+          result = pwdValidation(isConfirmPasswordCheck, value);
+          dispatch(pwdAddAction(result));
+          return;
+        case ENUM.pwdConfirm:
+          result = pwdConfirmValidation(isConfirmPasswordCheck, value);
+          dispatch(pwdConfirmAddAction(result));
+          return;
+        case ENUM.birthDay:
+          result = birthDayValidation(value);
+          dispatch(birthDayAddACtion(result));
+          return;
+        case ENUM.name:
+          result = nameValidation(value);
+          dispatch(nameAddAction(result));
+          return;
+        case ENUM.email:
+          result = emailValidation(value);
+          dispatch(emailAddAction(result));
+          return;
+        default:
+          throw new Error('Name not Found');
+      }
+    },
+    [isConfirmPasswordCheck]
+  );
 
   useEffect(() => {
     if (
@@ -159,13 +162,13 @@ const useForm = () => {
         String(pwdConfirm).length >= PWD_MIN_LENG &&
         String(pwd).length >= PWD_MIN_LENG
       ) {
-        let result = pwdValidation(pwdConfirm, pwd);
+        let result = pwdValidation(isConfirmPasswordCheck, pwdConfirm, pwd);
         dispatch(pwdAddAction(result));
-        result = pwdConfirmValidation(pwd, pwdConfirm);
+        result = pwdConfirmValidation(isConfirmPasswordCheck, pwd, pwdConfirm);
         dispatch(pwdConfirmAddAction(result));
       }
     }
-  }, [form.pwd, form.pwdConfirm]);
+  }, [form.pwd, form.pwdConfirm, isConfirmPasswordCheck]);
 
   return { form, handleChange, handleClick, dispatch };
 };
@@ -185,7 +188,7 @@ const ERROR_MESSAGES = Object.freeze({
   koreaLengCheck: '🚫 한글은 입력하지 못합니다.',
   specialSymbolCheck: '🚫 특수기호는 입력하지 못합니다.',
   maxLengthCheck: maxLeng => `🚫 ${maxLeng}자 이하로 입력해주세요.`,
-  minLengthCheck: minLeng => `🚫최소 ${minLeng}자 이상 입력해주세요.`,
+  minLengthCheck: minLeng => `🚫 최소 ${minLeng}자 이상 입력해주세요.`,
   englishCheck: '🚫 영어는 입력하지 못합니다.',
   pwdNotMatch: '🚫 비밀번호가 다릅니다.',
   emailSpecialSymbol: '🚫 공백문자는 입력하지 못합니다.',
@@ -217,7 +220,7 @@ const idValidation = value => {
   return isSuccess(value);
 };
 // 비밀번호 검사
-const pwdValidation = (value, pwdConfirm) => {
+const pwdValidation = (isConfirmPasswordCheck, value, pwdConfirm) => {
   const prevValue = value.slice(0, -1);
   if (validations.maxLengthCheck(value, PWD_MAX_LENG)) {
     return isError(prevValue, ERROR_MESSAGES.maxLengthCheck(PWD_MAX_LENG));
@@ -228,13 +231,13 @@ const pwdValidation = (value, pwdConfirm) => {
   if (validations.whiteSpaceCheck(value)) {
     return isError(prevValue, ERROR_MESSAGES.whiteSpaceCheck);
   }
-  if (pwdConfirm !== value) {
+  if (pwdConfirm !== value && isConfirmPasswordCheck) {
     return isError(value, ERROR_MESSAGES.pwdNotMatch);
   }
   return isSuccess(value);
 };
 // 비밀번호재확인 검사
-const pwdConfirmValidation = (value, pwd) => {
+const pwdConfirmValidation = (isConfirmPasswordCheck, value, pwd) => {
   const prevValue = value.slice(0, -1);
   if (validations.maxLengthCheck(value, PWD_MAX_LENG)) {
     return isError(prevValue, ERROR_MESSAGES.maxLengthCheck(PWD_MAX_LENG));
@@ -245,7 +248,7 @@ const pwdConfirmValidation = (value, pwd) => {
   if (validations.whiteSpaceCheck(value)) {
     return isError(prevValue, ERROR_MESSAGES.whiteSpaceCheck);
   }
-  if (pwd !== value) {
+  if (pwd !== value && isConfirmPasswordCheck) {
     return isError(value, ERROR_MESSAGES.pwdNotMatch);
   }
 
