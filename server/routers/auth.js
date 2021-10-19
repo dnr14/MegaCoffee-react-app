@@ -1,9 +1,7 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
+const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
-const dotenv = require("dotenv");
 const router = express.Router();
-dotenv.config();
 
 router.post("/login", async (req, res) => {
   try {
@@ -19,20 +17,11 @@ router.post("/login", async (req, res) => {
       throw new Error("비밀번호를 확인하세요.");
     }
 
-    const payload = {
-      userInfo: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-    };
-    const tokenOption = {
-      expiresIn: "30m", // 10분
-      issuer: "localhost",
-    };
-
-    const access_token = jwt.sign(payload, process.env.JWT_SECRET, tokenOption);
-    res.json({ message: `${user.id}님 반갑습니다.`, access_token });
+    const access_token = await jwt.sign(user);
+    res.json({
+      message: `${user.id}님 반갑습니다.`,
+      access_token,
+    });
   } catch (error) {
     const { message } = error;
     res.status(400).json({ message });
