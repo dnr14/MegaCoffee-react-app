@@ -12,8 +12,9 @@ const StyledForm = styled.form`
   flex-direction: column;
   gap: 1rem;
 
-  @media ${({ theme }) => theme.mobile} {
+  ${({ theme }) => theme.media.mobile} {
     gap: 0.5rem;
+    padding: 1rem;
   }
 `;
 

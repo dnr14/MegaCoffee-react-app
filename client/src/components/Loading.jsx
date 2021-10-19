@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import loding from '@/assets/images/loading.gif';
 
@@ -27,9 +28,16 @@ const StyledDiv = styled.div`
   left: 0;
 
   & > img {
-    width: 50%;
+    width: 30%;
     -webkit-user-drag: none;
+    ${({ theme }) => theme.media.mobile} {
+      width: 70%;
+    }
   }
 `;
+
+Loading.propTypes = {
+  loading: PropTypes.bool,
+};
 
 export default Loading;

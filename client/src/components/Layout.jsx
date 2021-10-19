@@ -18,10 +18,7 @@ const Container = styled.div`
   width: 50%;
 
   ${({ theme }) => theme.media.mobile} {
-    width: 70%;
-  }
-  ${({ theme }) => theme.media.mobileS} {
-    width: 90%;
+    width: 100%;
   }
 `;
 

@@ -1,23 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Form from '@/components/Form';
-import FormInput from '@/components/FormInput/';
 import FormLabel from '@/components/FormLabel';
 import Button from '@/components/Button';
 import useForm from '@/hooks/useForm';
 import Error from '@/components/Error';
-import Cancel from '@/components/Cancel';
 import Modal from '@/components/Modal';
 import Loading from '@/components/Loading';
-import * as validations from '@/utils/validations';
+import { emptyCheck } from '@/utils/validations';
 import * as users from '@/api/users';
 import useFetch from '@/hooks/useFetch';
+import Relative from '@/components/Relative';
 
 const MemberShipContainer = () => {
   const history = useHistory();
   const { form, handleChange, handleClick } = useForm();
   const { state, callApi } = useFetch();
-  const [isOpne, setIsOpne] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const { loading, success, error } = state;
 
@@ -93,19 +92,19 @@ const MemberShipContainer = () => {
 
     if (id.error || pwd.error || birthDay.error || name.error || email.error) {
       setMessage(messages[0]);
-      setIsOpne(prevState => !prevState);
+      setIsOpen(prevState => !prevState);
       return;
     }
 
     if (
-      validations.emptyCheck(id.data) ||
-      validations.emptyCheck(pwd.data) ||
-      validations.emptyCheck(birthDay.data) ||
-      validations.emptyCheck(name.data) ||
-      validations.emptyCheck(email.data)
+      emptyCheck(id.data) ||
+      emptyCheck(pwd.data) ||
+      emptyCheck(birthDay.data) ||
+      emptyCheck(name.data) ||
+      emptyCheck(email.data)
     ) {
       setMessage(messages[1]);
-      setIsOpne(prevState => !prevState);
+      setIsOpen(prevState => !prevState);
       return;
     }
     callApi(() =>
@@ -122,7 +121,7 @@ const MemberShipContainer = () => {
   useEffect(() => {
     if (error) {
       setMessage(messages[2]);
-      setIsOpne(prevState => !prevState);
+      setIsOpen(prevState => !prevState);
     }
   }, [error, messages]);
 
@@ -139,7 +138,7 @@ const MemberShipContainer = () => {
   return (
     <>
       <Loading loading={loading} />
-      <Modal isOpne={isOpne} backgroundTransparent setIsOpne={setIsOpne}>
+      <Modal isOpen={isOpen} backgroundTransparent setIsOpen={setIsOpen}>
         {message}
       </Modal>
       <Form onSubmit={handleSubmit}>
@@ -147,8 +146,8 @@ const MemberShipContainer = () => {
           <div key={idx}>
             <FormLabel htmlFor={el.id}>{el.name}</FormLabel>
             {form[el.id].error && <Error>{form[el.id].error}</Error>}
-            <div style={{ position: 'relative' }}>
-              <FormInput
+            <Relative>
+              <Relative.FormInput
                 id={el.id}
                 type={el.type}
                 placeholder={el.placeholder}
@@ -156,8 +155,10 @@ const MemberShipContainer = () => {
                 value={form[el.id].data}
                 onChange={handleChange}
               />
-              {form[el.id].data && <Cancel id={el.id} onClick={handleClick} />}
-            </div>
+              {form[el.id].data && (
+                <Relative.Cancel id={el.id} onClick={handleClick} />
+              )}
+            </Relative>
           </div>
         ))}
         <div>
