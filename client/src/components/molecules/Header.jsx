@@ -95,6 +95,7 @@ const Hamburger = styled.div`
   & > input {
     display: block;
     width: 100%;
+    height: 100%;
     height: 1.25rem;
     position: absolute;
     cursor: pointer;
