@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'styled-components';
 import App from './src/App';
 import GlobalStyle from './src/assets/style/global';
 import theme from './src/assets/style/Theme';
-import { ThemeProvider } from 'styled-components';
 
 ReactDOM.render(
   <>

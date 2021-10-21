@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import Button from '@/components/Button';
+import Button from '@/components/atoms/Button';
 
 const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
   const [visible, setVisible] = useState(false);
@@ -128,4 +128,4 @@ const ModelButton = styled(Button)`
   color: ${({ theme }) => theme.color.black1};
 `;
 
-export default Modal;
+export default memo(Modal);

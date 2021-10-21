@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -40,4 +40,4 @@ Loading.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default Loading;
+export default memo(Loading);

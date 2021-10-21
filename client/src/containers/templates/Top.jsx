@@ -1,5 +1,5 @@
-import HeaderContainer from '@/containers/HeaderContainer';
 import React from 'react';
+import HeaderContainer from '@/containers/organisms/HeaderContainer';
 
 const Top = () => {
   return <HeaderContainer />;

@@ -1,7 +1,7 @@
 import React from 'react';
-import Title from '@/components/Title';
-import MemberShipContainer from '@/containers/MemberShipContainer';
-import Layout from '@/components/Layout';
+import MemberShipContainer from '@/containers/organisms/MemberShipContainer';
+import Layout from '@/components/atoms/Layout';
+import Title from '@/components/atoms/Title';
 
 const MemberShip = () => {
   return (

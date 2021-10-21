@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import Layout from '@/components/Layout';
+import Layout from '@/components/atoms/Layout';
 import coffee from '@/assets/images/coffee.png';
-import LoginContainer from '@/containers/LoginContainer';
+import LoginContainer from '@/containers/organisms/LoginContainer';
 
 const Login = () => {
   const location = useLocation();

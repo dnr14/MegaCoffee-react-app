@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 
 const Title = ({ children }) => {
@@ -13,4 +13,4 @@ const H2 = styled.h2`
   word-break: keep-all;
 `;
 
-export default Title;
+export default memo(Title);

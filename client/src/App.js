@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Routers from './Routers';
-import Top from './pages/Top/Top';
-import Bottom from './pages/Bottom/Bottom';
+import Top from './containers/templates/Top';
+import Bottom from './containers/templates/Bottom';
 
 const App = () => {
   return (

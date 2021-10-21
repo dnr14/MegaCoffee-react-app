@@ -1,18 +1,18 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import FormLabel from '@/components/FormLabel';
-import FormInput from '@/components/FormInput';
-import Button from '@/components/Button';
-import Form from '@/components/Form';
+import FormLabel from '@/components/atoms/FormLabel';
+import FormInput from '@/components/atoms/FormInput';
+import Button from '@/components/atoms/Button';
+import Form from '@/components/atoms/Form';
 import useForm from '@/hooks/useForm';
-import Error from '@/components/Error';
-import Relative from '@/components/Relative';
+import Error from '@/components/atoms/Error';
+import Relative from '@/components/molecules/Relative';
 import { emptyCheck } from '@/utils/validations';
-import Modal from '@/components/Modal';
+import Modal from '@/components/atoms/Modal';
 import useFetch from '@/hooks/useFetch';
 import { login } from '@/api/auth';
-import Loading from '@/components/Loading';
+import Loading from '@/components/atoms/Loading';
 
 const LoginContainer = () => {
   const history = useHistory();
