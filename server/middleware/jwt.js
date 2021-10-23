@@ -32,7 +32,6 @@ module.exports = {
       req.decoded = jwt.verify(token, process.env.JWT_SECRET);
       return next();
     } catch (error) {
-      console.log(error);
       // 인증 실패
       // 유효기간이 초과된 경우
       if (error.name === "TokenExpiredError") {

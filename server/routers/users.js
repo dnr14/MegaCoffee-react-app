@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
 const router = express.Router();
 
@@ -22,6 +23,15 @@ router.post("/", async (req, res) => {
   } catch (error) {
     const { message } = error;
     res.status(400).json({ message });
+  }
+});
+
+router.get("/me", jwt.verify, async (req, res) => {
+  try {
+    res.json(req.decoded);
+  } catch (error) {
+    const { message } = error;
+    res.json({ message });
   }
 });
 
