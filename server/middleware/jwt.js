@@ -9,6 +9,9 @@ module.exports = {
         id: user.id,
         name: user.name,
         email: user.email,
+        birthDay: user.birthDay,
+        nickName: user.nickName,
+        img: user.img,
         role: "user",
       },
     };
