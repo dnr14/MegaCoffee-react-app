@@ -10,6 +10,7 @@ const methodColorMap = {
   get: colors.green,
   post: colors.cyan,
   put: colors.yellow,
+  patch: colors.yellow,
   delete: colors.red,
 };
 

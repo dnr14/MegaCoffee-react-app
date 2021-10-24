@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '@/components/Button';
-import Title from '@/components/Title';
-import Layout from '@/components/Layout';
+import Button from '@/components/atoms/Button';
+import Title from '@/components/atoms/Title';
+import Layout from '@/components/atoms/Layout';
 
 const Welcome = () => {
   const location = useLocation();
@@ -15,6 +15,8 @@ const Welcome = () => {
       history.push('/membership');
     }
   }, [location, history]);
+
+  if (!location.state) return null;
 
   return (
     <Layout>

@@ -9,6 +9,7 @@ const theme = {
   color: {
     magacoffeColor: '#ff9f43',
     coffee1: '#572526',
+    coffee2: '#d1a766',
     black1: '#000',
     white1: '#f7fbff',
     white2: '#fff',

@@ -35,6 +35,16 @@ const usersSchma = new Schema(
       trim: true,
       select: true,
     },
+    nickName: {
+      type: String,
+      default: "",
+      trim: true,
+      select: true,
+    },
+    img: {
+      type: Object,
+      default: {},
+    },
   },
   { toObject: { virtuals: true } }
 );

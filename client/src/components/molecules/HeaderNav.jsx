@@ -1,65 +1,43 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link, NavLink } from 'react-router-dom';
 
-const Header = ({ links, toggle, handleClick, handleChange }) => {
+const HeaderNav = ({
+  toggle,
+  handleChange,
+  handleClick,
+  links,
+  isLogin,
+  children,
+}) => {
   return (
-    <Container>
-      <Nav>
-        <Hamburger>
-          <input
-            type="checkbox"
-            id="checkbox"
-            checked={toggle}
-            onChange={handleChange}
-          />
-          <span />
-          <span />
-          <span />
-          <Manu htmlFor="checkbox">
-            <ul onClick={handleClick}>
-              {links.map((el, idx) => (
-                <NavLink to={el.path} key={idx} activeClassName="active" exact>
-                  <li>{el.name}</li>
+    <Nav>
+      <Hamburger>
+        <input
+          type="checkbox"
+          id="checkbox"
+          checked={toggle}
+          onChange={handleChange}
+        />
+        <span />
+        <span />
+        <span />
+        <Manu htmlFor="checkbox">
+          <ul onClick={handleClick}>
+            {isLogin && <StyledLi>{children}</StyledLi>}
+            {links.map((el, idx) => (
+              <li key={idx}>
+                <NavLink to={el.path} activeClassName="active" exact>
+                  {el.name}
                 </NavLink>
-              ))}
-            </ul>
-          </Manu>
-        </Hamburger>
-      </Nav>
-      <div>
-        <Link to="/">MEGA COFFEE</Link>
-      </div>
-    </Container>
+              </li>
+            ))}
+          </ul>
+        </Manu>
+      </Hamburger>
+    </Nav>
   );
 };
-
-const Container = styled.header`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  /* transition: font-size 0.5s ease-in; */
-  background: ${({ theme }) => `${theme.color.magacoffeColor}`};
-  color: ${({ theme }) => `${theme.color.white1}`};
-
-  & > div {
-    padding: 1rem;
-  }
-
-  ${({ theme }) => theme.media.tab} {
-    font-size: 2rem;
-    justify-content: flex-end;
-  }
-
-  ${({ theme }) => theme.media.mobile} {
-    & > div {
-      padding: 1.5rem;
-      text-align: end;
-    }
-  }
-`;
 
 const Hamburger = styled.div`
   position: relative;
@@ -95,6 +73,7 @@ const Hamburger = styled.div`
   & > input {
     display: block;
     width: 100%;
+    height: 100%;
     height: 1.25rem;
     position: absolute;
     cursor: pointer;
@@ -138,7 +117,6 @@ const Nav = styled.nav`
   top: 0;
   bottom: 0;
 `;
-
 const Manu = styled.label`
   position: fixed;
   left: 0;
@@ -154,9 +132,9 @@ const Manu = styled.label`
 
   & > ul {
     position: absolute;
-    width: 15rem;
-    padding: 2.5rem;
-    padding-top: 6.25rem;
+    box-sizing: border-box;
+    width: 20rem;
+    padding: 6.25rem 2.5rem 0 2.5rem;
     height: 100vh;
     background: ${({ theme }) => theme.color.magacoffeColor};
     font-size: 1.5rem;
@@ -166,23 +144,51 @@ const Manu = styled.label`
     transform: translate(-100%, 0);
     transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
-    ${({ theme }) => theme.mobile} {
-      width: 15rem;
+    ${({ theme }) => theme.media.mobile} {
+      width: 100vw;
+      padding: 6.25rem 1rem 0 1rem;
     }
 
-    & > a {
-      color: #232323;
-      transition: color 0.3s ease;
+    & > li {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      & > a {
+        color: #232323;
+        transition: color 0.3s ease;
 
-      &:hover {
-        color: ${({ theme }) => theme.color.white1};
-      }
-      & > li {
-        padding: 10px 0;
-        font-size: 1rem;
+        &:hover {
+          color: ${({ theme }) => theme.color.white1};
+        }
       }
     }
   }
 `;
+const StyledLi = styled.li`
+  position: relative;
+  display: none;
+  height: 100px;
+  padding: 0;
 
-export default Header;
+  & > div {
+    width: 100%;
+    margin: 0;
+  }
+
+  & > div > div > div:last-child {
+    padding-top: 0.6rem;
+  }
+
+  ${({ theme }) => theme.media.tab} {
+    display: block;
+
+    & > div {
+      height: 100%;
+      display: flex;
+    }
+  }
+  ${({ theme }) => theme.media.mobile} {
+    height: 5rem;
+  }
+`;
+
+export default HeaderNav;

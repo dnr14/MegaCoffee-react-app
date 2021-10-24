@@ -13,9 +13,13 @@ const Layout = ({ children }) => {
 
 const Container = styled.div`
   max-width: ${({ theme }) => theme.maxWidth};
-  padding-bottom: 1px;
+  padding: 1px 0;
   margin: 0 auto;
   width: 50%;
+
+  ${({ theme }) => theme.media.tab} {
+    width: 70%;
+  }
 
   ${({ theme }) => theme.media.mobile} {
     width: 100%;

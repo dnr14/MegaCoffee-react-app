@@ -1,16 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Form from '@/components/Form';
-import FormLabel from '@/components/FormLabel';
-import Button from '@/components/Button';
+import Button from '@/components/atoms/Button';
 import useForm from '@/hooks/useForm';
-import Error from '@/components/Error';
-import Modal from '@/components/Modal';
-import Loading from '@/components/Loading';
+import Modal from '@/components/atoms/Modal';
+import Loading from '@/components/atoms/Loading';
 import { emptyCheck } from '@/utils/validations';
 import * as users from '@/api/users';
 import useFetch from '@/hooks/useFetch';
-import Relative from '@/components/Relative';
+import Form from '@/components/atoms/Form';
+import MemberShipLabel from '@/components/molecules/MemberShipLabel';
+import Relative from '@/components/molecules/Relative';
 
 const MemberShipContainer = () => {
   const history = useHistory();
@@ -19,28 +18,6 @@ const MemberShipContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const { loading, success, error } = state;
-
-  const messages = useMemo(
-    () => [
-      <>
-        <div>
-          <span>에러가 있습니다.</span>
-        </div>
-        <div>
-          <span>수정 해주세요.</span>
-        </div>
-      </>,
-      <>
-        <div>
-          <span>빈칸이 있습니다.</span>
-        </div>
-        <div>
-          <span>모두 채워주세요.</span>
-        </div>
-      </>,
-    ],
-    []
-  );
 
   const els = useMemo(() => {
     return [
@@ -82,6 +59,28 @@ const MemberShipContainer = () => {
       },
     ];
   }, []);
+
+  const messages = useMemo(
+    () => [
+      <>
+        <div>
+          <span>에러가 있습니다.</span>
+        </div>
+        <div>
+          <span>수정 해주세요.</span>
+        </div>
+      </>,
+      <>
+        <div>
+          <span>빈칸이 있습니다.</span>
+        </div>
+        <div>
+          <span>모두 채워주세요.</span>
+        </div>
+      </>,
+    ],
+    []
+  );
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -145,8 +144,7 @@ const MemberShipContainer = () => {
       <Form onSubmit={handleSubmit}>
         {els.map((el, idx) => (
           <div key={idx}>
-            <FormLabel htmlFor={el.id}>{el.name}</FormLabel>
-            {form[el.id].error && <Error>{form[el.id].error}</Error>}
+            <MemberShipLabel el={el} error={form[el.id].error} />
             <Relative>
               <Relative.FormInput
                 id={el.id}
