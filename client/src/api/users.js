@@ -7,3 +7,7 @@ export function insert(data) {
 export function userInfo() {
   return http.get('/api/users/me');
 }
+
+export function userUpdate(id, formData) {
+  return http.patch(`/api/users/${id}`, formData);
+}

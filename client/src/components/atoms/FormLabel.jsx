@@ -8,7 +8,6 @@ const FormLabel = ({ children, ...rest }) => {
 const Label = styled.label`
   font-weight: bold;
   font-size: 0.8rem;
-  letter-spacing: 0.5rem;
   cursor: pointer;
 `;
 

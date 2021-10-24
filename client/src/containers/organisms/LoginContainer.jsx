@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useForm from '@/hooks/useForm';
 import Error from '@/components/atoms/Error';
@@ -13,12 +13,11 @@ import LoginLabel from '@/components/molecules/LoginLabel';
 import LoginInput from '@/components/molecules/LoginInput';
 import LoginButton from '@/components/molecules/LoginButton';
 import LoginForm from '@/components/molecules/LoginForm';
-import { tokenAddAction, userInfoAsync } from '@/modules/login';
+import { userInfoAsync } from '@/modules/login';
 import { setAccessToken } from '@/utils/localstorege';
 
 const LoginContainer = () => {
   const dispatch = useDispatch();
-  const s = useSelector(state => state.loginReducer);
   const history = useHistory();
   const { form, handleChange, handleClick } = useForm(false);
   const { state, callApi } = useFetch();
@@ -95,7 +94,7 @@ const LoginContainer = () => {
     if (error) {
       setMessage(
         <>
-          <div>{error.message}</div>
+          <span>{error.message}</span>
         </>
       );
       setIsOpen(prevState => !prevState);
@@ -108,7 +107,7 @@ const LoginContainer = () => {
       const { access_token: accseeToken } = data;
       setAccessToken(accseeToken);
       dispatch(userInfoAsync());
-      history.push('/home');
+      history.push('/');
     }
   }, [success, history, form, dispatch]);
 

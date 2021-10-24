@@ -7,8 +7,8 @@ import Profile from '@/components/molecules/Profile';
 
 const HeaderContainer = () => {
   const [toggle, setToggle] = useState(false);
-  const state = useSelector(state => state.loginReducer);
-  const { accessToken, isLogin, id, name } = state;
+  const state = useSelector(state => state.login);
+  const { accessToken, isLogin, id, name, img } = state;
 
   const handleClick = useCallback(e => {
     e.preventDefault();
@@ -18,17 +18,13 @@ const HeaderContainer = () => {
 
   const links = [{ path: '/', name: 'HOME' }];
   if (accessToken === null) {
-    links.push(
-      ...[
-        { path: '/login', name: '로그인' },
-        { path: '/membership', name: '회원가입' },
-      ]
-    );
+    links.push({ path: '/login', name: '로그인' });
+    links.push({ path: '/membership', name: '회원가입' });
   }
 
   const profile = useMemo(
-    () => isLogin && <Profile id={id} name={name} />,
-    [id, name, isLogin]
+    () => isLogin && <Profile id={id} name={name} img={img} />,
+    [id, name, isLogin, img]
   );
 
   return (

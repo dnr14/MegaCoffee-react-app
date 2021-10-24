@@ -2,19 +2,26 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InfoLable from '../atoms/InfoLable';
-import noProfile from '@/assets/images/noProfile.png';
+import NoProfile from '../atoms/noProfile';
 
-const Profile = () => {
+const Profile = ({ id, name, img }) => {
   return (
     <FlexBox>
       <Inner>
         <div>
-          <img src={noProfile} alt="src" />
-          <InfoLable>dnr14</InfoLable>
-          <InfoLable>이민욱</InfoLable>
+          {img !== '' ? (
+            <img src={`${PATH}${img.path}`} alt="profile" />
+          ) : (
+            <NoProfile />
+          )}
+
+          <InfoLable>{id}</InfoLable>
+          <InfoLable>{name}</InfoLable>
         </div>
         <div>
-          <InfoLable>정보수정</InfoLable>
+          <InfoLable>
+            <Link to="/info">정보수정</Link>
+          </InfoLable>
           <InfoLable>
             <Link to="/logout">로그아웃</Link>
           </InfoLable>
@@ -64,12 +71,14 @@ const Inner = styled.div`
     padding: 0.4rem 0 0.4rem 0;
     align-items: center;
     gap: 10px;
-    font-size: 1rem;
+    font-size: 0.9rem;
 
     & > img {
+      background-size: cover;
       border-radius: 50%;
       width: 24px;
-      padding: 5px;
+      height: 24px;
+      padding: 0.2rem;
       background-color: ${({ theme }) => theme.color.coffee1};
     }
   }

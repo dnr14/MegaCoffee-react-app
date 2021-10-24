@@ -6,7 +6,8 @@ import Login from '@/containers/templates/Login';
 import Welcome from '@/containers/templates/Welcome';
 import PublicRouter from './PublicRouter';
 import PrivateRouter from './PrivateRouter';
-import Logout from './containers/templates/Logout';
+import Logout from '@/containers/templates/Logout';
+import UserInfo from '@/containers/templates/UserInfo';
 
 const Routers = () => {
   return (
@@ -15,6 +16,7 @@ const Routers = () => {
       <PublicRouter path="/login" component={Login} restricted />
       <PublicRouter path="/memberShip" component={MemberShip} restricted />
       <PrivateRouter path="/logout" component={Logout} restricted />
+      <PrivateRouter path="/info" component={UserInfo} restricted />
       <Route path="/welcome" component={Welcome} />
     </Switch>
   );

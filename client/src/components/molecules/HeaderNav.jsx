@@ -173,11 +173,9 @@ const StyledLi = styled.li`
     width: 100%;
     margin: 0;
   }
-  & > div > div > div {
-  }
 
   & > div > div > div:last-child {
-    padding-top: 0.4rem;
+    padding-top: 0.6rem;
   }
 
   ${({ theme }) => theme.media.tab} {
@@ -187,6 +185,9 @@ const StyledLi = styled.li`
       height: 100%;
       display: flex;
     }
+  }
+  ${({ theme }) => theme.media.mobile} {
+    height: 5rem;
   }
 `;
 

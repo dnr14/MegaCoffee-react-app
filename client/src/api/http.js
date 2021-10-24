@@ -10,8 +10,11 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   config => {
+    const accessToken = getAccessToken();
     const c = config;
-    c.headers.authorization = getAccessToken();
+    if (accessToken) {
+      c.headers.authorization = accessToken;
+    }
     return c;
   },
   err => {

@@ -9,6 +9,9 @@ const init = {
   id: null,
   name: null,
   email: null,
+  birthDay: null,
+  nickName: null,
+  path: null,
   isLogin: false,
   accessToken: null,
 };
