@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -68,6 +69,9 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
+    new webpack.DefinePlugin({
+      PATH: JSON.stringify('http://localhost:5000'),
+    }),
   ],
   devServer: {
     port,
