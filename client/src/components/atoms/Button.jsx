@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 
 const Button = ({ children, ...rest }) => {
@@ -49,4 +49,4 @@ const StyledButton = styled.button`
   }
 `;
 
-export default memo(Button);
+export default Button;

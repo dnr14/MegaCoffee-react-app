@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAccessToken } from '@/utils/localstorege';
 
 const instance = axios.create({
   timeout: 5000,
@@ -9,8 +10,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   config => {
-    // config.headers.authorization = getAccessToken();
-    return config;
+    const c = config;
+    c.headers.authorization = getAccessToken();
+    return c;
   },
   err => {
     return Promise.reject(err);

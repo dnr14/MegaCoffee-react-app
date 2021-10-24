@@ -16,6 +16,8 @@ const Welcome = () => {
     }
   }, [location, history]);
 
+  if (!location.state) return null;
+
   return (
     <Layout>
       <Title>🎉 환영 합니다.</Title>

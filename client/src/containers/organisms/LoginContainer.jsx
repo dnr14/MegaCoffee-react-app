@@ -1,10 +1,6 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import FormLabel from '@/components/atoms/FormLabel';
-import FormInput from '@/components/atoms/FormInput';
-import Button from '@/components/atoms/Button';
-import Form from '@/components/atoms/Form';
 import useForm from '@/hooks/useForm';
 import Error from '@/components/atoms/Error';
 import Relative from '@/components/molecules/Relative';
@@ -13,8 +9,16 @@ import Modal from '@/components/atoms/Modal';
 import useFetch from '@/hooks/useFetch';
 import { login } from '@/api/auth';
 import Loading from '@/components/atoms/Loading';
+import LoginLabel from '@/components/molecules/LoginLabel';
+import LoginInput from '@/components/molecules/LoginInput';
+import LoginButton from '@/components/molecules/LoginButton';
+import LoginForm from '@/components/molecules/LoginForm';
+import { tokenAddAction, userInfoAsync } from '@/modules/login';
+import { setAccessToken } from '@/utils/localstorege';
 
 const LoginContainer = () => {
+  const dispatch = useDispatch();
+  const s = useSelector(state => state.loginReducer);
   const history = useHistory();
   const { form, handleChange, handleClick } = useForm(false);
   const { state, callApi } = useFetch();
@@ -100,9 +104,13 @@ const LoginContainer = () => {
 
   useEffect(() => {
     if (success) {
+      const { data } = success;
+      const { access_token: accseeToken } = data;
+      setAccessToken(accseeToken);
+      dispatch(userInfoAsync());
       history.push('/home');
     }
-  }, [success, history, form]);
+  }, [success, history, form, dispatch]);
 
   return (
     <>
@@ -111,22 +119,20 @@ const LoginContainer = () => {
         {message}
       </Modal>
       <LoginForm onSubmit={handleSubmit}>
-        {els.map((el, idx) => {
-          return (
-            <div key={idx}>
-              <LoginLabel htmlFor={el.props.id}>{el.name}</LoginLabel>
-              <Relative>
-                <LoginInput {...el.props} />
-                {form[el.props.id].data && (
-                  <Relative.Cancel id={el.props.id} onClick={handleClick} />
-                )}
-              </Relative>
-              {form[el.props.id].error && (
-                <Error>{form[el.props.id].error}</Error>
+        {els.map((el, idx) => (
+          <div key={idx}>
+            <LoginLabel htmlFor={el.props.id}>{el.name}</LoginLabel>
+            <Relative>
+              <LoginInput {...el.props} />
+              {form[el.props.id].data && (
+                <Relative.Cancel id={el.props.id} onClick={handleClick} />
               )}
-            </div>
-          );
-        })}
+            </Relative>
+            {form[el.props.id].error && (
+              <Error>{form[el.props.id].error}</Error>
+            )}
+          </div>
+        ))}
         <div>
           <LoginButton
             disabled={
@@ -140,43 +146,5 @@ const LoginContainer = () => {
     </>
   );
 };
-
-const LoginForm = styled(Form)`
-  margin: 0;
-  gap: 0;
-  & > div {
-    margin-top: 1rem;
-
-    & > span {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 0.7rem;
-    }
-  }
-`;
-
-const LoginInput = memo(styled(FormInput)`
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
-  border-radius: 0;
-  padding-left: 0;
-  padding-right: 2rem;
-
-  margin-top: 0.3rem;
-  &::placeholder {
-    font-size: 0.7rem;
-    letter-spacing: 0;
-  }
-`);
-const LoginLabel = memo(styled(FormLabel)`
-  letter-spacing: 0;
-`);
-
-const LoginButton = memo(styled(Button)`
-  letter-spacing: 0;
-  border-radius: ${({ theme }) => theme.borderRadius1};
-  background-color: ${({ theme }) => theme.color.coffee1};
-`);
 
 export default LoginContainer;
