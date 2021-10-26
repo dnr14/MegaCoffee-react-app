@@ -3,16 +3,17 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InfoLable from '../atoms/InfoLable';
 import NoProfile from '../atoms/noProfile';
+import { isEmptyObject } from '@/utils/validations';
 
 const Profile = ({ id, name, img }) => {
   return (
     <FlexBox>
       <Inner>
         <div>
-          {img !== '' ? (
-            <img src={`${PATH}${img.path}`} alt="profile" />
-          ) : (
+          {isEmptyObject(img) ? (
             <NoProfile />
+          ) : (
+            <img src={`${PATH}${img.path}`} alt="profile" />
           )}
 
           <InfoLable>{id}</InfoLable>
@@ -42,6 +43,7 @@ const FlexBox = styled.div`
   margin: auto;
   margin-right: 1rem;
   border-radius: ${({ theme }) => theme.borderRadius2};
+  width: 250px;
 
   background-color: ${({ theme }) => theme.color.coffee1};
   box-shadow: 2px 2px 2px ${({ theme }) => theme.color.shadowColor};

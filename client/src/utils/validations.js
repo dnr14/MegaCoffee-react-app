@@ -28,3 +28,9 @@ export const emptyCheck = value => {
   }
   return false;
 };
+export const isEmptyObject = param => {
+  if (!param) {
+    return true;
+  }
+  return Object.keys(param).length === 0 && param.constructor === Object;
+};

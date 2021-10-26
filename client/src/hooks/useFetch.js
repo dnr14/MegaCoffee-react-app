@@ -27,6 +27,7 @@ const reducer = (state, action) => {
         ...state,
         loading: null,
         success: action.res,
+        error: null,
       };
     case ERROR:
       return {

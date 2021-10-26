@@ -20,11 +20,13 @@ const HeaderContainer = () => {
   if (accessToken === null) {
     links.push({ path: '/login', name: '로그인' });
     links.push({ path: '/membership', name: '회원가입' });
+  } else {
+    links.push({ path: '/info', name: '정보수정' });
   }
 
   const profile = useMemo(
-    () => isLogin && <Profile id={id} name={name} img={img} />,
-    [id, name, isLogin, img]
+    () => accessToken && <Profile id={id} name={name} img={img} />,
+    [id, name, accessToken, img]
   );
 
   return (
