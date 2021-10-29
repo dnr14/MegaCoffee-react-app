@@ -5,6 +5,7 @@ import Strong from '@/components/atoms/Strong';
 import Relative from '@/components/molecules/Relative';
 import FormInput from '@/components/atoms/FormInput';
 import LoginButton from '@/components/molecules/LoginButton';
+import Error from '@/components/atoms/Error';
 
 const FindForm = ({ els, handleFindSubmit }) => {
   return (
@@ -21,6 +22,7 @@ const FindForm = ({ els, handleFindSubmit }) => {
                 <Relative.Cancel {...el.props} onClick={el.handleClick} />
               )}
             </Relative>
+            {el.props.error && <Error>{el.props.error}</Error>}
           </div>
         );
       })}

@@ -61,7 +61,7 @@ router.post("/find/id", async (req, res) => {
   }
 });
 
-router.post("/find/password", async (req, res) => {
+router.post("/find/pwd", async (req, res) => {
   try {
     const { id, email, birthDay } = req.body;
     if (emptyCheck(email)) {
@@ -96,9 +96,9 @@ router.post("/find/password", async (req, res) => {
         },
       },
       { new: true }
-    );
+    ).select("-_id -__v");
 
-    res.json({ ...user });
+    res.json(user);
   } catch (error) {
     const { message, status } = error;
     if (status) {

@@ -8,6 +8,7 @@ import Warning from '@/components/atoms/Warning';
 
 const Find = () => {
   const match = useRouteMatch();
+
   return (
     <Layout>
       <FlexBox>
@@ -47,7 +48,7 @@ const Find = () => {
     </Layout>
   );
 };
-// 정리
+
 const LinkBox = styled.div`
   display: flex;
   justify-content: center;

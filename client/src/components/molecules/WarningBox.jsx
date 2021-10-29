@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import Strong from '../atoms/Strong';
+import Strong from '@/components/atoms/Strong';
 
 const WarningBox = ({ children }) => {
   return (
