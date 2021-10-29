@@ -24,7 +24,7 @@ const Login = () => {
               <Link to="/find/id">아이디 찾기</Link>
             </span>
             <span>
-              <Link to="/find/password">비밀번호 찾기</Link>
+              <Link to="/find/pwd">비밀번호 찾기</Link>
             </span>
           </SearchMamber>
         </div>
@@ -126,6 +126,7 @@ const SearchMamber = styled.div`
     color: ${({ theme }) => theme.color.shadowColor};
     color: ${({ theme }) => theme.color.magacoffeColor};
     margin-right: 0.5rem;
+    display: inline-block;
     & > a {
       padding: 0.5rem 0;
     }

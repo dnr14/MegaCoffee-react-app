@@ -32,5 +32,8 @@ export const isEmptyObject = param => {
   if (!param) {
     return true;
   }
-  return Object.keys(param).length === 0 && param.constructor === Object;
+  if (param.constructor === Object || param.constructor === Array) {
+    return Object.keys(param).length === 0;
+  }
+  return true;
 };

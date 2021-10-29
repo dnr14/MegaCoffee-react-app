@@ -1,11 +1,8 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import RootRedirect from '@/RootRedirect';
-import FindId from '@/components/molecules/FindId';
-import FindPassword from '@/components/molecules/FindPassword';
 import useForm from '@/hooks/useForm';
-import Form from '@/components/atoms/Form';
-import LoginButton from '@/components/molecules/LoginButton';
+import FindForm from '@/components/molecules/FindForm';
 
 const FindContainer = () => {
   const match = useRouteMatch();
@@ -74,27 +71,23 @@ const FindContainer = () => {
     ],
   ];
 
-  const handleFindIdSubmit = e => {};
-  const handleFindPasswordSubmit = e => {};
+  const handleFindIdSubmit = e => {
+    e.preventDefault();
+    console.log('아이디 찾기 ', e);
+  };
+  const handleFindPasswordSubmit = e => {
+    e.preventDefault();
+    console.log('비밀번호 찾기 ', e);
+  };
 
   return (
     <>
       <Switch>
         <Route path={`${match.path}/id`}>
-          <Form onSubmit={handleFindIdSubmit}>
-            <FindId els={els[0]} />
-            <div>
-              <LoginButton>아이디찾기</LoginButton>
-            </div>
-          </Form>
+          <FindForm els={els[0]} handleFindSubmit={handleFindIdSubmit} />
         </Route>
-        <Route path={`${match.path}/password`}>
-          <Form onSubmit={handleFindPasswordSubmit}>
-            <FindPassword els={els[1]} />
-            <div>
-              <LoginButton>비밀번호찾기</LoginButton>
-            </div>
-          </Form>
+        <Route path={`${match.path}/pwd`}>
+          <FindForm els={els[1]} handleFindSubmit={handleFindPasswordSubmit} />
         </Route>
         <RootRedirect />
       </Switch>

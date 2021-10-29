@@ -1,12 +1,14 @@
 import React from 'react';
-import Relative from '@/components/molecules/Relative';
-import FormInput from '@/components/atoms/FormInput';
+import Form from '@/components/atoms/Form';
 import FormLabel from '@/components/atoms/FormLabel';
 import Strong from '@/components/atoms/Strong';
+import Relative from '@/components/molecules/Relative';
+import FormInput from '@/components/atoms/FormInput';
+import LoginButton from '@/components/molecules/LoginButton';
 
-const FindPassword = ({ els }) => {
+const FindForm = ({ els, handleFindSubmit }) => {
   return (
-    <>
+    <Form onSubmit={handleFindSubmit}>
       {els.map((el, key) => {
         return (
           <div key={key}>
@@ -22,8 +24,11 @@ const FindPassword = ({ els }) => {
           </div>
         );
       })}
-    </>
+      <div>
+        <LoginButton>찾기</LoginButton>
+      </div>
+    </Form>
   );
 };
 
-export default FindPassword;
+export default FindForm;
