@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-const port = 3000;
+const port = process.env.port || 3000;
 
 const RESOLVE = {
   extensions: ['.js', '.jsx'],
