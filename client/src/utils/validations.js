@@ -28,3 +28,12 @@ export const emptyCheck = value => {
   }
   return false;
 };
+export const isEmptyObject = param => {
+  if (!param) {
+    return true;
+  }
+  if (param.constructor === Object || param.constructor === Array) {
+    return Object.keys(param).length === 0;
+  }
+  return true;
+};

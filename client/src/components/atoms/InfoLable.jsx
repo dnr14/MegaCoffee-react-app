@@ -7,6 +7,9 @@ const InfoLable = ({ children, ...rest }) => {
 
 const Span = styled.span`
   display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default InfoLable;

@@ -8,7 +8,7 @@ const UserInfo = () => {
   return (
     <Layout>
       <Inner>
-        <Title>Modified</Title>
+        <Title>정보수정</Title>
         <UserInfoContainer />
       </Inner>
     </Layout>
@@ -16,7 +16,8 @@ const UserInfo = () => {
 };
 
 const Inner = styled.div`
-  margin: 1rem 0;
+  width: 50%;
+  margin: 1rem auto;
   box-shadow: 2px 2px 10px ${({ theme }) => theme.color.shadowColor};
   background-color: ${({ theme }) => theme.color.white2};
   border-radius: ${({ theme }) => theme.color.borderRadius1};
@@ -25,6 +26,10 @@ const Inner = styled.div`
     color: ${({ theme }) => theme.color.black1};
     font-weight: 700;
     margin-top: 1rem;
+  }
+
+  ${({ theme }) => theme.media.pc} {
+    width: auto;
   }
 `;
 export default UserInfo;

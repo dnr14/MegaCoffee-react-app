@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-const port = 3000;
+const port = process.env.port || 3000;
 
 const RESOLVE = {
   extensions: ['.js', '.jsx'],
@@ -19,10 +19,6 @@ module.exports = {
   // import 시 확장자가 없으면 js, jsx로 해석한다.
   entry: ENTRY,
   resolve: RESOLVE,
-  output: {
-    filename: '[name].[hash].js',
-    path: path.join(__dirname, '/build'),
-  },
 
   module: {
     rules: [
@@ -73,13 +69,18 @@ module.exports = {
       PATH: JSON.stringify('http://localhost:5000'),
     }),
   ],
+
+  output: {
+    filename: '[name].[hash].js',
+    path: path.join(__dirname, 'build'),
+    publicPath: '/',
+  },
+
   devServer: {
     port,
     hot: true,
     open: true,
-    historyApiFallback: {
-      disableDotRule: true,
-    },
+    historyApiFallback: true,
     proxy: {
       '/api': 'http://localhost:5000',
     },

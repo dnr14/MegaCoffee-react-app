@@ -2,8 +2,9 @@ import { userInfo } from '@/api/users';
 import { getAccessToken, removeToken } from '@/utils/localstorege';
 
 export const TOKEN_ADD = 'TOKEN_ADD';
-export const USER_INFO_ADD = 'USER_INFO_ADD';
-export const USER_INFO_REMOVE = 'USER_INFO_REMOVE';
+export const USER_INFO_FATCH = 'USER_INFO_FATCH';
+export const USER_INFO_FATCH_ERROR = 'USER_INFO_FATCH';
+export const userInfoRemove = 'userInfoRemove';
 
 const init = {
   id: null,
@@ -11,20 +12,19 @@ const init = {
   email: null,
   birthDay: null,
   nickName: null,
-  path: null,
-  isLogin: false,
+  img: null,
   accessToken: null,
 };
 
-export const tokenAddAction = token => ({
+export const tokenAddAction = accessToken => ({
   type: TOKEN_ADD,
-  token,
+  accessToken,
 });
 
-export const userInfoRemove = () => ({ type: USER_INFO_REMOVE });
+export const userInfoRemoveAction = () => ({ type: userInfoRemove });
 
-export const userInfoAddAction = userInfo => ({
-  type: USER_INFO_ADD,
+export const userInfoFatchAction = userInfo => ({
+  type: USER_INFO_FATCH,
   userInfo,
 });
 
@@ -33,9 +33,10 @@ export const userInfoAsync = () => async dispatch => {
   try {
     const response = await userInfo();
     const { data } = response;
-    dispatch(userInfoAddAction(data.userInfo));
+    dispatch(userInfoFatchAction(data.userInfo));
   } catch (error) {
     removeToken();
+    dispatch(userInfoRemoveAction());
   }
 };
 
@@ -44,15 +45,14 @@ export const loginReducer = (state = init, action) => {
     case TOKEN_ADD:
       return {
         ...state,
-        accessToken: action.token,
+        accessToken: action.accessToken,
       };
-    case USER_INFO_ADD:
+    case USER_INFO_FATCH:
       return {
         ...state,
         ...action.userInfo,
-        isLogin: true,
       };
-    case USER_INFO_REMOVE:
+    case userInfoRemove:
       return {
         ...init,
       };

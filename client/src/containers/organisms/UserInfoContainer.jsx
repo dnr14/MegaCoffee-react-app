@@ -103,7 +103,7 @@ const UserInfoContainer = () => {
   );
 
   useEffect(() => {
-    if (img) {
+    if (!validations.isEmptyObject(img) && img) {
       setProfileImg(`${PATH}${img.path}`);
     }
   }, [img]);
@@ -139,7 +139,7 @@ const UserInfoContainer = () => {
               {profileImg === null ? (
                 <NoProfile accept="image/*" />
               ) : (
-                <img src={profileImg} alt="profileimg" />
+                <img src={profileImg} alt="profile" />
               )}
             </div>
             <input type="file" id="file" onChange={handleProfileImgChange} />

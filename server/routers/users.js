@@ -4,6 +4,7 @@ const UsersSchma = require("../models/UsersSchma");
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
+const { makeError } = require("../utils/error");
 const router = express.Router();
 
 const STATIC_PATH = "./public/files/profile";
@@ -100,7 +101,7 @@ router.patch("/:id", (req, res) => {
         fs.unlinkSync(`.${user.img.path}`);
       }
 
-      let img = "";
+      let img = {};
       if (req.file) {
         const { originalname, mimetype, filename } = req.file;
         img = {
@@ -111,7 +112,7 @@ router.patch("/:id", (req, res) => {
         };
       }
 
-      const result = await UsersSchma.findOneAndUpdate(
+      await UsersSchma.findOneAndUpdate(
         { id },
         {
           $set: {
@@ -122,34 +123,6 @@ router.patch("/:id", (req, res) => {
         { new: true }
       );
 
-      console.log(result);
-
-      // let img = "";
-      // if (req.file) {
-      //   const { originalname, mimetype, filename } = req.file;
-      //   img = {
-      //     originalname,
-      //     mimetype,
-      //     filename,
-      //     path: `/public/files/profile/${filename}`,
-      //   };
-      //   if (user.img) {
-      //     fs.unlinkSync(`.${user.img.path}`);
-      //   }
-      // } else if (!req.file) {
-      // }
-
-      // const result = await UsersSchma.findOneAndUpdate(
-      //   { id },
-      //   {
-      //     $set: {
-      //       nickName,
-      //       img,
-      //     },
-      //   },
-      //   { new: true }
-      // );
-      // console.log(result);
       res.json({ message: "정보가 수정되었습니다." });
     } catch (error) {
       const { message, status } = error;
@@ -161,11 +134,5 @@ router.patch("/:id", (req, res) => {
     }
   });
 });
-
-function makeError(message, status) {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-}
 
 module.exports = router;

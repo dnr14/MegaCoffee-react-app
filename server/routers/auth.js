@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
+const { makeError, emptyCheck } = require("../utils/error");
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
@@ -25,6 +26,86 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     const { message } = error;
     res.status(400).json({ message });
+  }
+});
+
+router.post("/find/id", async (req, res) => {
+  try {
+    const { email, birthDay } = req.body;
+    if (emptyCheck(email)) {
+      throw makeError("이메일은 필수 입니다.", 400);
+    }
+    if (emptyCheck(birthDay)) {
+      throw makeError("생년월일은 필수 입니다.", 400);
+    }
+
+    const user = await UsersSchma.findOne()
+      .where("email")
+      .equals(email)
+      .where("birthDay")
+      .equals(birthDay);
+
+    if (user === null) {
+      throw makeError("이메일 생년월일이 맞지 않습니다.", 400);
+    }
+
+    const { id } = user;
+    res.json({ id });
+  } catch (error) {
+    const { message, status } = error;
+    if (status) {
+      res.status(400).json({ message });
+    } else {
+      res.json({ message });
+    }
+  }
+});
+
+router.post("/find/pwd", async (req, res) => {
+  try {
+    const { id, email, birthDay } = req.body;
+    if (emptyCheck(email)) {
+      throw makeError("이메일은 필수 입니다.", 400);
+    }
+    if (emptyCheck(birthDay)) {
+      throw makeError("생년월일은 필수 입니다.", 400);
+    }
+    if (emptyCheck(id)) {
+      throw makeError("아이디는 필수 입니다.", 400);
+    }
+
+    let user = await UsersSchma.findOne()
+      .where("email")
+      .equals(email)
+      .where("birthDay")
+      .equals(birthDay)
+      .where("id")
+      .equals(id);
+
+    if (user === null) {
+      throw makeError("정보가 맞지 않습니다.", 400);
+    }
+
+    const randomString = Math.random().toString(36).slice(2);
+
+    user = await UsersSchma.findOneAndUpdate(
+      { id },
+      {
+        $set: {
+          pwd: randomString,
+        },
+      },
+      { new: true }
+    ).select("-_id -__v");
+
+    res.json(user);
+  } catch (error) {
+    const { message, status } = error;
+    if (status) {
+      res.status(400).json({ message });
+    } else {
+      res.json({ message });
+    }
   }
 });
 

@@ -19,6 +19,14 @@ const Login = () => {
             </span>
           </NewMember>
           <LoginContainer />
+          <SearchMamber>
+            <span>
+              <Link to="/find/id">아이디 찾기</Link>
+            </span>
+            <span>
+              <Link to="/find/pwd">비밀번호 찾기</Link>
+            </span>
+          </SearchMamber>
         </div>
       </FlexBox>
     </Layout>
@@ -88,6 +96,7 @@ const FlexBox = styled.div`
 
 const NewMember = styled.div`
   margin-top: 1rem;
+
   & > span {
     word-break: keep-all;
     font-size: 0.6rem;
@@ -100,6 +109,26 @@ const NewMember = styled.div`
     &:last-child {
       color: ${({ theme }) => theme.color.magacoffeColor};
       font-weight: 700;
+    }
+    & > a {
+      padding: 0.5rem 0;
+    }
+  }
+`;
+
+const SearchMamber = styled.div`
+  margin-top: 0.5rem;
+  & > span {
+    word-break: keep-all;
+    font-size: 0.6rem;
+    line-height: 1.2rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.color.shadowColor};
+    color: ${({ theme }) => theme.color.magacoffeColor};
+    margin-right: 0.5rem;
+    display: inline-block;
+    & > a {
+      padding: 0.5rem 0;
     }
   }
 `;
