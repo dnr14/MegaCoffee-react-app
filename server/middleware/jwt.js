@@ -44,7 +44,9 @@ module.exports = {
       }
 
       if (error.name === "TokenisEmptyError") {
-        return res.redirect("/");
+        return res.status(409).json({
+          message: "토큰이 없습니다.",
+        });
       }
 
       // 토큰의 비밀키가 일치하지 않는 경우

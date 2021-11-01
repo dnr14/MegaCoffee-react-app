@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const { makeError } = require("../utils/error");
 const router = express.Router();
+const bcrypt = require("bcrypt-nodejs");
 
 const STATIC_PATH = "./public/files/profile";
 
@@ -80,7 +81,7 @@ router.get("/me", jwt.verify, async (req, res) => {
 });
 
 // 회원 정보 수정
-router.patch("/:id", (req, res) => {
+router.patch("/:id", jwt.verify, (req, res) => {
   upload(req, res, async (err) => {
     try {
       if (err) {
@@ -88,6 +89,11 @@ router.patch("/:id", (req, res) => {
       }
       const { id } = req.params;
       const { nickName } = req.body;
+      const { pwd } = req.body;
+      const { newPwd } = req.body;
+      const { file } = req;
+
+      console.log(pwd, newPwd);
 
       if (!id || !nickName) {
         throw makeError("잘못된 요청입니다.", 400);
@@ -96,29 +102,43 @@ router.patch("/:id", (req, res) => {
       if (!user) {
         throw makeError("없는 아이디입니다.", 400);
       }
-
-      if (user.img) {
-        fs.unlinkSync(`.${user.img.path}`);
+      if (!user.authenticate(pwd)) {
+        throw makeError("패스워드가 틀립니다.", 400);
       }
 
       let img = {};
-      if (req.file) {
-        const { originalname, mimetype, filename } = req.file;
+      if (file) {
+        const { originalname, mimetype, filename } = file;
         img = {
           originalname,
           mimetype,
           filename,
           path: `/public/files/profile/${filename}`,
         };
+      } else {
+        if (Object.keys(user.img).length !== 0) {
+          fs.unlinkSync(`.${user.img.path}`);
+        }
+      }
+
+      let update = {};
+      if (newPwd) {
+        update = {
+          nickName,
+          pwd: bcrypt.hashSync(newPwd),
+          img,
+        };
+      } else {
+        update = {
+          nickName,
+          img,
+        };
       }
 
       await UsersSchma.findOneAndUpdate(
         { id },
         {
-          $set: {
-            nickName,
-            img,
-          },
+          $set: update,
         },
         { new: true }
       );

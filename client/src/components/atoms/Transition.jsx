@@ -14,10 +14,9 @@ const StyledDiv = styled.div`
     transition: opacity ${({ duration }) => `${duration}ms`} linear 150ms;
   }
   .fade-exit {
-    opacity: 1;
+    display: none;
   }
   .fade-exit.fade-exit-active {
-    position: absolute;
     opacity: 0;
   }
 `;

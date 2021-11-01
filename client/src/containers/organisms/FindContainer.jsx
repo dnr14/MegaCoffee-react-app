@@ -16,6 +16,9 @@ import { findID, findPwd } from '@/api/auth';
 import Loading from '@/components/atoms/Loading';
 import Modal from '@/components/atoms/Modal';
 import Transition from '@/components/atoms/Transition';
+import Result from '@/components/molecules/Result';
+import LoginLabel from '@/components/molecules/LoginLabel';
+import ReadOnly from '@/components/atoms/ReadOnly';
 
 const FindContainer = () => {
   const match = useRouteMatch();
@@ -152,7 +155,10 @@ const FindContainer = () => {
   useEffect(() => {
     if (success) {
       const { data } = success;
-      history.push('/find/result', { ...data });
+      const map = new Map();
+      map.set('아이디', data.id);
+      if (Object.keys(data).length > 1) map.set('패스워드', data.pwd);
+      history.push('/find/result', map);
     }
   }, [success, history]);
 
@@ -196,19 +202,15 @@ const FindContainer = () => {
                       />
                     </Route>
                     <Route path={`${match.path}/result`}>
-                      <div>
-                        <div>찾기 결과</div>
-                        <div>
-                          {location.state &&
-                            Object.keys(location.state).map((key, idx) => {
-                              return (
-                                <div key={idx}>
-                                  {key} : <span>{location.state[key]}</span>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      </div>
+                      <Result>
+                        {location.state &&
+                          [...location.state].map((value, idx) => (
+                            <div key={idx}>
+                              <LoginLabel>{value[0]}</LoginLabel>
+                              <ReadOnly value={value[1]} />
+                            </div>
+                          ))}
+                      </Result>
                     </Route>
                     <RootRedirect />
                   </Switch>
