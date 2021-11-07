@@ -15,9 +15,10 @@ import Error from '@/components/atoms/Error';
 import useFetch from '@/hooks/useFetch';
 import Loading from '@/components/atoms/Loading';
 import Modal from '@/components/atoms/Modal';
+import useForm from '@/hooks/useForm';
 
 const nickNameStateInit = {
-  value: null,
+  value: '',
   error: null,
 };
 
@@ -27,11 +28,19 @@ const UserInfoContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
+  const { form, handleChange, handleClick } = useForm(false);
   const [nickNameState, setNickNameState] = useState(nickNameStateInit);
 
   const { state: fetch, callApi } = useFetch();
   const { id, name, email, birthDay, img } = state;
   const { error, loading, success } = fetch;
+  const { pwd, pwdConfirm } = form;
+
+  const handleNickNameChange = e => {
+    const result = nickNameValidation(e.target.value);
+    setNickNameState(result);
+  };
+  const handleNickNameValueRemove = () => setNickNameState(nickNameStateInit);
 
   const els = [
     {
@@ -49,6 +58,42 @@ const UserInfoContainer = () => {
     {
       value: birthDay,
       name: '생년월일',
+    },
+  ];
+
+  const updateEls = [
+    {
+      name: '기존 패스워드',
+      props: {
+        id: 'pwd',
+        type: 'password',
+        value: pwd.data,
+        error: pwd.error,
+      },
+      onClick: handleClick,
+      onChange: handleChange,
+    },
+    {
+      name: '패스워드 변경',
+      props: {
+        id: 'pwdConfirm',
+        type: 'password',
+        value: pwdConfirm.data,
+        error: pwdConfirm.error,
+      },
+      onClick: handleClick,
+      onChange: handleChange,
+    },
+    {
+      name: '닉네임',
+      props: {
+        id: 'nickName',
+        type: 'text',
+        value: nickNameState.value,
+        error: nickNameState.error,
+      },
+      onClick: handleNickNameValueRemove,
+      onChange: handleNickNameChange,
     },
   ];
 
@@ -80,9 +125,15 @@ const UserInfoContainer = () => {
     e.preventDefault();
     const file = e.target.file.files[0];
     const { value: nickName } = e.target.nickName;
+    const { value: pwd } = e.target.pwd;
+    const { value: pwdConfirm } = e.target.pwdConfirm;
     const formData = new FormData();
     if (!validations.emptyCheck(nickName)) {
       formData.append('nickName', nickName);
+    }
+    if (!validations.emptyCheck(pwd) && !validations.emptyCheck(pwdConfirm)) {
+      formData.append('pwd', pwd);
+      formData.append('newPwd', pwdConfirm);
     }
     if (file) {
       formData.append('file', file);
@@ -90,15 +141,8 @@ const UserInfoContainer = () => {
     callApi(() => userUpdate(id, formData));
   };
 
-  const handleNickNameChange = e => {
-    const result = nickNameValidation(e.target.value);
-    setNickNameState(result);
-  };
-
-  const handleNickNameValueRemove = () => setNickNameState(nickNameStateInit);
-
   useEffect(
-    () => setNickNameState({ value: state.nickName, error: null }),
+    () => setNickNameState({ value: state.nickName ?? '', error: null }),
     [state]
   );
 
@@ -116,14 +160,14 @@ const UserInfoContainer = () => {
   }, [error]);
 
   useEffect(() => {
-    (async () => {
-      if (success) {
-        setMessage(<span>수정이 되었습니다. 다시 로그인을 해주세요.</span>);
+    if (success) {
+      (async () => {
         setIsOpen(prevState => !prevState);
+        setMessage(<span>수정이 되었습니다. 다시 로그인을 해주세요.</span>);
         await new Promise(res => setTimeout(res, 2000));
         history.push('/logout');
-      }
-    })();
+      })();
+    }
   }, [success, history]);
 
   return (
@@ -155,29 +199,34 @@ const UserInfoContainer = () => {
             </div>
           );
         })}
-        <div>
-          <FormLabel>닉네임</FormLabel>
-          {nickNameState.error && (
-            <Error>
-              <span>{nickNameState.error}</span>
-            </Error>
-          )}
-          <Relative>
-            <LoginInput
-              id="nickName"
-              value={nickNameState.value ?? ''}
-              error={nickNameState.error}
-              onChange={handleNickNameChange}
-            />
-            {nickNameState.value && (
-              <Relative.Cancel onClick={handleNickNameValueRemove} />
-            )}
-          </Relative>
-        </div>
+        {updateEls.map((el, idx) => {
+          return (
+            <div key={idx}>
+              <FormLabel htmlFor={el.props.id}>{el.name}</FormLabel>
+              {el.props.error && (
+                <Error>
+                  <span>{el.props.error}</span>
+                </Error>
+              )}
+              <Relative>
+                <LoginInput {...el.props} onChange={el.onChange} />
+                {el.props.value && (
+                  <Relative.Cancel id={el.props.id} onClick={el.onClick} />
+                )}
+              </Relative>
+            </div>
+          );
+        })}
+
         <div>
           <LoginButton
             disabled={
-              !nickNameState.value || nickNameState.error ? true : false
+              !nickNameState.value ||
+              nickNameState.error ||
+              pwd.error ||
+              pwdConfirm.error
+                ? true
+                : false
             }
           >
             등록하기
@@ -202,7 +251,6 @@ const nickNameValidation = data => {
   if (validations.maxLengthCheck(data, 10)) {
     return { value: prevValue, error: '최대 10자 이하입니다.' };
   }
-
   return { value: data, error: null };
 };
 

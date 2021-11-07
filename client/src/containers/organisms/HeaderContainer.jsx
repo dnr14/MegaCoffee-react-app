@@ -22,6 +22,7 @@ const HeaderContainer = () => {
     links.push({ path: '/membership', name: '회원가입' });
   } else {
     links.push({ path: '/info', name: '정보수정' });
+    links.push({ path: '/logout', name: '로그아웃' });
   }
 
   const profile = useMemo(

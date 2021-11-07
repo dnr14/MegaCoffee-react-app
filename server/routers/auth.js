@@ -3,6 +3,7 @@ const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
 const { makeError, emptyCheck } = require("../utils/error");
 const router = express.Router();
+const bcrypt = require("bcrypt-nodejs");
 
 router.post("/login", async (req, res) => {
   try {
@@ -11,6 +12,7 @@ router.post("/login", async (req, res) => {
       .where("id")
       .equals(id)
       .select("-_id");
+
     if (!user) {
       throw new Error("없는 아이디 입니다.");
     }
@@ -25,7 +27,11 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     const { message } = error;
-    res.status(400).json({ message });
+    if (message) {
+      res.status(400).json({ message });
+    } else {
+      res.status(400).json({ error });
+    }
   }
 });
 
@@ -86,19 +92,19 @@ router.post("/find/pwd", async (req, res) => {
       throw makeError("정보가 맞지 않습니다.", 400);
     }
 
-    const randomString = Math.random().toString(36).slice(2);
+    const randomString = Math.random().toString(36).slice(4);
 
     user = await UsersSchma.findOneAndUpdate(
       { id },
       {
         $set: {
-          pwd: randomString,
+          pwd: bcrypt.hashSync(randomString),
         },
       },
       { new: true }
-    ).select("-_id -__v");
+    ).select("-_id -__v -birthDay -name -email -nickName");
 
-    res.json(user);
+    res.json(Object.assign(user, { pwd: randomString }));
   } catch (error) {
     const { message, status } = error;
     if (status) {
