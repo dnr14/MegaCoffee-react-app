@@ -16,7 +16,6 @@ const ENTRY = './index.js';
 
 module.exports = {
   mode: 'development',
-  // import 시 확장자가 없으면 js, jsx로 해석한다.
   entry: ENTRY,
   resolve: RESOLVE,
 
@@ -61,7 +60,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      favicon: null,
     }),
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
@@ -72,7 +70,7 @@ module.exports = {
 
   output: {
     filename: '[name].[hash].js',
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, '/dist/build'),
     publicPath: '/',
   },
 
