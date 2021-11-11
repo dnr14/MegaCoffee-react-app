@@ -84,7 +84,6 @@ const Hamburger = styled.div`
     &:checked ~ span {
       opacity: 1;
       transform: rotate(45deg) translate(3px, -0.5px);
-      background: #232323;
       &:nth-child(3) {
         opacity: 0;
         transform: translateX(100%);
@@ -133,10 +132,10 @@ const Manu = styled.label`
   & > ul {
     position: absolute;
     box-sizing: border-box;
-    width: 20rem;
+    width: 15rem;
     padding: 6.25rem 2.5rem 0 2.5rem;
     height: 100vh;
-    background: ${({ theme }) => theme.color.magacoffeColor};
+    background: ${({ theme }) => theme.color.magacoffeColor1};
     font-size: 1.5rem;
     list-style-type: none;
     -webkit-font-smoothing: antialiased;

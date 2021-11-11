@@ -2,12 +2,15 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Title from '../atoms/Title';
+import TopLogo from '@/assets/images/topLogo.png';
 
 const HeaderTitle = () => {
   return (
     <StyledDiv>
       <Title>
-        <Link to="/">MEGA COFFEE</Link>
+        <Link to="/">
+          <img src={TopLogo} alt="logo" />
+        </Link>
       </Title>
     </StyledDiv>
   );
@@ -15,11 +18,14 @@ const HeaderTitle = () => {
 
 const StyledDiv = styled.div`
   & > h2 {
-    padding: 1rem;
+    padding: 0.5rem 1rem 1rem 1rem;
     ${({ theme }) => theme.media.mobile} {
       padding: 1.5rem;
       text-align: end;
     }
+  }
+  img {
+    display: block;
   }
 `;
 
