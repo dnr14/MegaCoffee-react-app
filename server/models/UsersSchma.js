@@ -45,6 +45,10 @@ const usersSchma = new Schema(
       type: Object,
       default: {},
     },
+    role: {
+      type: String,
+      default: "user",
+    },
   },
   { toObject: { virtuals: true } }
 );
