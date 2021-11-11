@@ -11,7 +11,7 @@ const Container = styled.header`
   justify-content: center;
   font-size: 2.5rem;
   font-weight: bold;
-  background: ${({ theme }) => `${theme.color.magacoffeColor}`};
+  background: ${({ theme }) => `${theme.color.magacoffeColor2}`};
   color: ${({ theme }) => `${theme.color.white1}`};
 
   ${({ theme }) => theme.media.tab} {
