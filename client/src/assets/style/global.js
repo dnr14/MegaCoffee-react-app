@@ -30,6 +30,7 @@ body {
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+  height: 100vh;
 }
 ol,
 ul {
@@ -62,6 +63,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 }
 
 `;

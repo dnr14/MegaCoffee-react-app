@@ -7,7 +7,8 @@ export const size = {
 
 const theme = {
   color: {
-    magacoffeColor: '#ff9f43',
+    magacoffeColor1: '#fed338',
+    magacoffeColor2: 'rgb(54, 54, 54)',
     coffee1: '#572526',
     coffee2: '#d1a766',
     black1: '#000',
@@ -27,6 +28,7 @@ const theme = {
   borderRadius1: '5px',
   borderRadius2: '20px',
   maxWidth: '1100px',
+  boxShadow1: 'rgb(0 0 0 / 4%) 0px 4px 16px 0px',
 };
 
 export default theme;
