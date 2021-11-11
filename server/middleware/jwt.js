@@ -12,7 +12,7 @@ module.exports = {
         birthDay: user.birthDay,
         nickName: user.nickName,
         img: user.img,
-        role: "user",
+        role: user.role,
       },
     };
 
