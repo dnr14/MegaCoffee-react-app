@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Home from '@/pages/Home/Home';
+import Main from '@/pages/Main/Main';
 import MemberShip from '@/containers/templates/MemberShip';
 import Login from '@/containers/templates/Login';
 import Welcome from '@/containers/templates/Welcome';
@@ -20,7 +20,7 @@ const Routers = () => {
       <PrivateRouter path="/logout" component={Logout} restricted />
       <PrivateRouter path="/info" component={UserInfo} restricted />
       <Route path="/welcome" component={Welcome} />
-      <Route path="/" component={Home} exact />
+      <Route path="/" component={Main} exact />
       <RootRedirect />
     </Switch>
   );
