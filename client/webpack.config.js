@@ -60,6 +60,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
+      favicon: './public/favicon.png',
     }),
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
@@ -83,4 +84,5 @@ module.exports = {
       '/api': 'http://localhost:5000',
     },
   },
+  devtool: 'eval-cheap-module-source-map',
 };
