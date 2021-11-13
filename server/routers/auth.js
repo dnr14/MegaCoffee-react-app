@@ -23,6 +23,7 @@ router.post("/login", async (req, res) => {
     const access_token = await jwt.sign(user);
     res.json({
       message: `${user.id}님 반갑습니다.`,
+      role: user.role,
       access_token,
     });
   } catch (error) {

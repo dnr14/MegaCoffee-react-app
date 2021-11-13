@@ -49,6 +49,14 @@ const usersSchma = new Schema(
       type: String,
       default: "user",
     },
+    createAt: {
+      type: Number,
+      default: new Date().getTime(),
+    },
+    state: {
+      type: String,
+      default: "normal",
+    },
   },
   { toObject: { virtuals: true } }
 );

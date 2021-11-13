@@ -10,6 +10,8 @@ import Logout from '@/containers/templates/Logout';
 import UserInfo from '@/containers/templates/UserInfo';
 import Find from '@/containers/templates/Find';
 import RootRedirect from './RootRedirect';
+import AdminRouter from './Routers/AdminRouter';
+import AdminPage from './pages/Admin/AdminPage';
 
 const Routers = () => {
   return (
@@ -19,6 +21,7 @@ const Routers = () => {
       <PublicRouter path="/memberShip" component={MemberShip} restricted />
       <PrivateRouter path="/logout" component={Logout} restricted />
       <PrivateRouter path="/info" component={UserInfo} restricted />
+      <AdminRouter path="/admin" component={AdminPage} />
       <Route path="/welcome" component={Welcome} />
       <Route path="/" component={Main} exact />
       <RootRedirect />
