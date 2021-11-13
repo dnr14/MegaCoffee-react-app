@@ -15,7 +15,7 @@ const Container = styled.div`
   max-width: ${({ theme }) => theme.maxWidth};
   padding: 1px 0;
   margin: 0 auto;
-  width: 50%;
+  width: 60%;
   align-items: center;
 
   ${({ theme }) => theme.media.tab} {

@@ -10,27 +10,27 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   margin-top: 0.7rem;
-  line-height: 1.875rem;
+  line-height: 1.5;
   padding-left: 0.8rem;
   padding-right: 0.8rem;
-  font-size: 1.1rem;
+  font-size: 0.7rem;
+  padding: 0.4rem;
   letter-spacing: 0.123rem;
-  border: 1px solid rgba(45, 52, 54, 0.8);
   border-radius: ${({ theme }) => theme.borderRadius};
   transition: border 0.35s ease-in;
   ${({ error, theme, value }) => {
     if (value === '' && error === null) {
       return css`
-        border: 1px solid black;
+        border: 2px solid rgba(45, 52, 54, 0.8);
       `;
     }
     if (error) {
       return css`
-        border: 1px solid ${theme.color.red1};
+        border: 2px solid ${theme.color.red1};
       `;
     }
     return css`
-      border: 1px solid ${theme.color.green1};
+      border: 2px solid ${theme.color.green1};
     `;
   }};
 

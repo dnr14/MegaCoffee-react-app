@@ -8,6 +8,7 @@ const LoginButton = ({ children, ...rest }) => {
 
 const ExtensionButton = styled(Button)`
   letter-spacing: 0;
+  padding: 0.5rem 0;
   border-radius: ${({ theme }) => theme.borderRadius1};
   background-color: ${({ theme }) => theme.color.coffee1};
 `;

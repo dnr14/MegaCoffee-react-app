@@ -12,10 +12,10 @@ const LOADING = 'LOADING';
 const SUCCESS = 'SUCCESS';
 const ERROR = 'ERROR';
 
-const idAddAction = id => ({ type: ID_ADD, id });
-const pwdAddAction = pwd => ({ type: PWD_ADD, pwd });
-const nameAddAction = name => ({ type: NAME_ADD, name });
-const pwdConfirmAddAction = pwdConfirm => ({
+export const idAddAction = id => ({ type: ID_ADD, id });
+export const pwdAddAction = pwd => ({ type: PWD_ADD, pwd });
+export const nameAddAction = name => ({ type: NAME_ADD, name });
+export const pwdConfirmAddAction = pwdConfirm => ({
   type: PWD_CONFIRM_ADD,
   pwdConfirm,
 });

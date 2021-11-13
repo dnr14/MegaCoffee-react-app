@@ -17,10 +17,9 @@ const StyledButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   font-size: 1rem;
-  transition: opacity 0.35s ease-in;
-  transition: transform 0.35s ease-in;
+  transition: opacity 0.35s ease-in, transform 0.35s ease-in;
   box-shadow: 2px 5px 5px ${({ theme }) => theme.color.shadowColor};
-  background-color: ${({ theme }) => theme.color.magacoffeColor};
+  background-color: ${({ theme }) => theme.color.magacoffeColor1};
   color: ${({ theme }) => theme.color.white1};
   ${({ disabled }) =>
     disabled &&

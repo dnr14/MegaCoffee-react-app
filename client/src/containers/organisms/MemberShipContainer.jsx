@@ -35,7 +35,7 @@ const MemberShipContainer = () => {
       },
       {
         id: 'pwdConfirm',
-        name: '비밀번호재확인',
+        name: '비밀번호 재확인',
         type: 'password',
         placeholder: '비밀번호를 입력해주세요.',
       },

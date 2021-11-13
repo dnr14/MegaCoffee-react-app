@@ -8,7 +8,7 @@ import Profile from '@/components/molecules/Profile';
 const HeaderContainer = () => {
   const [toggle, setToggle] = useState(false);
   const state = useSelector(state => state.login);
-  const { accessToken, isLogin, id, name, img } = state;
+  const { accessToken, isLogin, id, name, img, role } = state;
 
   const handleClick = useCallback(e => {
     e.preventDefault();
@@ -23,6 +23,9 @@ const HeaderContainer = () => {
   } else {
     links.push({ path: '/info', name: '정보수정' });
     links.push({ path: '/logout', name: '로그아웃' });
+    if (role === 'admin') {
+      links.push({ path: '/admin/users', name: '관리자 페이지' });
+    }
   }
 
   const profile = useMemo(

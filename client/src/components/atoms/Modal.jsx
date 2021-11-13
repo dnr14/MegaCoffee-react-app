@@ -100,7 +100,7 @@ const StyledWrapper = styled.div`
     width: 20rem;
     padding: 1rem;
     border-radius: 10px;
-    background-color: ${({ theme }) => theme.color.magacoffeColor};
+    background-color: ${({ theme }) => theme.color.magacoffeColor1};
     box-shadow: 2px 2px 2px ${({ theme }) => theme.color.shadowColor};
     ${({ visible }) =>
       visible &&

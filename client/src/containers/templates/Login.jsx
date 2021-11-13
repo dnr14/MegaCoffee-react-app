@@ -123,8 +123,7 @@ const SearchMamber = styled.div`
     font-size: 0.6rem;
     line-height: 1.2rem;
     font-weight: 600;
-    color: ${({ theme }) => theme.color.shadowColor};
-    color: ${({ theme }) => theme.color.magacoffeColor};
+    color: ${({ theme }) => theme.color.coffee1};
     margin-right: 0.5rem;
     display: inline-block;
     & > a {

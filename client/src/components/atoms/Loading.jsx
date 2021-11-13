@@ -9,7 +9,7 @@ const Loading = ({ loading }) => {
     <>
       {loading && (
         <StyledDiv>
-          <img src={loding} alt="loading-bar" />
+          <img src={loding} alt="loading" />
         </StyledDiv>
       )}
     </>,
@@ -26,12 +26,16 @@ const StyledDiv = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
+  z-index: 10;
 
-  & > img {
-    width: 30%;
+  img {
+    width: 20%;
     -webkit-user-drag: none;
-    ${({ theme }) => theme.media.mobile} {
-      width: 70%;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    img {
+      width: 50%;
     }
   }
 `;

@@ -14,7 +14,7 @@ import LoginInput from '@/components/molecules/LoginInput';
 import LoginButton from '@/components/molecules/LoginButton';
 import LoginForm from '@/components/molecules/LoginForm';
 import { userInfoAsync } from '@/modules/login';
-import { setAccessToken } from '@/utils/localstorege';
+import { setAccessToken, setRole } from '@/utils/localstorege';
 
 const LoginContainer = () => {
   const dispatch = useDispatch();
@@ -105,7 +105,9 @@ const LoginContainer = () => {
     if (success) {
       const { data } = success;
       const { access_token: accseeToken } = data;
+      const { role } = data;
       setAccessToken(accseeToken);
+      setRole(role);
       dispatch(userInfoAsync());
       history.push('/');
     }
@@ -114,9 +116,11 @@ const LoginContainer = () => {
   return (
     <>
       <Loading loading={loading} />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        {message}
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          {message}
+        </Modal>
+      )}
       <LoginForm onSubmit={handleSubmit}>
         {els.map((el, idx) => (
           <div key={idx}>
@@ -126,10 +130,10 @@ const LoginContainer = () => {
               {form[el.props.id].data && (
                 <Relative.Cancel id={el.props.id} onClick={handleClick} />
               )}
+              {form[el.props.id].error && (
+                <Error>{form[el.props.id].error}</Error>
+              )}
             </Relative>
-            {form[el.props.id].error && (
-              <Error>{form[el.props.id].error}</Error>
-            )}
           </div>
         ))}
         <div>

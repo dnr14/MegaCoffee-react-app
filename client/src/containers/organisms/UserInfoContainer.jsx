@@ -121,6 +121,7 @@ const UserInfoContainer = () => {
     }
   };
 
+  // 회원 수정
   const handleFileUpload = e => {
     e.preventDefault();
     const file = e.target.file.files[0];
@@ -203,15 +204,16 @@ const UserInfoContainer = () => {
           return (
             <div key={idx}>
               <FormLabel htmlFor={el.props.id}>{el.name}</FormLabel>
-              {el.props.error && (
-                <Error>
-                  <span>{el.props.error}</span>
-                </Error>
-              )}
+
               <Relative>
                 <LoginInput {...el.props} onChange={el.onChange} />
                 {el.props.value && (
                   <Relative.Cancel id={el.props.id} onClick={el.onClick} />
+                )}
+                {el.props.error && (
+                  <Error>
+                    <span>{el.props.error}</span>
+                  </Error>
                 )}
               </Relative>
             </div>
