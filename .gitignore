@@ -1,6 +1,7 @@
 client/build
 client/dist
 client/node_modules
+client/.env
 server/node_modules
 server/public/files/profile
 server/.env

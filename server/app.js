@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const ROOT = path.join(__dirname, "/public");
 const IMG_PATH = `${ROOT}/files/profile/`;
+
 db();
 app.use(logger());
 app.use(express.json());

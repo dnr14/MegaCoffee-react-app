@@ -1,9 +1,12 @@
 const express = require("express");
 const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
-const { makeError, emptyCheck } = require("../utils/error");
+const MenuSchema = require("../models/MenuSchema");
+const { makeError } = require("../utils/error");
+const { s3upload, s3FileDelete } = require("../middleware/multer");
 const router = express.Router();
 
+// 유저 정보 다 가져오기
 router.get("/users", async (req, res) => {
   try {
     const query = req.query;
@@ -43,6 +46,27 @@ router.get("/users", async (req, res) => {
   }
 });
 
+// 특정 유저 정보 가져오기
+router.get("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await UsersSchma.findOne()
+      .where("id")
+      .equals(id)
+      .select("-_id -pwd -__v");
+
+    res.json(user);
+  } catch (error) {
+    const { message, status } = error;
+    res.json({
+      code: status,
+      message,
+    });
+  }
+});
+
+// 유저 정보 수정
 router.patch("/users", async (req, res) => {
   try {
     const body = req.body;
@@ -86,22 +110,70 @@ router.patch("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
+// 메뉴 등록 api
+router.post("/menu", (req, res) => {
+  s3upload("image", "menus")(req, res, async (err) => {
+    try {
+      if (err) throw err;
+
+      if (req.file === undefined) {
+        throw makeError("썸네일이 없습니다.", 400);
+      }
+
+      if (
+        req.body.title === undefined ||
+        req.body.body === undefined ||
+        req.body.temperature === undefined ||
+        req.body.category === undefined
+      ) {
+        s3FileDelete(req.file.key);
+        throw makeError("입력 값이 충족하지 않습니다.", 400);
+      }
+
+      const { title, body, temperature, category } = req.body;
+      const { location } = req.file;
+
+      const prefix = Math.random().toString(36).slice(6);
+      const subfix = Math.random().toString(8).slice(5);
+
+      const menu = await new MenuSchema({
+        id: prefix + subfix,
+        title,
+        body,
+        temperature,
+        category,
+        thumbnail: location,
+      }).save();
+
+      res.json(menu);
+    } catch (error) {
+      const { message, status: code = 504 } = error;
+      res.json({
+        code,
+        message,
+      });
+    }
+  });
+});
+
+// 메뉴 가져오기 api
+router.get("/menu", async (_, res) => {
   try {
-    const { id } = req.params;
+    const limit = 10;
+    const menus = await MenuSchema.find().sort({ _id: -1 }).select("-_id");
+    const totalResults = await MenuSchema.find().count();
+    const totalPages = Math.ceil(totalResults / limit);
 
-    const user = await UsersSchma.findOne()
-      .where("id")
-      .equals(id)
-      .select("-_id -pwd -__v");
-
-    res.json(user);
-  } catch (error) {
-    const { message, status } = error;
     res.json({
-      code: status,
-      message,
+      results: menus,
+      page: 1,
+      limit,
+      totalPages,
+      totalResults,
     });
+  } catch (e) {
+    const { message, status = 503 } = e;
+    res.json({ code: status, message });
   }
 });
 
