@@ -9,3 +9,10 @@ export function userUpdate(data) {
 export function userSearch(id) {
   return http.get(`/api/admin/users/${id}`);
 }
+
+export function menuInsert(formData) {
+  return http.post('/api/admin/menu', formData);
+}
+export function menuSelect() {
+  return http.get('/api/admin/menu');
+}

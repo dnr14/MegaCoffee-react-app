@@ -128,7 +128,7 @@ const editorConfiguration = {
     ],
   },
 
-  placeholder: '당신이 이야기를 적어주세요.',
+  // placeholder: '당신이 이야기를 적어주세요.',
 };
 
 const CoustomEditor = ({ ...rest }) => {

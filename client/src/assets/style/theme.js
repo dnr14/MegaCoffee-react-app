@@ -18,6 +18,7 @@ const theme = {
     red2: '#572526',
     green1: '#2ecc71',
     shadowColor: 'rgba(45, 52, 54,0.5)',
+    backgroundColor1: 'rgb(233, 236, 239)',
   },
   media: {
     pc: `@media screen and (max-width: ${size.pc})`,
