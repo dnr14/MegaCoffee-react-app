@@ -1,60 +1,56 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import Test from '@/components/atoms/Test';
 import { MenuContext } from './MenuContextProvider';
+import Menu from '@/components/molecules/Menu';
+import Test from '@/components/atoms/Test';
+
+let timer;
 
 const MenusContainer = () => {
   const history = useHistory();
   const params = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [popUpCloseEvent, setPopUpCloseEvent] = useState(null);
+  const [clicked, setClicked] = useState(null);
   const { list } = useContext(MenuContext);
   const { results } = list;
 
   const up = useCallback(close => setPopUpCloseEvent({ close }), []);
-  const historyMove = id => {
-    let timer;
-    return () => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        history.push(`/admin/menu/${id}`);
-        timer = null;
-      }, 1000);
-      popUpCloseEvent.close();
-    };
+
+  const historyMove = id => () => {
+    if (id === clicked && isOpen) return;
+    if (timer) clearTimeout(timer);
+    if (params.id && popUpCloseEvent) popUpCloseEvent.close();
+    timer = setTimeout(() => {
+      history.push(`/admin/menu/${id}`);
+      setClicked(id);
+    }, 400);
   };
 
   useEffect(() => {
-    if (params.id) {
-      setIsOpen(true);
-    }
+    if (params.id) setIsOpen(true);
   }, [params]);
 
-  const menuList = results?.map(
-    ({ id, thumbnail, body, title, temperature, category }) => (
-      <div key={id} style={{ overflow: 'hidden' }}>
-        <FLEXBOX>
-          <div onClick={historyMove(id)} style={{ cursor: 'pointer' }}>
-            <IMGBOX>
-              <IMG src={thumbnail} alt="menu-img" />
-            </IMGBOX>
-          </div>
+  const menuList = results?.map(menu => (
+    <div key={menu.id} style={{ overflow: 'hidden' }}>
+      <Menu menu={menu} historyMove={historyMove} />
+      {params.id === menu.id && isOpen && (
+        <Test
+          isOpen={isOpen}
+          openDelay={500}
+          closeDelay={300}
+          setIsOpen={setIsOpen}
+          up={up}
+        >
           <div>
-            <div dangerouslySetInnerHTML={{ __html: body }} />
-            <div>{title}</div>
-            <div>{temperature}</div>
-            <div>{category}</div>
+            <div>상세 설명</div>
+            <INFO dangerouslySetInnerHTML={{ __html: menu.body }} />
           </div>
-        </FLEXBOX>
-        {params.id === id && isOpen ? (
-          <Test isOpen={isOpen} setIsOpen={setIsOpen} up={up}>
-            1
-          </Test>
-        ) : null}
-      </div>
-    )
-  );
+        </Test>
+      )}
+    </div>
+  ));
 
   return (
     <>
@@ -75,25 +71,15 @@ const IMGBOX = styled.div`
   padding: 100px 0 0 0;
   width: 100px;
 `;
-const FLEXBOX = styled.div`
-  margin: 20px 0;
-  box-sizing: border-box;
-  display: flex;
 
-  & > div:last-child {
-    flex: 1;
-  }
-`;
-
-const visibleCss = css`
-  height: 100px;
-  opacity: 1;
-`;
 const INFO = styled.div`
-  height: 0;
-  opacity: 0;
-  transition: height 0.5s ease-in;
-  ${({ visible }) => visible && visibleCss}
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 20px;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default MenusContainer;
