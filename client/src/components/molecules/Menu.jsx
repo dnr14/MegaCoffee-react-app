@@ -1,55 +1,93 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 
-const Menu = ({ menu, historyMove }) => {
+const Menu = ({ menu, historyMove, handleMenuDelete, children }) => {
+  const { title, id, thumbnail, temperature, category } = menu;
   return (
-    <>
-      <FLEXBOX>
-        <div style={{ cursor: 'pointer' }} onClick={historyMove(menu.id)}>
-          <IMGBOX>
-            <IMG src={menu.thumbnail} alt="menu-img" />
-          </IMGBOX>
+    <MenuContainer>
+      <FloxBox>
+        <div onClick={historyMove(id)}>
+          <div className="img-box">
+            <img src={thumbnail} alt="menu-img" />
+          </div>
         </div>
-        <div>
-          <div>{menu.title}</div>
-          <div>{menu.temperature}</div>
-          <div>{menu.category}</div>
-        </div>
-      </FLEXBOX>
-    </>
+        <ProductInfo>
+          <div>
+            <span>상품명</span>
+            <span>{title}</span>
+          </div>
+          <div>
+            <span>상품 온도</span>
+            <span>{temperature}</span>
+          </div>
+          <div>
+            <span>상품 종류</span>
+            <span>{category}</span>
+          </div>
+        </ProductInfo>
+        <ProductDelete>
+          <span onClick={handleMenuDelete(id)}>delete</span>
+        </ProductDelete>
+      </FloxBox>
+      {children}
+    </MenuContainer>
   );
 };
 
-const IMG = styled.img`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100%;
-`;
+const MenuContainer = styled.div`
+  overflow: hidden;
 
-const IMGBOX = styled.div`
-  position: relative;
-  padding: 100px 0 0 0;
-  width: 100px;
-`;
-const FLEXBOX = styled.div`
-  margin: 20px 0;
-  box-sizing: border-box;
-  display: flex;
-
-  & > div:last-child {
-    flex: 1;
+  img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+  }
+  .img-box {
+    position: relative;
+    padding: 100px 0 0 0;
+    width: 100px;
   }
 `;
 
-const INFO = styled.div`
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-height: 20px;
-  font-size: 0.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+const ProductInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  & > div {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    align-items: center;
+  }
+  & > div > span:first-child {
+    width: 100px;
+  }
+
+  & > div > span:last-child {
+    font-weight: bold;
+  }
+`;
+
+const ProductDelete = styled.div`
+  span {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const FloxBox = styled.div`
+  margin: 20px 0;
+  box-sizing: border-box;
+  display: flex;
+  gap: 10px;
+
+  span {
+    font-size: 0.7rem;
+  }
 `;
 
 export default memo(Menu);

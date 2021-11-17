@@ -27,6 +27,7 @@ const HeaderContainer = () => {
       links.push({ path: '/admin/users', name: '관리자 페이지' });
     }
   }
+  links.push({ path: '/category/coffee', name: '메뉴' });
 
   const profile = useMemo(
     () => accessToken && <Profile id={id} name={name} img={img} />,

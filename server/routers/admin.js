@@ -157,23 +157,81 @@ router.post("/menu", (req, res) => {
 });
 
 // 메뉴 가져오기 api
-router.get("/menu", async (_, res) => {
+router.get("/menu", async (req, res) => {
   try {
-    const limit = 10;
-    const menus = await MenuSchema.find().sort({ _id: -1 }).select("-_id");
-    const totalResults = await MenuSchema.find().count();
-    const totalPages = Math.ceil(totalResults / limit);
+    const category = req.query.category;
+    console.log(category);
+    let page = Number(req.query.page ?? 1);
+    const limit = Number(req.query.limit ?? 10);
 
-    res.json({
-      results: menus,
-      page: 1,
-      limit,
-      totalPages,
-      totalResults,
-    });
+    if (!category) {
+      const totalResults = await MenuSchema.find().count();
+      const totalPages = Math.ceil(totalResults / limit);
+      if (page > totalPages) {
+        page = totalPages;
+      }
+      const skip = 0 > page - 1 ? 0 : Number((page - 1) * limit);
+
+      const results = await MenuSchema.find()
+        .sort({ _id: -1 })
+        .limit(limit)
+        .skip(skip)
+        .select("-_id");
+
+      res.json({
+        results,
+        page,
+        limit,
+        totalPages,
+        totalResults,
+      });
+    }
+
+    if (category) {
+      const totalResults = await MenuSchema.find({ category }).count();
+      console.log(totalResults);
+      const totalPages = Math.ceil(totalResults / limit);
+      if (page > totalPages) {
+        page = totalPages;
+      }
+      const skip = 0 > page - 1 ? 0 : Number((page - 1) * limit);
+
+      const results = await MenuSchema.find({ category })
+        .sort({ _id: -1 })
+        .limit(limit)
+        .skip(skip)
+        .select("-_id");
+
+      res.json({
+        results,
+        page,
+        limit,
+        totalPages,
+        totalResults,
+      });
+    }
   } catch (e) {
     const { message, status = 503 } = e;
     res.json({ code: status, message });
+  }
+});
+
+router.delete("/menu/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const menu = await MenuSchema.findOneAndDelete()
+      .where("id")
+      .equals(id)
+      .select("id -_id");
+
+    if (menu === null) return res.json({});
+    res.json(menu);
+  } catch (error) {
+    const { message, status: code = 504 } = error;
+    res.json({
+      code,
+      message,
+    });
   }
 });
 

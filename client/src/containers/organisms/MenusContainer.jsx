@@ -1,9 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components';
 import { MenuContext } from './MenuContextProvider';
 import Menu from '@/components/molecules/Menu';
-import Test from '@/components/atoms/Test';
+import Info from '@/components/atoms/Info';
+import Button from '@/components/atoms/Button';
+import useFetch from '@/hooks/useFetch';
+import { menuSelect, menuDelete } from '@/api/admin';
+import Loading from '@/components/atoms/Loading';
+import Alert from '@/components/atoms/Alert';
 
 let timer;
 
@@ -13,8 +17,13 @@ const MenusContainer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [popUpCloseEvent, setPopUpCloseEvent] = useState(null);
   const [clicked, setClicked] = useState(null);
-  const { list } = useContext(MenuContext);
+  const { state, callApi } = useFetch();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const { list, setList } = useContext(MenuContext);
   const { results } = list;
+  const { loading, error, success } = state;
+  const MenuId = params.id;
 
   const up = useCallback(close => setPopUpCloseEvent({ close }), []);
 
@@ -28,58 +37,103 @@ const MenusContainer = () => {
     }, 400);
   };
 
+  const handleHasMoreMenu = () => {
+    if (list.page === list.totalPages) return;
+    callApi(() => menuSelect(list.page + 1));
+  };
+  const handleMenuDelete = id => () => {
+    callApi(() => menuDelete(id));
+  };
+
   useEffect(() => {
     if (params.id) setIsOpen(true);
   }, [params]);
 
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+      setAlertOpen(true);
+      setAlertMessage(
+        <div className="red">
+          <span>서버에서 에러가 발생했습니다.</span>
+        </div>
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const { results } = success.data;
+      if (results) {
+        setList(prevList => ({
+          ...prevList,
+          results: [...prevList.results, ...results],
+          page: success.data.page,
+        }));
+      } else if (!results) {
+        setList(prevList => ({
+          ...prevList,
+          results: prevList.results.filter(list => list.id !== success.data.id),
+        }));
+        setAlertOpen(true);
+        setAlertMessage(
+          <div className="green">
+            <span>메뉴가 삭제되었습니다.</span>
+          </div>
+        );
+      }
+    }
+  }, [success, setList]);
+
   const menuList = results?.map(menu => (
-    <div key={menu.id} style={{ overflow: 'hidden' }}>
-      <Menu menu={menu} historyMove={historyMove} />
-      {params.id === menu.id && isOpen && (
-        <Test
+    <Menu
+      key={menu.id}
+      menu={menu}
+      historyMove={historyMove}
+      handleMenuDelete={handleMenuDelete}
+    >
+      {MenuId === menu.id && isOpen && (
+        <Info
           isOpen={isOpen}
           openDelay={500}
           closeDelay={300}
           setIsOpen={setIsOpen}
           up={up}
         >
-          <div>
-            <div>상세 설명</div>
-            <INFO dangerouslySetInnerHTML={{ __html: menu.body }} />
-          </div>
-        </Test>
+          <div>상세 설명</div>
+          <div
+            dangerouslySetInnerHTML={{ __html: menu.body }}
+            className="info"
+          />
+        </Info>
       )}
-    </div>
+    </Menu>
   ));
 
   return (
     <>
-      <div>{menuList}</div>
+      {alertOpen && (
+        <Alert isOpen={alertOpen} setIsOpen={setAlertOpen} closeDelay={3000}>
+          {alertMessage}
+        </Alert>
+      )}
+      <Loading loading={loading} />
+      <div>
+        <div>상품 이미지를 클릭 시 상세 설명이 나옵니다.(*)</div>
+        <div>
+          <span>total {list?.totalResults}개</span>
+        </div>
+        {menuList}
+        <Button
+          type="button"
+          onClick={handleHasMoreMenu}
+          disabled={list.page === list.totalPages}
+        >
+          더보기
+        </Button>
+      </div>
     </>
   );
 };
-
-const IMG = styled.img`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100%;
-`;
-
-const IMGBOX = styled.div`
-  position: relative;
-  padding: 100px 0 0 0;
-  width: 100px;
-`;
-
-const INFO = styled.div`
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-height: 20px;
-  font-size: 0.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
 
 export default MenusContainer;

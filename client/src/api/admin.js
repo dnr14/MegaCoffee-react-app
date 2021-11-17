@@ -13,6 +13,15 @@ export function userSearch(id) {
 export function menuInsert(formData) {
   return http.post('/api/admin/menu', formData);
 }
-export function menuSelect() {
-  return http.get('/api/admin/menu');
+export function menuSelect(page = 1, limit = 10, category) {
+  if (category) {
+    return http.get(
+      `/api/admin/menu?page=${page}&limit=${limit}&category=${category}`
+    );
+  }
+  return http.get(`/api/admin/menu?page=${page}&limit=${limit}`);
+}
+
+export function menuDelete(id) {
+  return http.delete(`/api/admin/menu/${id}`);
 }

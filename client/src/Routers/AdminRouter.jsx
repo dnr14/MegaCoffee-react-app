@@ -13,10 +13,8 @@ const AdminRouter = ({ component: Component, ...rest }) => {
   );
 };
 
-const isAdmin = () => {
-  return isLogin() && isRole() === 'admin';
-};
-const isLogin = () => !!getAccessToken();
+const isAdmin = () => isAuthenticated() && isRole() === 'admin';
+const isAuthenticated = () => !!getAccessToken();
 const isRole = () => getRole();
 
 export default AdminRouter;
