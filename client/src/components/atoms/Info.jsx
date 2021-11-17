@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-const Test = ({ isOpen, closeDelay, openDelay, setIsOpen, up, children }) => {
-  const [visible, setVisible] = useState(false);
+const Info = ({ isOpen, closeDelay, openDelay, setIsOpen, up, children }) => {
   const close = useRef(false);
+  const [visible, setVisible] = useState(false);
   const OPENDELAY = useMemo(() => openDelay, [openDelay]);
   const CLOSEELAY = useMemo(() => closeDelay, [closeDelay]);
 
@@ -24,44 +24,45 @@ const Test = ({ isOpen, closeDelay, openDelay, setIsOpen, up, children }) => {
   }, [visible, isOpen, setIsOpen, OPENDELAY, CLOSEELAY]);
 
   return (
-    <AlertContainer onClick={modalClose} visible={visible}>
+    <InfoContainer onClick={modalClose} visible={visible}>
       {children}
-    </AlertContainer>
+    </InfoContainer>
   );
 };
 
-const AlertOpenCss = css`
+const InfoOpenCss = css`
   opacity: 1;
   height: 100px;
 `;
 
-const AlertCloseCss = css`
+const InfoCloseCss = css`
   transition: height 0.3s, opacity 0.25s ease-in;
 `;
-const AlertContainer = styled.div`
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   cursor: pointer;
   opacity: 0;
   height: 0;
   transition: height 1s, opacity 0.25s ease-in;
   box-shadow: rgb(0 0 0 / 4%) 0px 4px 16px 0px;
 
-  ${({ visible }) => visible && AlertOpenCss}
-  ${({ visible }) => !visible && AlertCloseCss}
- 
-  & > div {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-    line-height: 1.5;
-    padding: 1rem;
-    padding-right: 3rem;
-    &.green {
-      background: rgb(18, 184, 134);
-    }
-    &.red {
-      background: #e74c3c;
-    }
+  ${({ visible }) => visible && InfoOpenCss}
+  ${({ visible }) => !visible && InfoCloseCss}
+
+  .info {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 20px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  p {
+    font-size: 0.7rem;
   }
 `;
 
-export default Test;
+export default Info;
