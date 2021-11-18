@@ -13,6 +13,7 @@ app.use(express.json());
 app.use("/api/users", require("./routers/users"));
 app.use("/api/auth", require("./routers/auth"));
 app.use("/api/admin", require("./routers/admin"));
+app.use("/api/noticeBoard", require("./routers/userNoticeBoard"));
 app.use("/public/files/profile/:imgname", (req, res) => {
   res.set("Cache-Control", "public, max-age=240");
   res.sendFile(`${IMG_PATH}${req.params.imgname}`);

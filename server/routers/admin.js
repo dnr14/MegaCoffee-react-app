@@ -1,5 +1,4 @@
 const express = require("express");
-const jwt = require("../middleware/jwt");
 const UsersSchma = require("../models/UsersSchma");
 const MenuSchema = require("../models/MenuSchema");
 const { makeError } = require("../utils/error");
@@ -21,7 +20,7 @@ router.get("/users", async (req, res) => {
       page = totalPages;
     }
 
-    const skip = Number((page - 1) * limit);
+    const skip = 0 > page - 1 ? 0 : Number((page - 1) * limit);
 
     // number 형태로 안들어가면 몽구스 페이지네이션이 잘안된다.
     const results = await UsersSchma.find()
