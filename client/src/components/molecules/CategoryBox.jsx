@@ -10,9 +10,8 @@ const CategoryBox = ({ container, containerIdx }) => {
     <Row>
       <Col>
         {container.map((category, categoryIdx) => {
-          if (Object.entries(category).length === 0) {
+          if (Object.entries(category).length === 0)
             return <StyledDiv key={categoryIdx} />;
-          }
 
           return (
             <Link

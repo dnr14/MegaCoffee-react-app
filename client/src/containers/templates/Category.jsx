@@ -7,25 +7,13 @@ import CategoryMainContainer from '../organisms/CategoryMainContainer';
 const Category = () => {
   const match = useRouteMatch();
   const { path } = match;
-  const [urls] = useState(['coffee', 'beverage', 'tea', 'juice', 'ade']);
-  const [fullUrls, setFullUrls] = useState([
+  const [fullUrls] = useState([
     `${path}/coffee`,
     `${path}/beverage`,
     `${path}/tea`,
     `${path}/juice`,
     `${path}/ade`,
   ]);
-
-  useEffect(() => {
-    console.log('변화');
-    setFullUrls([
-      `${path}/coffee`,
-      `${path}/beverage`,
-      `${path}/tea`,
-      `${path}/juice`,
-      `${path}/ade`,
-    ]);
-  }, [path]);
 
   // 레이아웃을 다른거쓰자
   return (
@@ -38,7 +26,7 @@ const Category = () => {
               if (!fullUrls.includes(match.url)) return <RootRedirect />;
               return (
                 <>
-                  <CategoryHeaderContainer urls={urls} path={path} />
+                  <CategoryHeaderContainer fullUrls={fullUrls} />
                   <CategoryMainContainer />
                 </>
               );

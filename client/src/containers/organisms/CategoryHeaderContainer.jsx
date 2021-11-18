@@ -1,16 +1,16 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import Categorys from '@/components/molecules/Categorys';
+import CategoryHeader from '@/components/molecules/CategoryHeader';
 
-const CategoryHeaderContainer = ({ path, urls }) => {
+const CategoryHeaderContainer = ({ fullUrls }) => {
   const match = useRouteMatch();
-  const categoryHeaderEls = urls.map(url => ({
-    url: `${path}/${url}`,
-    checked: match.url === `${path}/${url}`,
-    text: url,
+  const els = fullUrls.map(url => ({
+    url,
+    checked: match.url === url,
+    text: url.split('/')[2],
   }));
 
-  return <Categorys els={categoryHeaderEls} />;
+  return <CategoryHeader els={els} />;
 };
 
 export default CategoryHeaderContainer;

@@ -16,7 +16,7 @@ const IMG_EUMS = {
   ade: menuAde,
 };
 
-const Categorys = ({ els }) => {
+const CategoryHeader = ({ els }) => {
   const { id } = useParams();
   const categoryHeaders = els.map(({ url, checked, text }, idx) => (
     <CategoryLabel key={idx} checked={checked}>
@@ -46,4 +46,4 @@ const CategoryHeaderImgLayout = styled.div`
   border-bottom: 1px solid gray;
 `;
 
-export default Categorys;
+export default CategoryHeader;
