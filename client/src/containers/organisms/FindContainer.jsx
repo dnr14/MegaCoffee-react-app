@@ -7,7 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import RootRedirect from '@/RootRedirect';
+import RootRedirect from '@/Routers/RootRedirect';
 import useForm from '@/hooks/useForm';
 import FindForm from '@/components/molecules/FindForm';
 import { emptyCheck } from '@/utils/validations';

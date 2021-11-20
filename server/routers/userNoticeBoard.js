@@ -53,6 +53,7 @@ router.post("/", verify, async (req, res) => {
       category,
       categoryThumbnail,
       createAt: new Date().toLocaleString(),
+      timeStemp: new Date().getTime(),
     }).save();
 
     res.status(201).json({ userNoticeBoard });

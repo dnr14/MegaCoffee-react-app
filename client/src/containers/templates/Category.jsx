@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, useRouteMatch, Switch } from 'react-router-dom';
 import CategoryHeaderContainer from '../organisms/CategoryHeaderContainer';
-import RootRedirect from '@/RootRedirect';
+import RootRedirect from '@/Routers/RootRedirect';
 import CategoryMainContainer from '../organisms/CategoryMainContainer';
 
 const Category = () => {

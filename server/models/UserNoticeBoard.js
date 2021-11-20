@@ -47,6 +47,9 @@ const userNoticeBoard = new Schema(
       default: "",
       trim: true,
     },
+    timeStemp: {
+      type: String,
+    },
   },
   { versionKey: false }
 );
