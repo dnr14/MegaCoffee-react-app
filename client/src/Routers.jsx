@@ -7,18 +7,20 @@ import Welcome from '@/containers/templates/Welcome';
 import Logout from '@/containers/templates/Logout';
 import UserInfo from '@/containers/templates/UserInfo';
 import Find from '@/containers/templates/Find';
-import RootRedirect from './RootRedirect';
+import RootRedirect from './Routers/RootRedirect';
 import AdminRouter from './Routers/AdminRouter';
 import PublicRouter from './Routers/PublicRouter';
 import PrivateRouter from './Routers/PrivateRouter';
 import AdminPage from './pages/Admin/AdminPage';
 import CategoryPage from './pages/Category/CategoryPage';
+import NoticeBoardPage from '@/pages/NoticeBoard/NoticeBoardPage';
 
 const Routers = () => {
   return (
     <Switch>
       <Route path="/find" component={Find} />
       <Route path="/category" component={CategoryPage} />
+      <Route path="/noticeBoard" component={NoticeBoardPage} />
       <PublicRouter path="/login" component={Login} restricted />
       <PublicRouter path="/memberShip" component={MemberShip} restricted />
       <PrivateRouter path="/logout" component={Logout} restricted />

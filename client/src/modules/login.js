@@ -4,7 +4,7 @@ import { getAccessToken, removeToken } from '@/utils/localstorege';
 export const TOKEN_ADD = 'TOKEN_ADD';
 export const USER_INFO_FATCH = 'USER_INFO_FATCH';
 export const USER_INFO_FATCH_ERROR = 'USER_INFO_FATCH';
-export const userInfoRemove = 'userInfoRemove';
+export const USER_INFO_REMOVE = 'USER_INFO_REMOVE';
 
 const init = {
   id: null,
@@ -21,7 +21,7 @@ export const tokenAddAction = accessToken => ({
   accessToken,
 });
 
-export const userInfoRemoveAction = () => ({ type: userInfoRemove });
+export const userInfoRemoveAction = () => ({ type: USER_INFO_REMOVE });
 
 export const userInfoFatchAction = userInfo => ({
   type: USER_INFO_FATCH,
@@ -52,7 +52,7 @@ export const loginReducer = (state = init, action) => {
         ...state,
         ...action.userInfo,
       };
-    case userInfoRemove:
+    case USER_INFO_REMOVE:
       return {
         ...init,
       };

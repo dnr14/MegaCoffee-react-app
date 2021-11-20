@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
-import RootRedirect from '@/RootRedirect';
+import RootRedirect from '@/Routers/RootRedirect';
 import Title from '@/components/atoms/Title';
 import AdminLinks from '@/components/molecules/AdminLinks';
 import UsersContainer from '../organisms/UsersContainer';

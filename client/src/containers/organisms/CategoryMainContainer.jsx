@@ -36,6 +36,8 @@ const CategoryMainContainer = () => {
           return makeArray[index].push(result);
         });
 
+        console.log(makeArray);
+
         setCategory({
           ...data,
           results: makeArray,
