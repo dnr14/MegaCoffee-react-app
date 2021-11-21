@@ -116,42 +116,6 @@ const NoticeBoardInsertContainer = () => {
     (async () => {
       const { data } = await menuSelect(page, limit);
       const { results } = data;
-
-      // console.log(newArray);
-
-      // Array.from({ length: 60 }).map((_, i) => {
-      //   const index = Math.floor(i / 10);
-      //   const result = results[i] ? results[i] : {};
-      //   return makeArray[index].push({ ...result });
-      // });
-
-      // data.results.forEach((element, idx) => {
-      //   const index = Math.floor(idx / 10);
-      //   makeArray[index].push(element);
-      // });
-
-      // data.results.reduce((acc, cur, idx) => {
-      //   const index = Math.floor(idx / 10);
-      //   acc[index].push(cur);
-      //   return acc;
-      // }, newArray);
-
-      // const array = [
-      //   [1, 'red'],
-      //   [2, 'orange'],
-      //   [3, 'yellow'],
-      //   [4, 'green'],
-      // ];
-      // const [first, second] = newArray;
-      // const last2 = newArray[newArray.length - 1];
-      // const last1 = newArray[newArray.length - 2];
-      // const n = newArray.concat([first]);
-      // setList(array.concat([first]));
-      // newArray.unshift(last1);
-      // newArray.unshift(last2);
-      // newArray.push(first);
-      // newArray.push(second);
-
       const newArray = [];
       results.forEach((el, idx) => {
         const index = Math.floor(idx / 10);
@@ -162,35 +126,17 @@ const NoticeBoardInsertContainer = () => {
           newArray[index].push(el);
         }
       });
-
-      // const newArray = [
-      //   [1, 'red'],
-      //   [2, 'orange'],
-      //   [3, 'yellow'],
-      //   [4, 'green'],
-      //   [5, 'red'],
-      // ];
       const [frist] = newArray;
       newArray.push(frist);
-
       setList(newArray);
       ulRef.current.style.width = `${newArray.length * width}px`;
     })();
   }, []);
 
-  console.log(list);
-
   return (
     <div>
       <SlideWrapper width={width}>
         <ul ref={ulRef}>
-          {/* {list.map(([a, b], idx) => {
-            return (
-              <li key={idx} className={b}>
-                {a}
-              </li>
-            );
-          })} */}
           {list.map((rows, idx) => (
             <li key={idx}>
               {rows.map(cols => {
