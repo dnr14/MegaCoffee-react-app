@@ -2,64 +2,60 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { menuSelect } from '@/api/admin';
 
+const SLIDE_INTERVAL_TIME = 4000;
+const STR_TRANSITION_TIEM = '0.8s';
+const SLIDE_BTN_TIME = 1500;
+
 const NoticeBoardInsertContainer = () => {
   const [list, setList] = useState([]);
-  const [width] = useState(1000);
+  const [defaultWidth] = useState(1000);
   const count = useRef(1);
-  const ulRef = useRef();
+  const slideRef = useRef();
   const slideStop = useRef(false);
 
+  // 이동 시킬 요소
+  // 슬라이드 index 초기화
+  const moving = (el, value, slideIndex) => {
+    setTimeout(() => {
+      el.style.transition = '0ms';
+      setTranslateX(el, value);
+      setTimeout(() => {
+        el.style.transition = STR_TRANSITION_TIEM;
+        count.current = slideIndex;
+      }, 100);
+    }, 900);
+  };
+
+  const setTranslateX = (el, xValue) => {
+    el.style.transform = `translateX(-${100 * xValue}%)`;
+  };
+
   const light = () => {
-    const lis = ulRef.current.childNodes;
+    const $lis = slideRef.current.childNodes;
+    const slideLastIndex = $lis.length - 1;
+    const beforIndex = count.current;
     count.current += 1;
-    if (count.current > lis.length - 1) {
-      count.current = lis.length - 1;
+    if (count.current > slideLastIndex) count.current = slideLastIndex;
+    $lis.forEach(el => setTranslateX(el, count.current));
+
+    if (count.current === slideLastIndex) {
+      $lis.forEach(el => moving(el, 0, 0));
     }
-
-    lis.forEach(el => {
-      el.style.transform = `translateX(-${100 * count.current}%)`;
-    });
-
-    if (count.current === lis.length - 1) {
-      ulRef.current.childNodes.forEach(el => {
-        setTimeout(() => {
-          el.style.transition = '0ms';
-          el.style.transform = `translateX(-${0}%)`;
-          setTimeout(() => {
-            // el.style.transform = `translateX(-${100}%)`;
-            el.style.transition = '0.8s';
-            count.current = 0;
-          }, 100);
-        }, 900);
-      });
+    if (beforIndex === slideLastIndex) {
+      $lis.forEach(el => setTimeout(() => setTranslateX(el, 1, 1), 1200));
     }
   };
 
   const left = () => {
-    const lis = ulRef.current.childNodes;
+    const $lis = slideRef.current.childNodes;
+    const slideLastIndex = $lis.length - 1;
     count.current -= 1;
+    if (count.current < 0) count.current = 0;
 
-    if (count.current < 0) {
-      count.current = 0;
-    }
-
-    lis.forEach(el => {
-      el.style.transform = `translateX(-${100 * count.current}%)`;
-    });
+    $lis.forEach(el => setTranslateX(el, count.current));
 
     if (count.current === 0) {
-      const last = lis.length - 1;
-
-      ulRef.current.childNodes.forEach(el => {
-        setTimeout(() => {
-          el.style.transition = '0ms';
-          el.style.transform = `translateX(-${last * 100}%)`;
-          setTimeout(() => {
-            el.style.transition = '0.8s';
-            count.current = last;
-          }, 100);
-        }, 900);
-      });
+      $lis.forEach(el => moving(el, slideLastIndex, slideLastIndex));
     }
   };
 
@@ -74,7 +70,7 @@ const NoticeBoardInsertContainer = () => {
       throttling = setTimeout(() => {
         throttling = null;
         slideStop.current = false;
-      }, 1500);
+      }, SLIDE_BTN_TIME);
       light();
     };
   };
@@ -90,11 +86,12 @@ const NoticeBoardInsertContainer = () => {
       throttling = setTimeout(() => {
         throttling = null;
         slideStop.current = false;
-      }, 1500);
+      }, SLIDE_BTN_TIME);
       left();
     };
   };
 
+  // 슬라이드 자동 회전
   // useEffect(() => {
   //   const timer = setInterval(() => {
   //     if (!slideStop.current) {
@@ -103,57 +100,57 @@ const NoticeBoardInsertContainer = () => {
   //       // interval 도중 클릭 시 무시 하도록 하기위해
   //       setTimeout(() => {
   //         slideStop.current = false;
-  //       }, [1000]);
+  //       }, 1000);
   //     }
-  //   }, 4000);
+  //   }, SLIDE_INTERVAL_TIME);
   //   return () => clearInterval(timer);
   // }, []);
 
   useEffect(() => {
     const page = 1;
     const limit = 100;
+    // 하나의 슬라이드에 몇개의 컬럼을 보여줄지 정한다.
+    const COL_COUNT = 10;
 
     (async () => {
       const { data } = await menuSelect(page, limit);
       const { results } = data;
-      const newArray = [];
+      const slideArray = [];
       results.forEach((el, idx) => {
-        const index = Math.floor(idx / 10);
-        if (newArray[index]) {
-          newArray[index].push(el);
+        const index = Math.floor(idx / COL_COUNT);
+        if (slideArray[index]) {
+          slideArray[index].push(el);
         } else {
-          newArray[index] = [];
-          newArray[index].push(el);
+          slideArray[index] = [];
+          slideArray[index].push(el);
         }
       });
-      const [frist] = newArray;
-      newArray.push(frist);
-      setList(newArray);
-      ulRef.current.style.width = `${newArray.length * width}px`;
+      slideArray.push(slideArray[0]);
+      setList(slideArray);
+      slideRef.current.style.width = `${slideArray.length * defaultWidth}px`;
     })();
-  }, []);
+  }, [defaultWidth]);
 
   return (
     <div>
-      <SlideWrapper width={width}>
-        <ul ref={ulRef}>
+      <SlideWrapper width={defaultWidth} translateTime={STR_TRANSITION_TIEM}>
+        <ul ref={slideRef}>
           {list.map((rows, idx) => (
             <li key={idx}>
-              {rows.map(cols => {
-                return (
-                  <div key={cols.id}>
-                    <div>
-                      <img src={cols.thumbnail} alt="thumb" />
-                    </div>
-                    <div>{cols.title}</div>
-                    <div>{cols.category}</div>
+              {rows.map(cols => (
+                <div key={cols.id}>
+                  <div>
+                    <img src={cols.thumbnail} alt="thumb" />
                   </div>
-                );
-              })}
+                  <div>{cols.title}</div>
+                  <div>{cols.category}</div>
+                </div>
+              ))}
             </li>
           ))}
         </ul>
       </SlideWrapper>
+      {/* 수정 해야된다. */}
       <button type="button" onClick={slideLeftMove()}>
         왼쪽
       </button>
@@ -173,7 +170,7 @@ const SlideWrapper = styled.div`
   }
   li {
     width: ${({ width = 1000 }) => `${width}px`};
-    transition: transform 0.8s ease-in-out;
+    transition: transform ${({ translateTime }) => translateTime} ease-in-out;
     transform: translateX(-100%);
     float: left;
     display: flex;
@@ -184,7 +181,7 @@ const SlideWrapper = styled.div`
       border: 1px solid black;
       display: flex;
       flex-direction: column;
-      width: 10%;
+      width: 20%;
       height: 150px;
       overflow: hidden;
       align-items: center;
@@ -199,18 +196,6 @@ const SlideWrapper = styled.div`
         width: 100%;
       }
     }
-  }
-  .red {
-    background-color: red;
-  }
-  .orange {
-    background-color: orange;
-  }
-  .yellow {
-    background-color: yellow;
-  }
-  .green {
-    background-color: green;
   }
 `;
 
