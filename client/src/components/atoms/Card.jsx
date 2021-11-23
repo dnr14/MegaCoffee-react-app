@@ -1,35 +1,36 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import noThumbnail from '@/assets/images/noThumbnail.png';
 import { toStringByFormatting } from '@/utils/formatUtil';
 
 const Card = props => {
-  const { title, body, thumbnail, createAt, updateAt, writer } = props;
+  const { title, body, thumbnail, createAt, updateAt, writer, id } = props;
 
   return (
     <StyledDiv>
-      <CardImg>
-        {thumbnail !== '' ? (
-          <img src={thumbnail && noThumbnail} alt="test" />
-        ) : (
-          <img src={noThumbnail} alt="test" />
-        )}
-      </CardImg>
-      <CardBodyLayout>
-        <CardTitle>{title}</CardTitle>
-        <CardBody>
-          <p>{body}</p>
-        </CardBody>
-        <p>
-          <strong>Writer</strong> : {writer}
-        </p>
-        <p>
-          {updateAt !== ''
-            ? toStringByFormatting(updateAt)
-            : toStringByFormatting(createAt)}
-        </p>
-        <p>댓글 수 0</p>
-      </CardBodyLayout>
+      <Link to={`/noticeBoard/${id}`}>
+        <CardImg>
+          {thumbnail !== '' ? (
+            <img src={thumbnail && noThumbnail} alt="test" />
+          ) : (
+            <img src={noThumbnail} alt="test" />
+          )}
+        </CardImg>
+        <CardBodyLayout>
+          <CardTitle>{title}</CardTitle>
+          <CardBody dangerouslySetInnerHTML={{ __html: body }} />
+          <p>
+            <strong>Writer</strong> : {writer}
+          </p>
+          <p>
+            {updateAt !== ''
+              ? toStringByFormatting(updateAt)
+              : toStringByFormatting(createAt)}
+          </p>
+          <p>댓글 수 0</p>
+        </CardBodyLayout>
+      </Link>
     </StyledDiv>
   );
 };
@@ -59,6 +60,15 @@ const CardBody = styled.div`
   height: 50px;
   ${({ theme }) => theme.media.tab} {
     height: 70px;
+  }
+  p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 20px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 

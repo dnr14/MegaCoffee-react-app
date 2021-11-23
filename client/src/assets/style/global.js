@@ -66,6 +66,9 @@ a {
 .ck-editor__editable_inline {
     min-height: 500px;
 }
+img{
+  -webkit-user-drag: none;
+}
 
 `;
 export default GlobalStyle;

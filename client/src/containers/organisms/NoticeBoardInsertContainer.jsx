@@ -1,201 +1,251 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { insert } from '@/api/userNoticeBoard';
+import Slide from '@/components/molecules/Slide';
+import CoustomEditor from '@/components/molecules/CustomEditor';
+import Form from '@/components/atoms/Form';
+import ThumbnailBox from '@/components/molecules/ThumbnailBox';
+import Thumbnail from '@/components/atoms/Thumbnail';
+import { emptyCheck } from '@/utils/validations';
+import Alert from '@/components/atoms/Alert';
+import Loading from '@/components/atoms/Loading';
+import useFetch from '@/hooks/useFetch';
 import { menuSelect } from '@/api/admin';
+import FormInput from '@/components/atoms/FormInput';
+import InsertMenubar from '@/components/molecules/InsertMenubar';
+import Button from '@/components/atoms/Button';
 
-const SLIDE_INTERVAL_TIME = 4000;
-const STR_TRANSITION_TIEM = '0.8s';
-const SLIDE_BTN_TIME = 1500;
+const CATEGORY_ENUMS = {
+  coffee: '커피',
+  beverage: '음료',
+  tea: '차',
+  juice: '쥬스',
+  ade: '에이드',
+};
 
 const NoticeBoardInsertContainer = () => {
   const [list, setList] = useState([]);
-  const [defaultWidth] = useState(1000);
-  const count = useRef(1);
-  const slideRef = useRef();
-  const slideStop = useRef(false);
+  const history = useHistory();
+  const userInfo = useSelector(({ login }) => login);
+  const [checked, setChecked] = useState(null);
+  const [base64, setBase64] = useState(null);
+  const [fileValue, setFileValue] = useState(null);
+  const [editorValue, setEditorValue] = useState('');
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [category, setCategory] = useState('coffee');
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const { state, callApi } = useFetch();
+  const { loading, success, error } = state;
 
-  // 이동 시킬 요소
-  // 슬라이드 index 초기화
-  const moving = (el, value, slideIndex) => {
-    setTimeout(() => {
-      el.style.transition = '0ms';
-      setTranslateX(el, value);
-      setTimeout(() => {
-        el.style.transition = STR_TRANSITION_TIEM;
-        count.current = slideIndex;
-      }, 100);
-    }, 900);
+  const handleEditorOnChange = (_, editor) => setEditorValue(editor.getData());
+  const handleClick = ({ currentTarget }) => {
+    let obj;
+    const { id } = currentTarget;
+    list.forEach(rows => {
+      rows.forEach(cols => {
+        if (cols.id === id) {
+          obj = cols;
+        }
+      });
+    });
+
+    setChecked({ obj, id });
+  };
+  const handleImgRemoveClick = () => setBase64(null);
+  const handleFileOnchange = async ({ target }) => {
+    const file = target.files[0];
+    const toBase64 = file =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    const base64 = await toBase64(file);
+    setBase64(base64);
+    setFileValue(file);
   };
 
-  const setTranslateX = (el, xValue) => {
-    el.style.transform = `translateX(-${100 * xValue}%)`;
-  };
-
-  const light = () => {
-    const $lis = slideRef.current.childNodes;
-    const slideLastIndex = $lis.length - 1;
-    const beforIndex = count.current;
-    count.current += 1;
-    if (count.current > slideLastIndex) count.current = slideLastIndex;
-    $lis.forEach(el => setTranslateX(el, count.current));
-
-    if (count.current === slideLastIndex) {
-      $lis.forEach(el => moving(el, 0, 0));
+  const handleOnSubmit = e => {
+    e.preventDefault();
+    const { target } = e;
+    const titleValue = target.title.value;
+    const bodyValue = editorValue;
+    const categoryObj = checked?.obj;
+    if (
+      emptyCheck(titleValue) ||
+      emptyCheck(bodyValue) ||
+      emptyCheck(categoryObj)
+    ) {
+      setAlertOpen(true);
+      setAlertMessage(
+        <div className="red">
+          <span>내용을 채워 주세요.</span>
+        </div>
+      );
+      return;
     }
-    if (beforIndex === slideLastIndex) {
-      $lis.forEach(el => setTimeout(() => setTranslateX(el, 1, 1), 1200));
-    }
-  };
 
-  const left = () => {
-    const $lis = slideRef.current.childNodes;
-    const slideLastIndex = $lis.length - 1;
-    count.current -= 1;
-    if (count.current < 0) count.current = 0;
-
-    $lis.forEach(el => setTranslateX(el, count.current));
-
-    if (count.current === 0) {
-      $lis.forEach(el => moving(el, slideLastIndex, slideLastIndex));
-    }
-  };
-
-  const slideLightMove = () => {
-    let throttling;
-    return () => {
-      // interval 도중에 클릭 시 리턴
-      if (slideStop.current) return;
-      // 버튼 연속으로 클릭 시 제어 , 클릭시 인터벌 동작 x
-      if (throttling) return;
-      slideStop.current = true;
-      throttling = setTimeout(() => {
-        throttling = null;
-        slideStop.current = false;
-      }, SLIDE_BTN_TIME);
-      light();
+    const { category, thumbnail } = categoryObj;
+    const data = {
+      title: titleValue,
+      body: bodyValue,
+      writer: userInfo.id,
+      category,
+      categoryThumbnail: thumbnail,
     };
+
+    // const formData = new FormData();
+    // formData.append('title', titleValue);
+    // formData.append('category', categoryValue);
+    // formData.append('temperature', temperatureValue);
+    // formData.append('body', editorValue);
+    // formData.append('image', fileValue);
+    callApi(() => insert(data));
+    setBase64(null);
+    setEditorValue('');
+    target.title.value = '';
   };
 
-  const slideLeftMove = () => {
-    let throttling;
-    return () => {
-      // interval 도중에 클릭 시 리턴
-      if (slideStop.current) return;
-      // 버튼 연속으로 클릭 시 제어 , 클릭시 인터벌 동작 x
-      if (throttling) return;
-      slideStop.current = true;
-      throttling = setTimeout(() => {
-        throttling = null;
-        slideStop.current = false;
-      }, SLIDE_BTN_TIME);
-      left();
-    };
+  const handleCategoryOpenClick = e => {
+    e.preventDefault();
+    setCategoryOpen(true);
   };
-
-  // 슬라이드 자동 회전
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     if (!slideStop.current) {
-  //       slideStop.current = true;
-  //       light();
-  //       // interval 도중 클릭 시 무시 하도록 하기위해
-  //       setTimeout(() => {
-  //         slideStop.current = false;
-  //       }, 1000);
-  //     }
-  //   }, SLIDE_INTERVAL_TIME);
-  //   return () => clearInterval(timer);
-  // }, []);
+  const handleCategoryClicked = e => setCategory(e.target.id);
+  const hanleMenuOpenClose = e => {
+    if (e.defaultPrevented) return;
+    setCategoryOpen(false);
+  };
 
   useEffect(() => {
     const page = 1;
     const limit = 100;
-    // 하나의 슬라이드에 몇개의 컬럼을 보여줄지 정한다.
     const COL_COUNT = 10;
-
     (async () => {
-      const { data } = await menuSelect(page, limit);
+      const { data } = await menuSelect(page, limit, category);
       const { results } = data;
       const slideArray = [];
       results.forEach((el, idx) => {
         const index = Math.floor(idx / COL_COUNT);
+        const obj = {
+          ...el,
+          checked: false,
+        };
         if (slideArray[index]) {
-          slideArray[index].push(el);
+          slideArray[index].push(obj);
         } else {
           slideArray[index] = [];
-          slideArray[index].push(el);
+          slideArray[index].push(obj);
         }
       });
       slideArray.push(slideArray[0]);
       setList(slideArray);
-      slideRef.current.style.width = `${slideArray.length * defaultWidth}px`;
     })();
-  }, [defaultWidth]);
+  }, [category]);
+
+  useEffect(() => {
+    if (checked) {
+      setList(prevList =>
+        prevList.map(rows =>
+          rows.map(cols =>
+            cols.id === checked.id
+              ? { ...cols, checked: true }
+              : { ...cols, checked: false }
+          )
+        )
+      );
+    }
+  }, [checked]);
+
+  useEffect(() => {
+    if (success) {
+      history.replace('/noticeBoard');
+    }
+  }, [success, history]);
+
+  useEffect(() => {
+    if (error) {
+      setAlertOpen(true);
+      setAlertMessage(
+        <div className="red">
+          <span>서버에서 에러가 발생했습니다.</span>
+        </div>
+      );
+    }
+  }, [error]);
 
   return (
-    <div>
-      <SlideWrapper width={defaultWidth} translateTime={STR_TRANSITION_TIEM}>
-        <ul ref={slideRef}>
-          {list.map((rows, idx) => (
-            <li key={idx}>
-              {rows.map(cols => (
-                <div key={cols.id}>
-                  <div>
-                    <img src={cols.thumbnail} alt="thumb" />
-                  </div>
-                  <div>{cols.title}</div>
-                  <div>{cols.category}</div>
-                </div>
-              ))}
-            </li>
-          ))}
-        </ul>
-      </SlideWrapper>
-      {/* 수정 해야된다. */}
-      <button type="button" onClick={slideLeftMove()}>
-        왼쪽
-      </button>
-      <button type="button" onClick={slideLightMove()}>
-        오른쪽
-      </button>
-    </div>
+    <>
+      {alertOpen && (
+        <Alert isOpen={alertOpen} setIsOpen={setAlertOpen} closeDelay={3000}>
+          {alertMessage}
+        </Alert>
+      )}
+      <Loading loading={loading} />
+      <h2>건의가 필요한 {CATEGORY_ENUMS[category]}를 클릭 해주세요.</h2>
+      <Layout onClick={hanleMenuOpenClose}>
+        <InsertMenubar
+          currentId={category}
+          ENUMS={CATEGORY_ENUMS}
+          isOpen={categoryOpen}
+          setIsOpen={setCategoryOpen}
+          menuClick={handleCategoryOpenClick}
+          menuClicked={handleCategoryClicked}
+        />
+      </Layout>
+      <Slide list={list} slideCardClickEevent={handleClick} />
+      <Form onSubmit={handleOnSubmit}>
+        <Layout>
+          <input type="text" id="title" maxLength={100} />
+        </Layout>
+        <div>
+          <ThumbnailBox>
+            <Thumbnail>
+              {base64 ? (
+                <>
+                  <span onClick={handleImgRemoveClick}>제거</span>
+                  <img src={base64} alt="thumbnail" />
+                </>
+              ) : (
+                <>
+                  <label htmlFor="image">
+                    썸네일 업로드
+                    <input
+                      type="file"
+                      id="image"
+                      onChange={handleFileOnchange}
+                    />
+                  </label>
+                </>
+              )}
+            </Thumbnail>
+          </ThumbnailBox>
+        </div>
+        <div>
+          <CoustomEditor
+            id="body"
+            data={editorValue}
+            onChange={handleEditorOnChange}
+          />
+        </div>
+        <Button>출간하기</Button>
+      </Form>
+    </>
   );
 };
 
-const SlideWrapper = styled.div`
-  width: ${({ width = 1000 }) => `${width}px`};
-  margin: 0 auto;
-  overflow: hidden;
-  ul {
-    float: left;
-  }
-  li {
-    width: ${({ width = 1000 }) => `${width}px`};
-    transition: transform ${({ translateTime }) => translateTime} ease-in-out;
-    transform: translateX(-100%);
-    float: left;
-    display: flex;
-    gap: 5px;
-
-    & > div {
-      padding: 0.5rem 0.3rem;
-      border: 1px solid black;
-      display: flex;
-      flex-direction: column;
-      width: 20%;
-      height: 150px;
-      overflow: hidden;
-      align-items: center;
-      justify-content: center;
-
-      & > div {
-        font-size: 0.7rem;
-        word-break: break-all;
-      }
-
-      img {
-        width: 100%;
-      }
-    }
+const Layout = styled.div`
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  input {
+    width: 100%;
+    padding: 0.3rem;
   }
 `;
 

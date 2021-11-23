@@ -69,6 +69,7 @@
     "@ckeditor/ckeditor5-theme-lark": "^31.0.0",
     "@ckeditor/ckeditor5-upload": "^31.0.0",
     "axios": "^0.23.0",
+    "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
