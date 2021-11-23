@@ -2,12 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ThumbnailBox = ({ children }) => {
-  return (
-    <Layout>
-      <div>음료사진</div>
-      {children}
-    </Layout>
-  );
+  return <Layout>{children}</Layout>;
 };
 
 const Layout = styled.div`

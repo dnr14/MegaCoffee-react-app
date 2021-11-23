@@ -50,6 +50,7 @@ const NoticeBoardContainer = () => {
   const makePagination = useCallback(
     (page, totalPages) => {
       if (page === undefined || totalPages === undefined) return [];
+      if (page === 0 || totalPages === 0) return [];
 
       const makeSpan = (index, text) => (
         <span
@@ -92,17 +93,17 @@ const NoticeBoardContainer = () => {
     [handlePageMove]
   );
 
-  const cards = results?.map(card => <Card key={card.id} {...card} />);
+  const cards = results?.map(card => <Card {...card} key={card.id} />);
 
   return (
     <>
       <Loading loading={loading} />
       <Title>
-        <h2>유저 게시판</h2>
+        <h2>건의 게시판</h2>
         {!!getAccessToken() && (
           <div>
             <Link to="/noticeBoard/insert">
-              <span>게시글 쓰기</span>
+              <span>건의 하기</span>
             </Link>
           </div>
         )}

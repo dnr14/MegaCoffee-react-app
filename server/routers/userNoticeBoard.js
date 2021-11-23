@@ -16,12 +16,24 @@ router.get("/", async (req, res) => {
   const skip = page - 1 > 0 ? (page - 1) * limit : 0;
 
   const results = await UserNoticeBoard.find()
-    .sort({ _id: 1 })
+    .sort({ _id: -1 })
     .limit(limit)
     .skip(skip)
     .select("-_id");
 
   res.json({ results, page, limit, totalPages, totalResults });
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  const notice = await UserNoticeBoard.findOne()
+    .where("id")
+    .equals(id)
+    .select("-_id");
+
+  res.json(notice);
 });
 
 router.post("/", verify, async (req, res) => {
@@ -41,6 +53,8 @@ router.post("/", verify, async (req, res) => {
     if (emptyCheck(categoryThumbnail))
       throw makeError("카테고리 사진은 필수입니다.", 400);
 
+    console.log(req.body);
+
     const prefix = Math.random().toString(36).slice(6);
     const suffix = Math.random().toString(8).slice(5);
 
@@ -54,9 +68,12 @@ router.post("/", verify, async (req, res) => {
       categoryThumbnail,
       createAt: new Date().toLocaleString(),
       timeStemp: new Date().getTime(),
-    }).save();
+    })
+      .save()
+      .select("-_id");
 
     res.status(201).json({ userNoticeBoard });
+    // res.status(201).json({ test: "ggoodd" });
   } catch (error) {
     const { message, status = 504 } = error;
     res.json({ code: status, message });
@@ -68,7 +85,7 @@ router.delete("/:id", verify, async (req, res) => {
     const { id } = req.params;
     // 업로드되어있는 사진 지우기 개발
     await UserNoticeBoard.findOneAndDelete().where("id").equals(id);
-    res.status(204);
+    res.status(204).send();
   } catch (error) {
     const { message, status = 504 } = error;
     res.json({ code: status, message });

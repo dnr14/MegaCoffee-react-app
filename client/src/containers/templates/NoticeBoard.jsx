@@ -5,6 +5,7 @@ import RootRedirect from '@/Routers/RootRedirect';
 import NoticeBoardContainer from '../organisms/NoticeBoardContainer';
 import NoticeBoardInsertContainer from '../organisms/NoticeBoardInsertContainer';
 import PrivateRouter from '@/Routers/PrivateRouter';
+import NoticeBoardSelectContainer from '../organisms/NoticeBoardSelectContainer';
 
 const NoticeBoard = () => {
   const { url } = useRouteMatch();
@@ -17,6 +18,7 @@ const NoticeBoard = () => {
             path={`${url}/insert`}
             component={NoticeBoardInsertContainer}
           />
+          <Route path={`${url}/:id`} component={NoticeBoardSelectContainer} />
           <RootRedirect />
         </Switch>
       </section>

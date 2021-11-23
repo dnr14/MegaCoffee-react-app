@@ -28,7 +28,7 @@ const HeaderContainer = () => {
     }
   }
   links.push({ path: '/category/coffee', name: '메뉴' });
-  links.push({ path: '/noticeBoard', name: '유저 게시판' });
+  links.push({ path: '/noticeBoard', name: '건의 게시판' });
 
   const profile = useMemo(
     () => accessToken && <Profile id={id} name={name} img={img} />,

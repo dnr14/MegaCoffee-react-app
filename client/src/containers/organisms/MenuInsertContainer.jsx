@@ -13,6 +13,7 @@ import Form from '@/components/atoms/Form';
 import Alert from '@/components/atoms/Alert';
 import useFetch from '@/hooks/useFetch';
 import Loading from '@/components/atoms/Loading';
+import Title from '@/components/atoms/Title';
 
 const CATEGORY_ENUMS = {
   coffee: '커피',
@@ -145,6 +146,7 @@ const MenuInsertContainer = () => {
         </Alert>
       )}
       <Loading loading={loading} />
+      <Title>음료 사진</Title>
       <Form onSubmit={handleOnSubmit} onClick={hanleMenuOpenClose}>
         <ThumbnailBox>
           <Thumbnail>
