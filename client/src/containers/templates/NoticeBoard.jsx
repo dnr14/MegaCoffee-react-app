@@ -6,6 +6,7 @@ import NoticeBoardContainer from '../organisms/NoticeBoardContainer';
 import NoticeBoardInsertContainer from '../organisms/NoticeBoardInsertContainer';
 import PrivateRouter from '@/Routers/PrivateRouter';
 import NoticeBoardSelectContainer from '../organisms/NoticeBoardSelectContainer';
+import NoticeBoardModifyContainer from '../organisms/NoticeBoardModifyContainer';
 
 const NoticeBoard = () => {
   const { url } = useRouteMatch();
@@ -13,12 +14,16 @@ const NoticeBoard = () => {
     <Layout>
       <section>
         <Switch>
-          <Route path={`${url}`} component={NoticeBoardContainer} exact />
           <PrivateRouter
             path={`${url}/insert`}
             component={NoticeBoardInsertContainer}
           />
+          <PrivateRouter
+            path={`${url}/modify`}
+            component={NoticeBoardModifyContainer}
+          />
           <Route path={`${url}/:id`} component={NoticeBoardSelectContainer} />
+          <Route path={`${url}`} component={NoticeBoardContainer} />
           <RootRedirect />
         </Switch>
       </section>
