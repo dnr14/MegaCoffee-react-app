@@ -1,14 +1,28 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 const Notice = ({ post, userInfo, boardDelete }) => {
+  const { url } = useRouteMatch();
   const { id, body, category, categoryThumbnail, timeStemp, writer } = post;
   return (
     <Container>
       {writer === userInfo.id && (
         <ModifyBox>
-          <span>수정하기</span>
+          <span>
+            <Link
+              to={{
+                pathname: `/${url.split('/')[1]}/modify`,
+                state: {
+                  id,
+                  writer,
+                },
+              }}
+            >
+              수정하기
+            </Link>
+          </span>
           <span onClick={boardDelete(id)}>삭제하기</span>
         </ModifyBox>
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { selectById, deleteById } from '@/api/userNoticeBoard';
@@ -6,6 +6,7 @@ import useFetch from '@/hooks/useFetch';
 import Loading from '@/components/atoms/Loading';
 import Alert from '@/components/atoms/Alert';
 import Notice from '@/components/molecules/Notice';
+import { emptyCheck } from '@/utils/validations';
 
 const NoticeBoardSelectContainer = () => {
   const [post, setPost] = useState(null);
@@ -17,9 +18,10 @@ const NoticeBoardSelectContainer = () => {
   const { state, callApi } = useFetch();
   const { loading, error, success } = state;
 
-  const boardDelete = id => () => {
-    deleteById(id).then(() => history.replace('/noticeBoard'));
-  };
+  const boardDelete = useCallback(
+    id => () => callApi(() => deleteById(id)),
+    [callApi]
+  );
 
   useEffect(() => {
     const { id } = param;
@@ -29,9 +31,14 @@ const NoticeBoardSelectContainer = () => {
   useEffect(() => {
     if (success) {
       const { data } = success;
-      setPost(data);
+      // 게시글 삭제
+      if (emptyCheck(data)) {
+        history.replace('/noticeBoard');
+      } else {
+        setPost(data);
+      }
     }
-  }, [success]);
+  }, [success, history]);
 
   useEffect(() => {
     if (error) {
