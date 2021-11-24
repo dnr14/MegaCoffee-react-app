@@ -1,7 +1,7 @@
 const express = require("express");
 const { makeError, emptyCheck } = require("../utils/error");
 const verify = require("../middleware/jwt").verify;
-const UserNoticeBoard = require("../models/UserNoticeBoard");
+const UserNoticeBoard = require("../models/UserNoticeBoardSchema");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -26,7 +26,6 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   const notice = await UserNoticeBoard.findOne()
     .where("id")
@@ -53,8 +52,6 @@ router.post("/", verify, async (req, res) => {
     if (emptyCheck(categoryThumbnail))
       throw makeError("카테고리 사진은 필수입니다.", 400);
 
-    console.log(req.body);
-
     const prefix = Math.random().toString(36).slice(6);
     const suffix = Math.random().toString(8).slice(5);
 
@@ -68,12 +65,9 @@ router.post("/", verify, async (req, res) => {
       categoryThumbnail,
       createAt: new Date().toLocaleString(),
       timeStemp: new Date().getTime(),
-    })
-      .save()
-      .select("-_id");
+    }).save();
 
     res.status(201).json({ userNoticeBoard });
-    // res.status(201).json({ test: "ggoodd" });
   } catch (error) {
     const { message, status = 504 } = error;
     res.json({ code: status, message });
@@ -97,7 +91,7 @@ router.patch("/:id", verify, async (req, res) => {
   // 불량 값이 들어오면 정규식으로 거르자
   const { title, body, writer, category, categoryThumbnail } = req.body;
 
-  const userNoticeBoard = await UserNoticeBoard.findOneAndUpdate(
+  await UserNoticeBoard.findOneAndUpdate(
     { id },
     {
       $set: {
@@ -107,7 +101,7 @@ router.patch("/:id", verify, async (req, res) => {
     },
     { new: true }
   ).select("-_id");
-  res.json({ userNoticeBoard });
+  res.status(204).send("");
 });
 
 module.exports = router;
