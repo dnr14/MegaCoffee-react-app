@@ -8,6 +8,10 @@ import Pagination from '@/components/molecules/Pagination';
 import useFetch from '@/hooks/useFetch';
 import Loading from '@/components/atoms/Loading';
 import { getAccessToken } from '@/utils/localstorege';
+import Alert from '@/components/atoms/Alert';
+import { selectById } from '@/api/comment';
+import Empty from '@/components/atoms/Empty';
+import { isEmptyObject } from '@/utils/validations';
 
 const USERNOTICE_NUMBER = 'USERNOTICE_NUMBER';
 
@@ -16,6 +20,8 @@ const NoticeBoardContainer = () => {
   const { results, totalPages, page } = userNoticeBoard;
   const { state, callApi } = useFetch();
   const { loading, error, success } = state;
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
 
   const handlePageMove = useCallback(
     id => () => {
@@ -25,25 +31,45 @@ const NoticeBoardContainer = () => {
   );
 
   useEffect(() => {
-    (async () => {
-      const page = localStorage.getItem(USERNOTICE_NUMBER, 1) ?? 1;
-      const { data } = await select(page);
-      setUserNoticeBoard(data);
-    })();
+    const page = localStorage.getItem(USERNOTICE_NUMBER, 1) ?? 1;
+    callApi(() => select(page));
     return () => localStorage.removeItem(USERNOTICE_NUMBER);
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     if (success) {
       const { data } = success;
       localStorage.setItem(USERNOTICE_NUMBER, data.page);
-      setUserNoticeBoard(data);
+      const promiseArray = data.results.map(async result =>
+        selectById(result.id)
+      );
+
+      const boardArray = data.results;
+
+      (async () => {
+        const promiseResult = await Promise.all(promiseArray);
+        const commentsArray = promiseResult.map(o => o.data);
+
+        setUserNoticeBoard({
+          ...data,
+          results: boardArray.map((result, idx) => ({
+            ...result,
+            comments: commentsArray[idx],
+          })),
+        });
+      })();
     }
   }, [success]);
 
   useEffect(() => {
+    console.log(error);
     if (error) {
-      console.error(error);
+      setAlertOpen(true);
+      setAlertMessage(
+        <div className="red">
+          <span>서버에서 에러가 발생했습니다.</span>
+        </div>
+      );
     }
   }, [error]);
 
@@ -93,10 +119,17 @@ const NoticeBoardContainer = () => {
     [handlePageMove]
   );
 
+  // 첫랜더시 css 높이 잡아는주는 용도
+
   const cards = results?.map(card => <Card {...card} key={card.id} />);
 
   return (
     <>
+      {alertOpen && (
+        <Alert isOpen={alertOpen} setIsOpen={setAlertOpen} closeDelay={3000}>
+          {alertMessage}
+        </Alert>
+      )}
       <Loading loading={loading} />
       <Title>
         <h2>건의 게시판</h2>
@@ -108,8 +141,17 @@ const NoticeBoardContainer = () => {
           </div>
         )}
       </Title>
-      <Cards>{cards}</Cards>
-      <Pagination>{makePagination(page, totalPages)}</Pagination>
+      {isEmptyObject(userNoticeBoard) ? (
+        <>
+          <Loading loading={loading} />
+          <Empty />
+        </>
+      ) : (
+        <>
+          <Cards>{cards}</Cards>
+          <Pagination>{makePagination(page, totalPages)}</Pagination>
+        </>
+      )}
     </>
   );
 };
