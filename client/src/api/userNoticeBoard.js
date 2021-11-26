@@ -14,3 +14,7 @@ export function insert(data) {
 export function deleteById(id) {
   return http.delete(`/api/noticeBoard/${id}`);
 }
+
+export function modify(id, data) {
+  return http.patch(`/api/noticeBoard/${id}`, data);
+}

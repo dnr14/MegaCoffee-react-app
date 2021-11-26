@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import useFetch from '@/hooks/useFetch';
-import { selectById } from '@/api/userNoticeBoard';
+import { selectById, modify } from '@/api/userNoticeBoard';
 import { emptyCheck, isEmptyObject } from '@/utils/validations';
 import Loading from '@/components/atoms/Loading';
-import CoustomEditor from '@/components/molecules/CustomEditor';
 import Alert from '@/components/atoms/Alert';
+import Empty from '@/components/atoms/Empty';
+import Modify from '@/components/molecules/Modify';
 
 const NoticeBoardModifyContainer = () => {
   const userInfo = useSelector(({ login }) => login);
@@ -15,14 +16,32 @@ const NoticeBoardModifyContainer = () => {
   const [post, setPost] = useState({});
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
+  const [editorValue, setEditorValue] = useState();
   const { state, callApi } = useFetch();
   const { loading, success, error } = state;
   const { state: locationState } = location;
 
+  const handleOnSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      const { id } = post;
+
+      callApi(() =>
+        modify(id, {
+          body: editorValue,
+        })
+      );
+    },
+    [post, callApi, editorValue]
+  );
+  const handleEditorOnChange = useCallback(
+    (_, editor) => setEditorValue(editor.getData()),
+    []
+  );
+
   useEffect(() => {
     try {
       emptyCheck(locationState);
-      if (locationState.writer !== userInfo.id) throw new Error();
       callApi(() => selectById(locationState.id));
     } catch (error) {
       alert('잘못된 경로입니다.');
@@ -32,8 +51,15 @@ const NoticeBoardModifyContainer = () => {
 
   useEffect(() => {
     if (!success) return;
-    setPost(success.data);
-  }, [success]);
+    const { data, status } = success;
+    if (status === 200) {
+      setEditorValue(data.body);
+      setPost(data);
+    }
+    if (status === 204) {
+      history.goBack();
+    }
+  }, [success, history]);
 
   useEffect(() => {
     if (error) {
@@ -46,7 +72,14 @@ const NoticeBoardModifyContainer = () => {
     }
   }, [error]);
 
-  const { body, title, categoryThumbnail } = post;
+  if (isEmptyObject(post)) {
+    return (
+      <>
+        <Loading loading={loading} />
+        <Empty />
+      </>
+    );
+  }
 
   return (
     <>
@@ -56,15 +89,12 @@ const NoticeBoardModifyContainer = () => {
         </Alert>
       )}
       <Loading loading={loading} />
-      {isEmptyObject(post) || (
-        <div>
-          <div>{title}</div>
-          <div>
-            <img src={categoryThumbnail} alt="thumbnail" />
-          </div>
-          <CoustomEditor data={body} />
-        </div>
-      )}
+      <Modify
+        post={post}
+        editorValue={editorValue}
+        handleOnSubmit={handleOnSubmit}
+        handleEditorOnChange={handleEditorOnChange}
+      />
     </>
   );
 };

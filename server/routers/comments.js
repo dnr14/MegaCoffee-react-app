@@ -46,8 +46,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    if (id.length !== 24) throw makeError(400, "잘못된 입력입니다.");
-    const comment = await Comment.findOne().where("_id").equals(id);
+    console.log(id);
+    // if (id.length !== 24) throw makeError(400, "잘못된 입력입니다.");
+    const comment = await Comment.find().where("noticeBoardId").equals(id);
     res.json(comment);
   } catch (error) {
     const { message, status = 504 } = error;
