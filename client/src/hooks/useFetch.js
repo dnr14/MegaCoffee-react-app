@@ -42,9 +42,11 @@ const reducer = (state, action) => {
 };
 
 const useFetch = () => {
+  const API_DELAY_TIME = 1000;
   const [state, dispatch] = useReducer(reducer, INIT);
 
-  const delay = () => new Promise(res => setTimeout(() => res(), 1000));
+  const delay = () =>
+    new Promise(res => setTimeout(() => res(), API_DELAY_TIME));
   const callApi = useCallback(async cb => {
     dispatch(loadingAction());
     try {
@@ -69,6 +71,8 @@ const useFetch = () => {
     }
   }, []);
 
+  // 반환 값이 2개 밖게 없을땐 배열로 보내주자.
+  // 다음에 개발할땐 객체로 반환하지말고 배열로 반환하자
   return { state, callApi };
 };
 

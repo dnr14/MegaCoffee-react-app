@@ -17,15 +17,14 @@ export const emailCheck = value => {
   return !result;
 };
 export const emptyCheck = value => {
-  if (value === undefined) {
-    throw new Error('value id undefined');
-  }
-  if (value instanceof Array) {
-    return Array(value).length === 0;
-  }
-  if (value === null || value === '' || value === 0) {
-    return true;
-  }
+  // throw new Error('value id undefined');
+  if (Number.isNaN(value)) return true;
+  if (value === undefined) return true;
+  if (value === null || value === '' || value === 0) return true;
+  if (value instanceof Array) return Array(value).length === 0;
+  if (value.constructor === Object || value.constructor === Array)
+    return Object.keys(value).length === 0;
+
   return false;
 };
 export const isEmptyObject = param => {
