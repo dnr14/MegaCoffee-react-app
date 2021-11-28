@@ -7,20 +7,16 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
-const port = process.env.port || 3000;
-
+const PORT = 3000;
 const PRODUCTION = 'production';
-const DEVELOPMENT = 'development';
 const PRODUCT_PUBLIC_PATH = '/build/';
 const DEV_PUBLIC_PATH = '/';
 
-module.exports = (_, argv) => {
-  const mode = argv.mode === PRODUCTION ? PRODUCTION : DEVELOPMENT;
-  const nodeEnv = argv.mode === PRODUCTION ? PRODUCTION : DEVELOPMENT;
+module.exports = (_, { mode }) => {
   const publicPath =
-    argv.mode === PRODUCTION ? PRODUCT_PUBLIC_PATH : DEV_PUBLIC_PATH;
+    mode === PRODUCTION ? PRODUCT_PUBLIC_PATH : DEV_PUBLIC_PATH;
   const plugins =
-    argv.mode === PRODUCTION
+    mode === PRODUCTION
       ? ['@babel/plugin-transform-runtime']
       : ['@babel/plugin-transform-runtime', 'react-refresh/babel'];
 
@@ -28,11 +24,11 @@ module.exports = (_, argv) => {
     template: './public/index.ejs',
     favicon: './public/favicon.png',
     templateParameters: {
-      title: mode === 'development' ? '(개발용)' : 'megacoffeClone',
+      title: mode === PRODUCTION ? 'megacoffeClone' : '(개발용)',
     },
   };
 
-  const CONFIG = {
+  const config = {
     mode,
     entry: './index.js',
     output: {
@@ -127,7 +123,8 @@ module.exports = (_, argv) => {
       new CleanWebpackPlugin(),
       new ReactRefreshWebpackPlugin(),
       new webpack.DefinePlugin({
-        NODE_ENV: JSON.stringify(nodeEnv),
+        NODE_ENV: JSON.stringify(mode),
+        PATH: JSON.stringify('http://localhost:5000'),
       }),
       new MomentLocalesPlugin({
         localesToKeep: ['ko'],
@@ -142,8 +139,7 @@ module.exports = (_, argv) => {
     },
 
     devServer: {
-      port,
-      hot: true,
+      port: PORT,
       open: true,
       historyApiFallback: true,
       devMiddleware: {
@@ -155,14 +151,12 @@ module.exports = (_, argv) => {
     },
   };
 
-  if (argv.mode === PRODUCTION) {
+  if (mode === PRODUCTION) {
     htmlWebpackPluginConfig.filename = '../index.html';
-    CONFIG.plugins.push(new Bp());
+    config.plugins.push(new Bp());
+  } else {
+    config.devtool = 'eval-cheap-module-source-map';
   }
 
-  if (argv.mode === DEVELOPMENT) {
-    CONFIG.devtool = 'eval-cheap-module-source-map';
-  }
-
-  return CONFIG;
+  return config;
 };
