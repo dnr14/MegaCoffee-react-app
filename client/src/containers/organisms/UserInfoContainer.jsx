@@ -24,7 +24,7 @@ const nickNameStateInit = {
 
 const UserInfoContainer = () => {
   const history = useHistory();
-  const state = useSelector(state => state.login);
+  const state = useSelector(({ login }) => login);
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);

@@ -64,9 +64,9 @@ const CommentsContainer = styled.div`
     display: flex;
     justify-content: flex-end;
 
-    & > span {
+    & > button {
       display: inline-block;
-      padding: 0.5rem 0.3rem;
+      padding: 0.3rem 0.3rem;
       cursor: pointer;
       background-color: ${({ theme }) => theme.color.magacoffeColor1};
       color: ${({ theme }) => theme.color.white1};

@@ -1,11 +1,26 @@
 import React from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
+import withLoading from '@/hoc/withLoading';
+import { isEmptyObject } from '@/utils/validations';
 
-const Notice = ({ post, userInfo, boardDelete }) => {
+const Notice = ({ post, userInfo, noticeDelete }) => {
   const { url } = useRouteMatch();
-  const { id, body, category, categoryThumbnail, timeStemp, writer } = post;
+  const { id, body, category, categoryThumbnail, writer, createAt, updateAt } =
+    post;
+
+  if (isEmptyObject(post)) {
+    return (
+      <Container>
+        <div className="skeleton skeleton-title" />
+        <div className="skeleton skeleton-date" />
+        <div className="skeleton skeleton-img" />
+        <div className="skeleton skeleton-category" />
+        <div className="skeleton skeleton-editor" />
+      </Container>
+    );
+  }
+
   return (
     <Container>
       {writer === userInfo.id && (
@@ -23,7 +38,7 @@ const Notice = ({ post, userInfo, boardDelete }) => {
               수정하기
             </Link>
           </span>
-          <span onClick={boardDelete(id)}>삭제하기</span>
+          <span onClick={noticeDelete(id)}>삭제하기</span>
         </ModifyBox>
       )}
 
@@ -31,7 +46,14 @@ const Notice = ({ post, userInfo, boardDelete }) => {
         <h6>{post.title}</h6>
       </TitleBox>
       <DateBox>
-        <span>등록일 {moment(Number(timeStemp)).format('YYYY-MM-DD')}</span>
+        {updateAt === '' ? (
+          <span>{createAt}</span>
+        ) : (
+          <>
+            <span> {updateAt}</span>
+            <UnderBar>업데이트됨</UnderBar>
+          </>
+        )}
       </DateBox>
       <ImgBox>
         <img src={categoryThumbnail} alt="thumbnail" />
@@ -49,12 +71,12 @@ const Notice = ({ post, userInfo, boardDelete }) => {
 
 const CKContent = styled.div`
   word-break: 'break-all';
-  min-height: 300px;
   margin-top: 1rem;
   box-shadow: ${({ theme }) => theme.boxShadow1};
   border: 1px solid ${({ theme }) => theme.color.magacoffeColor1};
   padding: 1rem;
   line-height: 1.5;
+  min-height: 300px;
   border-radius: 20px;
 
   ${({ theme }) => theme.media.tab} {
@@ -83,6 +105,33 @@ const Container = styled.div`
   }
   ${({ theme }) => theme.media.mobile} {
     padding: 0;
+  }
+
+  .skeleton {
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    background-color: ${({ theme }) => theme.color.skeletonColor};
+    ${({ theme }) => theme.skeletonAnimation}
+  }
+
+  .skeleton-title {
+    height: 2.5rem;
+  }
+  .skeleton-date {
+    height: 1rem;
+  }
+  .skeleton-category {
+    height: 1.5rem;
+  }
+  .skeleton-img {
+    height: 400px;
+  }
+  .skeleton-editor {
+    margin-bottom: 0;
+    padding: 1rem;
+    margin-top: 1rem;
+    min-height: 300px;
+    border-radius: 20px;
   }
 `;
 
@@ -152,6 +201,8 @@ const ImgBox = styled.div`
 
 const DateBox = styled.div`
   margin-bottom: 1rem;
+  display: flex;
+  gap: 10px;
   ${({ theme }) => theme.media.tab} {
     font-size: 1rem;
   }
@@ -163,4 +214,18 @@ const DateBox = styled.div`
   }
 `;
 
-export default Notice;
+const UnderBar = styled.span`
+  position: relative;
+  color: rgba(149, 165, 166, 0.4);
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid rgba(149, 165, 166, 0.4);
+    bottom: -20%;
+  }
+`;
+
+export default withLoading(Notice);

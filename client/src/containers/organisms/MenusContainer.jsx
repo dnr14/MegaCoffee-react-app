@@ -51,7 +51,6 @@ const MenusContainer = () => {
 
   useEffect(() => {
     if (error) {
-      console.error(error);
       setAlertOpen(true);
       setAlertMessage(
         <div className="red">

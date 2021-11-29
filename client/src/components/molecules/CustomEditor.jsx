@@ -18,6 +18,7 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle.js';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
+import styled from 'styled-components';
 
 const fontSize = {
   options: [
@@ -67,6 +68,7 @@ const toolbar = [
 
 const editorConfiguration = {
   language: 'ko',
+
   plugins: [
     Heading,
     Essentials,
@@ -127,16 +129,21 @@ const editorConfiguration = {
       },
     ],
   },
-
   // placeholder: '당신이 이야기를 적어주세요.',
 };
 
 const CoustomEditor = ({ ...rest }) => {
   return (
-    <div>
+    <Layout>
       <CKEditor editor={ClassicEditor} config={editorConfiguration} {...rest} />
-    </div>
+    </Layout>
   );
 };
+
+const Layout = styled.div`
+  .ck-editor__editable_inline {
+    min-height: 500px;
+  }
+`;
 
 export default CoustomEditor;

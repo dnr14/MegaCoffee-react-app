@@ -38,6 +38,25 @@ module.exports = (_, { mode }) => {
       path: path.join(__dirname, '/dist/build'),
       publicPath,
     },
+    resolve: {
+      modules: ['node_modules'],
+      extensions: ['.js', '.jsx'],
+      alias: {
+        '@': path.resolve(__dirname, 'src/'),
+      },
+    },
+
+    devServer: {
+      port: PORT,
+      open: true,
+      historyApiFallback: true,
+      devMiddleware: {
+        publicPath,
+      },
+      proxy: {
+        '/api': 'http://localhost:5000',
+      },
+    },
 
     module: {
       rules: [
@@ -130,32 +149,13 @@ module.exports = (_, { mode }) => {
         localesToKeep: ['ko'],
       }),
     ],
-    resolve: {
-      modules: ['node_modules'],
-      extensions: ['.js', '.jsx'],
-      alias: {
-        '@': path.resolve(__dirname, 'src/'),
-      },
-    },
-
-    devServer: {
-      port: PORT,
-      open: true,
-      historyApiFallback: true,
-      devMiddleware: {
-        publicPath,
-      },
-      proxy: {
-        '/api': 'http://localhost:5000',
-      },
-    },
   };
 
   if (mode === PRODUCTION) {
     htmlWebpackPluginConfig.filename = '../index.html';
     config.plugins.push(new Bp());
   } else {
-    config.devtool = 'eval-cheap-module-source-map';
+    config.devtool = 'eval-source-map';
   }
 
   return config;

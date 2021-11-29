@@ -1,8 +1,12 @@
 import React from 'react';
-import Layout from '@/components/atoms/Layout';
+import Main from '@/containers/templates/Main';
 
 const MainPage = () => {
-  return <Layout>여긴 메인입니다.</Layout>;
+  const a = {};
+
+  console.log(a.b.map(o => o));
+
+  return <Main />;
 };
 
 export default MainPage;

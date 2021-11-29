@@ -17,6 +17,11 @@ const Container = styled.div`
   margin: 0 auto;
   width: 60%;
   align-items: center;
+  min-height: 800px;
+  display: flex;
+  & > div {
+    flex: 1;
+  }
 
   ${({ theme }) => theme.media.tab} {
     width: 70%;

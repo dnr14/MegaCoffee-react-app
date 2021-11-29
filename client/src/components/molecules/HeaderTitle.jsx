@@ -18,14 +18,15 @@ const HeaderTitle = () => {
 
 const StyledDiv = styled.div`
   & > h2 {
-    padding: 0.5rem 1rem 1rem 1rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     ${({ theme }) => theme.media.mobile} {
-      padding: 1.5rem;
+      padding: 1.5rem 0.5rem;
       text-align: end;
     }
   }
   img {
-    display: block;
+    display: inline-block;
+    width: 80%;
   }
 `;
 

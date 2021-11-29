@@ -6,6 +6,7 @@ const Form = ({ children, ...rest }) => {
 };
 
 const StyledForm = styled.form`
+  width: 100%;
   display: flex;
   margin-top: 1.5rem;
   margin-bottom: 3rem;

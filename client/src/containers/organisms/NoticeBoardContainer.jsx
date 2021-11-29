@@ -1,68 +1,76 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { select } from '@/api/userNoticeBoard';
-import Cards from '@/components/molecules/Cards';
-import Card from '@/components/atoms/Card';
-import Pagination from '@/components/molecules/Pagination';
 import useFetch from '@/hooks/useFetch';
-import Loading from '@/components/atoms/Loading';
-import { getAccessToken } from '@/utils/localstorege';
 import Alert from '@/components/atoms/Alert';
 import { selectById } from '@/api/comment';
-import Empty from '@/components/atoms/Empty';
-import { isEmptyObject } from '@/utils/validations';
-
-const USERNOTICE_NUMBER = 'USERNOTICE_NUMBER';
+import CardsBox from '../../components/molecules/CardsBox';
+import {
+  getCurrentNoticeNumber,
+  setCurrentNoticeNumber,
+} from '@/utils/localstorege';
+import Pagination from '@/components/molecules/Pagination';
+import { emptyCheck } from '@/utils/validations';
+import Card from '@/components/atoms/Card';
 
 const NoticeBoardContainer = () => {
-  const [userNoticeBoard, setUserNoticeBoard] = useState({});
-  const { results, totalPages, page } = userNoticeBoard;
-  const { state, callApi } = useFetch();
-  const { loading, error, success } = state;
+  const [noticeState, setNoticeState] = useState({});
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
+  const { state, callApi } = useFetch();
+  const { results, totalPages, page } = noticeState;
+  const { loading, error, success } = state;
 
-  const handlePageMove = useCallback(
+  // 페이지네이션 번호 클릭 시 페이지 호출
+  const handleNextPage = useCallback(
     id => () => {
-      if (id !== page) callApi(() => select(id));
+      if (id !== page) {
+        setNoticeState(prev => ({
+          ...prev,
+          results: null,
+        }));
+        callApi(() => select(id));
+      }
     },
     [page, callApi]
   );
 
+  // 컴포넌트 첫 랜더링 시
   useEffect(() => {
-    const page = localStorage.getItem(USERNOTICE_NUMBER, 1) ?? 1;
-    callApi(() => select(page));
-    return () => localStorage.removeItem(USERNOTICE_NUMBER);
+    const firstRenderPage = getCurrentNoticeNumber() ?? 1;
+    callApi(() => select(firstRenderPage));
   }, [callApi]);
 
+  // 페이지네이션 번호 클릭 후 응답
   useEffect(() => {
-    if (success) {
+    try {
+      if (emptyCheck(success)) return;
+      if (!success.data) throw new Error('data is notfound');
+
       const { data } = success;
-      localStorage.setItem(USERNOTICE_NUMBER, data.page);
-      const promiseArray = data.results.map(async result =>
-        selectById(result.id)
-      );
+      const { page, results } = data;
 
-      const boardArray = data.results;
-
+      setCurrentNoticeNumber(page);
+      const promiseArray = results.map(async ({ id }) => selectById(id));
       (async () => {
         const promiseResult = await Promise.all(promiseArray);
-        const commentsArray = promiseResult.map(o => o.data);
-
-        setUserNoticeBoard({
-          ...data,
-          results: boardArray.map((result, idx) => ({
-            ...result,
-            comments: commentsArray[idx],
-          })),
-        });
+        const commentsArray = promiseResult.map(({ data }) => data);
+        const newResults = results.map((result, idx) => ({
+          ...result,
+          comments: commentsArray[idx],
+        }));
+        setNoticeState({ ...data, results: newResults });
       })();
+    } catch (error) {
+      setAlertOpen(true);
+      setAlertMessage(
+        <div className="red">
+          <span>서버응답은 성공했지만 에러가 발생했습니다.</span>
+        </div>
+      );
     }
   }, [success]);
 
   useEffect(() => {
-    console.log(error);
     if (error) {
       setAlertOpen(true);
       setAlertMessage(
@@ -75,53 +83,67 @@ const NoticeBoardContainer = () => {
 
   const makePagination = useCallback(
     (page, totalPages) => {
-      if (page === undefined || totalPages === undefined) return [];
-      if (page === 0 || totalPages === 0) return [];
-
+      if (emptyCheck(page) || emptyCheck(totalPages)) return [];
       const makeSpan = (index, text) => (
         <span
           key={index}
-          onClick={handlePageMove(index)}
+          onClick={handleNextPage(index)}
           className={page === index ? 'current' : ''}
         >
           {text}
         </span>
       );
 
-      const PAGENATION_NUMBER_COUNT = 5;
-      const lastPageGroup = Math.ceil(totalPages / PAGENATION_NUMBER_COUNT);
-      const currentPageGroup = Math.ceil(page / PAGENATION_NUMBER_COUNT);
+      // 페이지네이션 그룹들 ==> 페이지네이션 그룹 ==> 버튼들
 
-      const start = (currentPageGroup - 1) * PAGENATION_NUMBER_COUNT + 1;
-      const nextPage = currentPageGroup * PAGENATION_NUMBER_COUNT + 1;
-      const prevPage = (currentPageGroup - 1) * PAGENATION_NUMBER_COUNT;
+      // 하나의 페이지네이션 그룹에 몇개의 버튼이 만들지 결정하는 변수
+      const PAGINATION_NUMBER_COUNT = 5;
+      // 현재 보고있는 페이지의 그룹이 어딘지 계산
+      const currentPageGroup = Math.ceil(page / PAGINATION_NUMBER_COUNT);
+      // PAGENATION_NUMBER_COUNT개씩 몇개의 그룹이 만들어지는지 계산
+      const lastPageGroup = Math.ceil(totalPages / PAGINATION_NUMBER_COUNT);
 
+      // 현재 그룹에서 번호가 몇번 부터 시작하는지 계산
+      const start = (currentPageGroup - 1) * PAGINATION_NUMBER_COUNT + 1;
+      // 다음 그룹의 시작번호가 몇번 부터인지 계산
+      const nextPage = currentPageGroup * PAGINATION_NUMBER_COUNT + 1;
+      // 이전 그룹의 마지막번호가 몇번 부터인지 계산
+      const prevPage = (currentPageGroup - 1) * PAGINATION_NUMBER_COUNT;
+
+      // 현재 페이지네이션그룹에 몇개의 버튼을 그릴지 계산
       const length =
         currentPageGroup === lastPageGroup
           ? totalPages + 1 - start
-          : PAGENATION_NUMBER_COUNT;
+          : PAGINATION_NUMBER_COUNT;
 
-      const pageNationCountArray = Array.from({ length }).map((_, i) => {
-        const index = (currentPageGroup - 1) * PAGENATION_NUMBER_COUNT + 1 + i;
+      const pagiNationButtons = Array.from({ length }).map((_, i) => {
+        const index = (currentPageGroup - 1) * PAGINATION_NUMBER_COUNT + 1 + i;
         return makeSpan(index, index);
       });
 
+      // 현재 페이지네이션그룹이 첫번째가 아니면 이전 페이지네이션그룹 버튼 생성
       if (currentPageGroup !== 1) {
-        pageNationCountArray.unshift(makeSpan(prevPage, 'prev'));
+        pagiNationButtons.unshift(makeSpan(prevPage, 'prev'));
       }
 
+      // 현재 페이지네이션그룹이 마지막그룹이 아니면 다음 페이지네이션그룹 버튼 생성
       if (currentPageGroup !== lastPageGroup) {
-        pageNationCountArray.push(makeSpan(nextPage, 'next'));
+        pagiNationButtons.push(makeSpan(nextPage, 'next'));
       }
-
-      return pageNationCountArray;
+      return pagiNationButtons;
     },
-    [handlePageMove]
+    [handleNextPage]
   );
 
-  // 첫랜더시 css 높이 잡아는주는 용도
+  const pagiNations = emptyCheck(results)
+    ? Array.from({ length: 5 }, (_, idx) => (
+        <span key={idx} className="skeleton-number" />
+      ))
+    : makePagination(page, totalPages);
 
-  const cards = results?.map(card => <Card {...card} key={card.id} />);
+  const cards = emptyCheck(results)
+    ? Array.from({ length: 10 }, (v, idx) => <Card key={idx} {...v} />)
+    : results.map(card => <Card {...card} key={card.id} />);
 
   return (
     <>
@@ -130,62 +152,10 @@ const NoticeBoardContainer = () => {
           {alertMessage}
         </Alert>
       )}
-      <Loading loading={loading} />
-      <Title>
-        <h2>건의 게시판</h2>
-        {!!getAccessToken() && (
-          <div>
-            <Link to="/noticeBoard/insert">
-              <span>건의 하기</span>
-            </Link>
-          </div>
-        )}
-      </Title>
-      {isEmptyObject(userNoticeBoard) ? (
-        <>
-          <Loading loading={loading} />
-          <Empty />
-        </>
-      ) : (
-        <>
-          <Cards>{cards}</Cards>
-          <Pagination>{makePagination(page, totalPages)}</Pagination>
-        </>
-      )}
+      <CardsBox cards={cards} loading={loading} />
+      <Pagination>{pagiNations}</Pagination>
     </>
   );
 };
-
-// 분리해줘야된다.
-const Title = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-
-  span {
-    position: relative;
-    font-size: 0.7rem;
-    transition: color 0.25s ease-in-out;
-    cursor: pointer;
-    color: rgba(149, 165, 166, 0.8);
-    &::after {
-      position: absolute;
-      content: '';
-      border-top: 1px solid black;
-      left: 0;
-      right: 0;
-      height: 1px;
-      bottom: -5px;
-      opacity: 0;
-    }
-
-    &:hover {
-      color: black;
-      &::after {
-        opacity: 1;
-      }
-    }
-  }
-`;
 
 export default NoticeBoardContainer;

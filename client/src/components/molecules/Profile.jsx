@@ -33,15 +33,14 @@ const Profile = ({ id, name, img }) => {
 };
 
 const FlexBox = styled.div`
-  display: flex;
   position: absolute;
-  flex-direction: column;
-  height: 90%;
-  right: 0;
+  right: 2%;
   top: 0;
   bottom: 0;
-  margin: auto;
   margin-right: 1rem;
+  padding: 0.4rem;
+  margin: 0.3rem 0;
+  box-sizing: border-box;
   border-radius: ${({ theme }) => theme.borderRadius2};
   width: 250px;
 
@@ -58,19 +57,21 @@ const FlexBox = styled.div`
 `;
 
 const Inner = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 100%;
-  margin: 0.3rem;
   box-sizing: border-box;
   border-radius: 15px;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   background-color: ${({ theme }) => theme.color.coffee2};
+  gap: 10px;
 
   & > div {
     display: flex;
   }
 
   & > div:first-child {
-    padding: 0.4rem 0 0.4rem 0;
     align-items: center;
     gap: 10px;
     font-size: 0.9rem;

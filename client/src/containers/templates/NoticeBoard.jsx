@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import RootRedirect from '@/Routers/RootRedirect';
@@ -7,9 +7,13 @@ import NoticeBoardInsertContainer from '../organisms/NoticeBoardInsertContainer'
 import PrivateRouter from '@/Routers/PrivateRouter';
 import NoticeBoardSelectContainer from '../organisms/NoticeBoardSelectContainer';
 import NoticeBoardModifyContainer from '../organisms/NoticeBoardModifyContainer';
+import { currentNoticeNumberRemove } from '@/utils/localstorege';
 
 const NoticeBoard = () => {
   const { url } = useRouteMatch();
+
+  useEffect(() => () => currentNoticeNumberRemove(), []);
+
   return (
     <Layout>
       <section>

@@ -8,8 +8,9 @@ import CommentModify from './CommentModify';
 const Comment = (
   {
     isOpen,
-    checkedId,
+    currentModifyCommentId,
     comment,
+    modifyDisabled,
     modifyCommentValue,
     setIsOpen,
     commentDelete,
@@ -17,6 +18,7 @@ const Comment = (
     commentModifyEditorClose,
     handleCommentModifyOnClick,
     handleCommentModifyOnChange,
+    handleCommentModifyEditorOnUpdate,
   },
   ref
 ) => {
@@ -26,7 +28,7 @@ const Comment = (
   const formatDate = updateTimeStemp !== '' ? updateTimeStemp : timeStemp;
   const date = moment(Number(formatDate)).format('YYYY-MM-DD HH시 mm분 ss초');
 
-  const truthy = checkedId === _id && isOpen;
+  const truthy = currentModifyCommentId === _id && isOpen;
   const button = (
     <>
       <span
@@ -40,7 +42,7 @@ const Comment = (
     </>
   );
 
-  const modifyMatch = modifyCommentValue.match(/&nbsp;/gi);
+  const modifyMatch = modifyCommentValue.match(/<p>/gi);
   const indent = modifyMatch === null ? 0 : modifyMatch.length;
 
   return (
@@ -76,9 +78,16 @@ const Comment = (
             <CommentEditor
               data={modifyCommentValue}
               onChange={handleCommentModifyOnChange}
+              onUpdate={handleCommentModifyEditorOnUpdate}
             />
             <div>
-              <span onClick={handleCommentModify(_id)}>수정하기</span>
+              <button
+                type="button"
+                disabled={modifyDisabled}
+                onClick={handleCommentModify(_id)}
+              >
+                수정하기
+              </button>
             </div>
           </CommentModify>
         )}

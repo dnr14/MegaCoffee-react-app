@@ -13,7 +13,6 @@ import Alert from '@/components/atoms/Alert';
 import Loading from '@/components/atoms/Loading';
 import useFetch from '@/hooks/useFetch';
 import { menuSelect } from '@/api/admin';
-import FormInput from '@/components/atoms/FormInput';
 import InsertMenubar from '@/components/molecules/InsertMenubar';
 import Button from '@/components/atoms/Button';
 
@@ -74,7 +73,7 @@ const NoticeBoardInsertContainer = () => {
     const { target } = e;
     const titleValue = target.title.value;
     const bodyValue = editorValue;
-    const categoryObj = checked?.obj;
+    const categoryObj = checked?.obj ?? '';
     if (
       emptyCheck(titleValue) ||
       emptyCheck(bodyValue) ||

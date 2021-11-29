@@ -37,6 +37,13 @@ const StyledDiv = styled.div`
     font-weight: bold;
     animation: ${Ymove} 2s 1s infinite linear alternate;
   }
+
+  .skeleton-number {
+    height: 0.8rem;
+    width: 0.7rem;
+    background-color: ${({ theme }) => theme.color.skeletonColor};
+    ${({ theme }) => theme.skeletonAnimation}
+  }
 `;
 
 export default Pagination;
