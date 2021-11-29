@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '@/components/atoms/Button';
 import useForm from '@/hooks/useForm';
@@ -60,25 +60,15 @@ const MemberShipContainer = () => {
     ];
   }, []);
 
-  const messages = useMemo(
-    () => [
-      <>
-        <div>
-          <span>에러가 있습니다.</span>
-        </div>
-        <div>
-          <span>수정 해주세요.</span>
-        </div>
-      </>,
-      <>
-        <div>
-          <span>빈칸이 있습니다.</span>
-        </div>
-        <div>
-          <span>모두 채워주세요.</span>
-        </div>
-      </>,
-    ],
+  const setMessages = useCallback(
+    metas =>
+      metas.map(meta => (
+        <>
+          <div>
+            <span>{meta}</span>
+          </div>
+        </>
+      )),
     []
   );
 
@@ -87,7 +77,7 @@ const MemberShipContainer = () => {
     const { id, pwd, birthDay, name, email } = form;
 
     if (id.error || pwd.error || birthDay.error || name.error || email.error) {
-      setMessage(messages[0]);
+      setMessage(setMessages(['에러가 있습니다.', '수정 해주세요.']));
       setIsOpen(prevState => !prevState);
       return;
     }
@@ -99,7 +89,7 @@ const MemberShipContainer = () => {
       emptyCheck(name.data) ||
       emptyCheck(email.data)
     ) {
-      setMessage(messages[1]);
+      setMessage(setMessages(['빈칸이 있습니다.', '모두 채워주세요.']));
       setIsOpen(prevState => !prevState);
       return;
     }
@@ -116,14 +106,10 @@ const MemberShipContainer = () => {
 
   useEffect(() => {
     if (error) {
-      setMessage(
-        <>
-          <div>{error.message}</div>
-        </>
-      );
+      setMessage(setMessages([`${error.message}`, '에러가 발생했습니다.']));
       setIsOpen(prevState => !prevState);
     }
-  }, [error]);
+  }, [error, setMessages]);
 
   useEffect(() => {
     if (success) {

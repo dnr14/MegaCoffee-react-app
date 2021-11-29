@@ -11,8 +11,6 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.clear();
-    console.log('App.js in Clear');
     const accessToken = getAccessToken();
     if (accessToken) {
       dispatch(userInfoAsync());
