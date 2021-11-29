@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '@/components/atoms/Button';
@@ -8,44 +8,50 @@ import Layout from '@/components/atoms/Layout';
 const Welcome = () => {
   const location = useLocation();
   const history = useHistory();
+  const { state } = location;
 
-  useEffect(() => {
-    const { state } = location;
+  useLayoutEffect(() => {
     if (!state) {
       history.push('/membership');
     }
-  }, [location, history]);
-
-  if (!location.state) return null;
+  }, [state, history]);
 
   return (
     <Layout>
-      <Title>🎉 환영 합니다.</Title>
-      <StyledDid>
-        <div>{location.state.props.id}님 가입을 축하드립니다.</div>
+      <StyledDiv>
+        <Title>🎉 환영 합니다.</Title>
+        <div>
+          <strong>{state.props.id}</strong> 님 가입을 축하드립니다.
+        </div>
         <Link
           to={{
             pathname: '/login',
             props: {
-              id: location.state.props.id,
+              id: state.props.id,
             },
           }}
         >
           <Button>sign in</Button>
         </Link>
-      </StyledDid>
+      </StyledDiv>
     </Layout>
   );
 };
 
-const StyledDid = styled.div`
+const StyledDiv = styled.div`
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
 
   & > div {
     padding: 2rem 0;
     text-align: center;
     word-break: keep-all;
     line-height: 1.5rem;
+  }
+
+  strong {
+    font-weight: bold;
   }
 `;
 
