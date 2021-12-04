@@ -62,6 +62,6 @@
         "some": ["nesting", "id"]
       }
     }],
-    "no-param-reassign": ["error", { "props": false }]
+    "no-param-reassign": ["off"]
   }
 }

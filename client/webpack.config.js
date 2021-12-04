@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const Bp = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -15,46 +15,24 @@ const DEV_PUBLIC_PATH = '/';
 module.exports = (_, { mode }) => {
   const publicPath =
     mode === PRODUCTION ? PRODUCT_PUBLIC_PATH : DEV_PUBLIC_PATH;
-  const plugins =
-    mode === PRODUCTION
-      ? ['@babel/plugin-transform-runtime']
-      : ['@babel/plugin-transform-runtime', 'react-refresh/babel'];
-
-  const htmlWebpackPluginConfig = {
-    template: './public/index.ejs',
-    favicon: './public/favicon.png',
-    templateParameters: {
-      title: mode === PRODUCTION ? 'megacoffeClone' : '(개발용)',
-    },
-  };
 
   const config = {
+    name: 'mega',
     mode,
     entry: './index.js',
-    output: {
-      filename: '[name].[chunkhash].js',
-      chunkFilename: '[name].[chunkhash].js',
-      clean: true,
-      path: path.join(__dirname, '/dist/build'),
-      publicPath,
-    },
+    devtool: mode === PRODUCTION ? 'hidden-source-map' : 'eval-source-map',
     resolve: {
-      modules: ['node_modules'],
       extensions: ['.js', '.jsx'],
       alias: {
         '@': path.resolve(__dirname, 'src/'),
-      },
-    },
-
-    devServer: {
-      port: PORT,
-      open: true,
-      historyApiFallback: true,
-      devMiddleware: {
-        publicPath,
-      },
-      proxy: {
-        '/api': 'http://localhost:5000',
+        '@api': path.resolve(__dirname, 'src/api'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@containers': path.resolve(__dirname, 'src/containers'),
+        '@hoc': path.resolve(__dirname, 'src/hoc'),
+        '@hooks': path.resolve(__dirname, 'src/hooks'),
+        '@modules': path.resolve(__dirname, 'src/modules'),
+        '@pages': path.resolve(__dirname, 'src/pages'),
+        '@utils': path.resolve(__dirname, 'src/utils'),
       },
     },
 
@@ -69,7 +47,17 @@ module.exports = (_, { mode }) => {
               '@babel/preset-react',
               ['@babel/preset-env', { modules: false }],
             ],
-            plugins,
+            env: {
+              development: {
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                  require.resolve('react-refresh/babel'),
+                ],
+              },
+              production: {
+                plugins: ['@babel/plugin-transform-runtime'],
+              },
+            },
           },
         },
         {
@@ -138,24 +126,60 @@ module.exports = (_, { mode }) => {
       ],
     },
     plugins: [
-      new HtmlWebpackPlugin(htmlWebpackPluginConfig),
       new CleanWebpackPlugin(),
-      new ReactRefreshWebpackPlugin(),
+      new MomentLocalesPlugin({ localesToKeep: ['ko'] }),
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(mode),
-        PATH: JSON.stringify('http://localhost:5000'),
-      }),
-      new MomentLocalesPlugin({
-        localesToKeep: ['ko'],
+        PATH: JSON.stringify(
+          mode === 'production' ? 'not setting' : 'http://localhost:5000'
+        ),
       }),
     ],
+
+    output: {
+      filename: '[name].[chunkhash].js',
+      chunkFilename: '[name].[chunkhash].js',
+      clean: true,
+      path: path.join(__dirname, '/dist/build'),
+      publicPath,
+    },
+
+    devServer: {
+      port: PORT,
+      open: true,
+      hot: true,
+      historyApiFallback: true,
+      devMiddleware: {
+        publicPath,
+      },
+      proxy: {
+        '/api': 'http://localhost:5000',
+      },
+    },
   };
 
-  if (mode === PRODUCTION) {
+  const htmlWebpackPluginConfig = {
+    template: './public/index.ejs',
+    favicon: './public/favicon.png',
+    templateParameters: {
+      title: mode === PRODUCTION ? 'megacoffeClone' : '(개발용)',
+    },
+  };
+
+  // 프로덕트
+  if (mode === PRODUCTION && config.plugins) {
     htmlWebpackPluginConfig.filename = '../index.html';
-    config.plugins.push(new Bp());
-  } else {
-    config.devtool = 'eval-source-map';
+    config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
+    config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
+    config.plugins.push(new HtmlWebpackPlugin(htmlWebpackPluginConfig));
+  }
+  if (mode !== PRODUCTION && config.plugins) {
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    config.plugins.push(new ReactRefreshWebpackPlugin());
+    config.plugins.push(
+      new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true })
+    );
+    config.plugins.push(new HtmlWebpackPlugin(htmlWebpackPluginConfig));
   }
 
   return config;
