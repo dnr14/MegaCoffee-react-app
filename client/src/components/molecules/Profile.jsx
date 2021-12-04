@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InfoLable from '../atoms/InfoLable';
 import NoProfile from '../atoms/noProfile';
-import { isEmptyObject } from '@/utils/validations';
+import { emptyCheck } from '@/utils/validations';
 
-const Profile = ({ id, name, img }) => {
+const Profile = ({ id, name, thumbnail }) => {
   return (
     <FlexBox>
       <Inner>
         <div>
-          {isEmptyObject(img) ? (
+          {emptyCheck(thumbnail) ? (
             <NoProfile />
           ) : (
-            <img src={`${PATH}${img.path}`} alt="profile" />
+            <img src={thumbnail} alt="profile" />
           )}
 
           <InfoLable>{id}</InfoLable>

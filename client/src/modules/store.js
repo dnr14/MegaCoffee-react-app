@@ -1,15 +1,19 @@
-import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import ReduxThunk from 'redux-thunk';
-import { loginReducer } from './login';
+import { createBrowserHistory } from 'history';
+import { configureStore } from '@reduxjs/toolkit';
+import index from './login/index';
 
-const enhancer =
-  NODE_ENV === 'production'
-    ? compose(applyMiddleware(ReduxThunk))
-    : composeWithDevTools(applyMiddleware(ReduxThunk));
+const rootReducer = {
+  login: index,
+};
 
-const rootReducer = combineReducers({
-  login: loginReducer,
+export const customHistory = createBrowserHistory();
+
+export default configureStore({
+  reducer: rootReducer,
+  devTools: NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      thunk: { extraArgument: { history: customHistory } },
+      serializableCheck: false,
+    }),
 });
-
-export const store = createStore(rootReducer, enhancer);

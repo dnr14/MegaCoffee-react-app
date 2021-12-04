@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { userInfoRemoveAction } from '@/modules/login';
+import { userInfoRemove } from '@/modules/login/index';
 import { removeToken } from '@/utils/localstorege';
 
 const Logout = () => {
@@ -9,7 +9,7 @@ const Logout = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     removeToken();
-    dispatch(userInfoRemoveAction());
+    dispatch(userInfoRemove());
     history.push('/');
   }, [dispatch, history]);
 

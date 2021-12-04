@@ -3,8 +3,7 @@ import Loading from '@/components/atoms/Loading';
 
 const withLoading = Component => {
   const hoc = props => {
-    const { loading } = props;
-
+    const { loading = false } = props;
     return (
       <>
         <Loading loading={loading} />

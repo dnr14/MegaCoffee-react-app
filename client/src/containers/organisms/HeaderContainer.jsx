@@ -4,11 +4,12 @@ import Header from '@/components/molecules/Header';
 import HeaderNav from '@/components/molecules/HeaderNav';
 import HeaderTitle from '@/components/molecules/HeaderTitle';
 import Profile from '@/components/molecules/Profile';
+import { loginSelector } from '@/modules/login/index';
 
 const HeaderContainer = () => {
   const [toggle, setToggle] = useState(false);
-  const state = useSelector(state => state.login);
-  const { accessToken, isLogin, id, name, img, role } = state;
+  const { user } = useSelector(loginSelector);
+  const { accessToken, isLogin, id, name, role, thumbnail } = user;
 
   const handleClick = useCallback(e => {
     e.preventDefault();
@@ -31,8 +32,8 @@ const HeaderContainer = () => {
   links.push({ path: '/noticeBoard', name: '건의 게시판' });
 
   const profile = useMemo(
-    () => accessToken && <Profile id={id} name={name} img={img} />,
-    [id, name, accessToken, img]
+    () => accessToken && <Profile id={id} name={name} thumbnail={thumbnail} />,
+    [id, name, accessToken, thumbnail]
   );
 
   return (

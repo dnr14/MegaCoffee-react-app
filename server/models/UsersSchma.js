@@ -57,8 +57,16 @@ const usersSchma = new Schema(
       type: String,
       default: "normal",
     },
+    thumbnail: {
+      type: String,
+      default: "",
+    },
+    key: {
+      type: String,
+      default: "",
+    },
   },
-  { toObject: { virtuals: true } }
+  { toObject: { virtuals: true }, versionKey: false }
 );
 
 usersSchma.pre("save", function (next) {
@@ -73,6 +81,7 @@ usersSchma.pre("save", function (next) {
 
 usersSchma.methods.authenticate = function (password) {
   const user = this;
+  console.log(String(password), user.pwd);
   return bcrypt.compareSync(String(password), user.pwd);
 };
 

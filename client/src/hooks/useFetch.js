@@ -54,6 +54,9 @@ const useFetch = () => {
       const response = await cb();
       dispatch(successAction(response));
     } catch (error) {
+      if (!error) {
+        dispatch(errorAction('서버에서 에러가 발생했습니다.'));
+      }
       if (error.data) {
         dispatch(errorAction(error.data));
       } else if (error.response) {
