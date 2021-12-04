@@ -13,7 +13,7 @@ import LoginLabel from '@/components/molecules/LoginLabel';
 import LoginInput from '@/components/molecules/LoginInput';
 import LoginButton from '@/components/molecules/LoginButton';
 import LoginForm from '@/components/molecules/LoginForm';
-import { userInfoAsync } from '@/modules/login';
+import { userInfoAsync } from '@/modules/login/index';
 import { setAccessToken, setRole } from '@/utils/localstorege';
 
 const LoginContainer = () => {
@@ -92,6 +92,7 @@ const LoginContainer = () => {
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       setMessage(
         <>
           <span>{error.message}</span>
@@ -104,12 +105,10 @@ const LoginContainer = () => {
   useEffect(() => {
     if (success) {
       const { data } = success;
-      const { access_token: accseeToken } = data;
-      const { role } = data;
+      const { access_token: accseeToken, role } = data;
       setAccessToken(accseeToken);
       setRole(role);
       dispatch(userInfoAsync());
-      history.push('/');
     }
   }, [success, history, form, dispatch]);
 
@@ -139,7 +138,9 @@ const LoginContainer = () => {
         <div>
           <LoginButton
             disabled={
-              !id.data || !pwd.data || pwd.error || id.error ? true : false
+              loading || !id.data || !pwd.data || pwd.error || id.error
+                ? true
+                : false
             }
           >
             로그인

@@ -7,6 +7,7 @@ const path = require("path");
 const { makeError } = require("../utils/error");
 const router = express.Router();
 const bcrypt = require("bcrypt-nodejs");
+const { s3upload, s3FileDelete } = require("../middleware/multer");
 
 const STATIC_PATH = "./public/files/profile";
 
@@ -82,23 +83,22 @@ router.get("/me", jwt.verify, async (req, res) => {
 
 // 회원 정보 수정
 router.patch("/:id", jwt.verify, (req, res) => {
-  upload(req, res, async (err) => {
+  s3upload("thumbnail", "profileThumbnail")(req, res, async (err) => {
     try {
-      if (err) {
-        throw new Error(err);
-      }
+      if (err) throw err;
       const { id } = req.params;
       const { nickName } = req.body;
       const { pwd } = req.body;
       const { newPwd } = req.body;
-      const { file } = req;
-
-      console.log(pwd, newPwd);
+      const user = await UsersSchma.findOne().where("id").equals(id);
+      const update = {};
+      update.thumbnail = user.thumbnail;
+      update.key = user.key;
+      update.nickName = nickName;
 
       if (!id || !nickName) {
         throw makeError("잘못된 요청입니다.", 400);
       }
-      const user = await UsersSchma.findOne().where("id").equals(id);
       if (!user) {
         throw makeError("없는 아이디입니다.", 400);
       }
@@ -106,36 +106,21 @@ router.patch("/:id", jwt.verify, (req, res) => {
         throw makeError("패스워드가 틀립니다.", 400);
       }
 
-      let img = {};
-      if (file) {
-        const { originalname, mimetype, filename } = file;
-        img = {
-          originalname,
-          mimetype,
-          filename,
-          path: `/public/files/profile/${filename}`,
-        };
-      } else {
-        if (Object.keys(user.img).length !== 0) {
-          fs.unlinkSync(`.${user.img.path}`);
+      if (req.file) {
+        const { location, key } = req.file;
+        // 기존에 썸네일이있는데 새로운 파일이 들어오면 기존에 파일 삭제
+        if (user.thumbnail !== "") {
+          s3FileDelete(user.key);
         }
+        update.thumbnail = location;
+        update.key = key;
       }
 
-      let update = {};
       if (newPwd) {
-        update = {
-          nickName,
-          pwd: bcrypt.hashSync(newPwd),
-          img,
-        };
-      } else {
-        update = {
-          nickName,
-          img,
-        };
+        update.pwd = bcrypt.hashSync(newPwd);
       }
 
-      await UsersSchma.findOneAndUpdate(
+      const newUser = await UsersSchma.findOneAndUpdate(
         { id },
         {
           $set: update,
@@ -143,8 +128,13 @@ router.patch("/:id", jwt.verify, (req, res) => {
         { new: true }
       );
 
+      console.log(newUser);
+
       res.json({ message: "정보가 수정되었습니다." });
     } catch (error) {
+      if (req.file) {
+        s3FileDelete(req.file.key);
+      }
       const { message, status } = error;
       if (status) {
         res.status(400).json({ message });

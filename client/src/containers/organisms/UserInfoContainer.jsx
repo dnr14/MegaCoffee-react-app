@@ -32,7 +32,7 @@ const UserInfoContainer = () => {
   const [nickNameState, setNickNameState] = useState(nickNameStateInit);
 
   const { state: fetch, callApi } = useFetch();
-  const { id, name, email, birthDay, img } = state;
+  const { id, name, email, birthDay, img, thumbnail } = state;
   const { error, loading, success } = fetch;
   const { pwd, pwdConfirm } = form;
 
@@ -137,8 +137,9 @@ const UserInfoContainer = () => {
       formData.append('newPwd', pwdConfirm);
     }
     if (file) {
-      formData.append('file', file);
+      formData.append('thumbnail', file);
     }
+    console.log(nickName, file, pwd, pwdConfirm);
     callApi(() => userUpdate(id, formData));
   };
 
@@ -148,10 +149,10 @@ const UserInfoContainer = () => {
   );
 
   useEffect(() => {
-    if (!validations.isEmptyObject(img) && img) {
-      setProfileImg(`${PATH}${img.path}`);
+    if (!validations.emptyCheck(thumbnail)) {
+      setProfileImg(thumbnail);
     }
-  }, [img]);
+  }, [thumbnail]);
 
   useEffect(() => {
     if (error) {
@@ -171,6 +172,12 @@ const UserInfoContainer = () => {
     }
   }, [success, history]);
 
+  const profile = validations.emptyCheck(profileImg) ? (
+    <NoProfile />
+  ) : (
+    <img src={profileImg} alt="profile" />
+  );
+
   return (
     <>
       <Loading loading={loading} />
@@ -180,55 +187,47 @@ const UserInfoContainer = () => {
       <LoginForm onSubmit={handleFileUpload}>
         <ProfileImg>
           <label htmlFor="file">
-            <div>
-              {profileImg === null ? (
-                <NoProfile accept="image/*" />
-              ) : (
-                <img src={profileImg} alt="profile" />
-              )}
-            </div>
-            <input type="file" id="file" onChange={handleProfileImgChange} />
+            <div>{profile}</div>
+            <input
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={handleProfileImgChange}
+            />
           </label>
           <p>아직도 프로필 사진이 없으신가요?</p>
           <p>등록을 원하시면 사진을 클릭해주세요.</p>
         </ProfileImg>
-        {els.map((el, idx) => {
-          return (
-            <div key={idx}>
-              <FormLabel>{el.name}</FormLabel>
-              <UserInfoInput value={el.value ?? ''} readOnly />
-            </div>
-          );
-        })}
-        {updateEls.map((el, idx) => {
-          return (
-            <div key={idx}>
-              <FormLabel htmlFor={el.props.id}>{el.name}</FormLabel>
-
-              <Relative>
-                <LoginInput {...el.props} onChange={el.onChange} />
-                {el.props.value && (
-                  <Relative.Cancel id={el.props.id} onClick={el.onClick} />
-                )}
-                {el.props.error && (
-                  <Error>
-                    <span>{el.props.error}</span>
-                  </Error>
-                )}
-              </Relative>
-            </div>
-          );
-        })}
+        {els.map(({ name, value }, idx) => (
+          <div key={idx}>
+            <FormLabel>{name}</FormLabel>
+            <UserInfoInput value={value ?? ''} readOnly />
+          </div>
+        ))}
+        {updateEls.map(({ name, props, onChange, onClick }, idx) => (
+          <div key={idx}>
+            <FormLabel htmlFor={props.id}>{name}</FormLabel>
+            <Relative>
+              <LoginInput {...props} onChange={onChange} />
+              {props.value && (
+                <Relative.Cancel id={props.id} onClick={onClick} />
+              )}
+              {props.error && (
+                <Error>
+                  <span>{props.error}</span>
+                </Error>
+              )}
+            </Relative>
+          </div>
+        ))}
 
         <div>
           <LoginButton
             disabled={
-              !nickNameState.value ||
+              validations.emptyCheck(nickNameState.value) ||
               nickNameState.error ||
               pwd.error ||
               pwdConfirm.error
-                ? true
-                : false
             }
           >
             등록하기
