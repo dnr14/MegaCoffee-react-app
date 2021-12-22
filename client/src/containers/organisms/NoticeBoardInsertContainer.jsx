@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { menuSelect } from '@/api/admin';
+import { insert } from '@/api/userNoticeBoard';
+import Alert from '@/components/atoms/Alert';
+import Button from '@/components/atoms/Button';
+import Form from '@/components/atoms/Form';
+import Loading from '@/components/atoms/Loading';
+import Thumbnail from '@/components/atoms/Thumbnail';
+import CoustomEditor from '@/components/molecules/CustomEditor';
+import InsertMenubar from '@/components/molecules/InsertMenubar';
+import Slide from '@/components/molecules/Slide';
+import ThumbnailBox from '@/components/molecules/ThumbnailBox';
+import useFetch from '@/hooks/useFetch';
+import { emptyCheck } from '@/utils/validations';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { insert } from '@/api/userNoticeBoard';
-import Slide from '@/components/molecules/Slide';
-import CoustomEditor from '@/components/molecules/CustomEditor';
-import Form from '@/components/atoms/Form';
-import ThumbnailBox from '@/components/molecules/ThumbnailBox';
-import Thumbnail from '@/components/atoms/Thumbnail';
-import { emptyCheck } from '@/utils/validations';
-import Alert from '@/components/atoms/Alert';
-import Loading from '@/components/atoms/Loading';
-import useFetch from '@/hooks/useFetch';
-import { menuSelect } from '@/api/admin';
-import InsertMenubar from '@/components/molecules/InsertMenubar';
-import Button from '@/components/atoms/Button';
 
 const CATEGORY_ENUMS = {
   coffee: '커피',
@@ -74,11 +74,7 @@ const NoticeBoardInsertContainer = () => {
     const titleValue = target.title.value;
     const bodyValue = editorValue;
     const categoryObj = checked?.obj ?? '';
-    if (
-      emptyCheck(titleValue) ||
-      emptyCheck(bodyValue) ||
-      emptyCheck(categoryObj)
-    ) {
+    if (emptyCheck(titleValue) || emptyCheck(bodyValue) || emptyCheck(categoryObj)) {
       setAlertOpen(true);
       setAlertMessage(
         <div className="red">
@@ -149,11 +145,7 @@ const NoticeBoardInsertContainer = () => {
     if (checked) {
       setList(prevList =>
         prevList.map(rows =>
-          rows.map(cols =>
-            cols.id === checked.id
-              ? { ...cols, checked: true }
-              : { ...cols, checked: false }
-          )
+          rows.map(cols => (cols.id === checked.id ? { ...cols, checked: true } : { ...cols, checked: false }))
         )
       );
     }
@@ -212,11 +204,7 @@ const NoticeBoardInsertContainer = () => {
                 <>
                   <label htmlFor="image">
                     썸네일 업로드
-                    <input
-                      type="file"
-                      id="image"
-                      onChange={handleFileOnchange}
-                    />
+                    <input type="file" id="image" onChange={handleFileOnchange} />
                   </label>
                 </>
               )}
@@ -224,11 +212,7 @@ const NoticeBoardInsertContainer = () => {
           </ThumbnailBox>
         </div>
         <div>
-          <CoustomEditor
-            id="body"
-            data={editorValue}
-            onChange={handleEditorOnChange}
-          />
+          <CoustomEditor id="body" data={editorValue} onChange={handleEditorOnChange} />
         </div>
         <Button>출간하기</Button>
       </Form>

@@ -1,19 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react';
-import CoustomEditor from '@/components/molecules/CustomEditor';
-import { menuInsert } from '@/api/admin';
-import ThumbnailBox from '@/components/molecules/ThumbnailBox';
-import InsertMenubar from '@/components/molecules/InsertMenubar';
-import Button from '@/components/atoms/Button';
-import AdminMenuBox from '@/components/molecules/AdminMenuBox';
-import MenuEditor from '@/components/molecules/MenuEditor';
-import { emptyCheck } from '@/utils/validations';
 import { MenuContext } from './MenuContextProvider';
-import Thumbnail from '@/components/atoms/Thumbnail';
-import Form from '@/components/atoms/Form';
+import { useContext, useEffect, useState } from 'react';
+
+import { menuInsert } from '@/api/admin';
+
 import Alert from '@/components/atoms/Alert';
-import useFetch from '@/hooks/useFetch';
+import Button from '@/components/atoms/Button';
+import Form from '@/components/atoms/Form';
 import Loading from '@/components/atoms/Loading';
+import Thumbnail from '@/components/atoms/Thumbnail';
 import Title from '@/components/atoms/Title';
+import AdminMenuBox from '@/components/molecules/AdminMenuBox';
+import CoustomEditor from '@/components/molecules/CustomEditor';
+import InsertMenubar from '@/components/molecules/InsertMenubar';
+import MenuEditor from '@/components/molecules/MenuEditor';
+import ThumbnailBox from '@/components/molecules/ThumbnailBox';
+
+import useFetch from '@/hooks/useFetch';
+
+import { emptyCheck } from '@/utils/validations';
 
 const CATEGORY_ENUMS = {
   coffee: '커피',
@@ -50,12 +54,7 @@ const MenuInsertContainer = () => {
     const temperatureValue = temperature;
     const bodyValue = editorValue;
 
-    if (
-      emptyCheck(titleValue) ||
-      emptyCheck(categoryValue) ||
-      emptyCheck(temperatureValue) ||
-      emptyCheck(bodyValue)
-    ) {
+    if (emptyCheck(titleValue) || emptyCheck(categoryValue) || emptyCheck(temperatureValue) || emptyCheck(bodyValue)) {
       setAlertOpen(true);
       setAlertMessage(
         <div className="red">
@@ -184,11 +183,7 @@ const MenuInsertContainer = () => {
           />
         </AdminMenuBox>
         <MenuEditor>
-          <CoustomEditor
-            id="body"
-            data={editorValue}
-            onChange={handleEditorOnChange}
-          />
+          <CoustomEditor id="body" data={editorValue} onChange={handleEditorOnChange} />
         </MenuEditor>
         <Button>제출하기</Button>
       </Form>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
 import { menuSelect } from '@/api/admin';
-import CategoryBox from '@/components/molecules/CategoryBox';
+
 import Alert from '@/components/atoms/Alert';
+import CategoryBox from '@/components/molecules/CategoryBox';
 
 const CategoryMainContainer = () => {
 	const [categorys, setCategory] = useState({});

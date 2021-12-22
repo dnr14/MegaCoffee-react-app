@@ -1,20 +1,25 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import useForm from '@/hooks/useForm';
-import Error from '@/components/atoms/Error';
-import Relative from '@/components/molecules/Relative';
-import { emptyCheck } from '@/utils/validations';
-import Modal from '@/components/atoms/Modal';
-import useFetch from '@/hooks/useFetch';
+
 import { login } from '@/api/auth';
+
+import Error from '@/components/atoms/Error';
 import Loading from '@/components/atoms/Loading';
-import LoginLabel from '@/components/molecules/LoginLabel';
-import LoginInput from '@/components/molecules/LoginInput';
+import Modal from '@/components/atoms/Modal';
 import LoginButton from '@/components/molecules/LoginButton';
 import LoginForm from '@/components/molecules/LoginForm';
-import { userInfoAsync } from '@/modules/login/index';
+import LoginInput from '@/components/molecules/LoginInput';
+import LoginLabel from '@/components/molecules/LoginLabel';
+import Relative from '@/components/molecules/Relative';
+
+import useFetch from '@/hooks/useFetch';
+import useForm from '@/hooks/useForm';
+
+import { userInfoAsync } from '@/modules/login';
+
 import { setAccessToken, setRole } from '@/utils/localstorege';
+import { emptyCheck } from '@/utils/validations';
 
 const LoginContainer = () => {
   const dispatch = useDispatch();
@@ -126,23 +131,13 @@ const LoginContainer = () => {
             <LoginLabel htmlFor={el.props.id}>{el.name}</LoginLabel>
             <Relative>
               <LoginInput {...el.props} />
-              {form[el.props.id].data && (
-                <Relative.Cancel id={el.props.id} onClick={handleClick} />
-              )}
-              {form[el.props.id].error && (
-                <Error>{form[el.props.id].error}</Error>
-              )}
+              {form[el.props.id].data && <Relative.Cancel id={el.props.id} onClick={handleClick} />}
+              {form[el.props.id].error && <Error>{form[el.props.id].error}</Error>}
             </Relative>
           </div>
         ))}
         <div>
-          <LoginButton
-            disabled={
-              loading || !id.data || !pwd.data || pwd.error || id.error
-                ? true
-                : false
-            }
-          >
+          <LoginButton disabled={loading || !id.data || !pwd.data || pwd.error || id.error ? true : false}>
             로그인
           </LoginButton>
         </div>

@@ -1,14 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import useForm, { idAddAction } from '@/hooks/useForm';
-import useFetch from '@/hooks/useFetch';
+import { useCallback, useEffect, useState } from 'react';
+
 import { userSearch, userUpdate } from '@/api/admin';
+
 import Loading from '@/components/atoms/Loading';
-import Search from '@/components/molecules/Search';
-import UsersTable from '@/components/molecules/UsersTable';
 import TableBody from '@/components/atoms/TableBody';
 import Title from '@/components/atoms/Title';
 import RoleMenubar from '@/components/molecules/RoleMenubar';
+import Search from '@/components/molecules/Search';
 import StateMenuBar from '@/components/molecules/StateMenuBar';
+import UsersTable from '@/components/molecules/UsersTable';
+
+import useFetch from '@/hooks/useFetch';
+import useForm, { idAddAction } from '@/hooks/useForm';
 
 const STATE_ENUM = {
   normal: '정상',
@@ -21,16 +24,7 @@ const ROLE_EUNM = {
   user: '사용자',
 };
 
-const heads = [
-  '번호',
-  '아이디',
-  '이메일',
-  '생년월일',
-  '권한',
-  '권한 관리',
-  '상태',
-  '관리',
-];
+const heads = ['번호', '아이디', '이메일', '생년월일', '권한', '권한 관리', '상태', '관리'];
 
 const UsersSearchConatiner = () => {
   const { form, handleChange, handleClick, dispatch } = useForm(false);
@@ -60,8 +54,7 @@ const UsersSearchConatiner = () => {
     (currentRole, userId) =>
       ({ target }) => {
         const { id } = target;
-        if (id !== currentRole)
-          callApi(() => userUpdate({ id: userId, role: id }));
+        if (id !== currentRole) callApi(() => userUpdate({ id: userId, role: id }));
       },
     [callApi]
   );
@@ -70,8 +63,7 @@ const UsersSearchConatiner = () => {
     (currentState, userId) =>
       ({ target }) => {
         const { id } = target;
-        if (id !== currentState)
-          callApi(() => userUpdate({ id: userId, state: id }));
+        if (id !== currentState) callApi(() => userUpdate({ id: userId, state: id }));
       },
     [callApi]
   );

@@ -1,8 +1,10 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Layout from '@/components/atoms/Layout';
+
 import coffee from '@/assets/images/coffee.png';
+
+import Layout from '@/components/atoms/Layout';
+
 import LoginContainer from '@/containers/organisms/LoginContainer';
 
 const Login = () => {

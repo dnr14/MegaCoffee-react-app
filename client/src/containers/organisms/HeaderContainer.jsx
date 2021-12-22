@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import Header from '@/components/molecules/Header';
 import HeaderNav from '@/components/molecules/HeaderNav';
 import HeaderTitle from '@/components/molecules/HeaderTitle';
 import Profile from '@/components/molecules/Profile';
-import { loginSelector } from '@/modules/login/index';
+
+import { loginSelector } from '@/modules/login';
 
 const HeaderContainer = () => {
   const [toggle, setToggle] = useState(false);
@@ -38,13 +40,7 @@ const HeaderContainer = () => {
 
   return (
     <Header>
-      <HeaderNav
-        links={links}
-        toggle={toggle}
-        isLogin={isLogin}
-        handleClick={handleClick}
-        handleChange={handleChange}
-      >
+      <HeaderNav links={links} toggle={toggle} isLogin={isLogin} handleClick={handleClick} handleChange={handleChange}>
         {profile}
       </HeaderNav>
       <HeaderTitle />
