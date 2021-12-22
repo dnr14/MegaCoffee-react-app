@@ -1,24 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import RootRedirect from '@/Routers/RootRedirect';
-import useForm from '@/hooks/useForm';
-import FindForm from '@/components/molecules/FindForm';
-import { emptyCheck } from '@/utils/validations';
-import useFetch from '@/hooks/useFetch';
+import { useEffect, useMemo, useState } from 'react';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 import { findID, findPwd } from '@/api/auth';
+
 import Loading from '@/components/atoms/Loading';
 import Modal from '@/components/atoms/Modal';
-import Transition from '@/components/atoms/Transition';
-import Result from '@/components/molecules/Result';
-import LoginLabel from '@/components/molecules/LoginLabel';
 import ReadOnly from '@/components/atoms/ReadOnly';
+import Transition from '@/components/atoms/Transition';
+import FindForm from '@/components/molecules/FindForm';
+import LoginLabel from '@/components/molecules/LoginLabel';
+import Result from '@/components/molecules/Result';
+
+import useFetch from '@/hooks/useFetch';
+import useForm from '@/hooks/useForm';
+
+import RootRedirect from '@/Routers/RootRedirect';
+
+import { emptyCheck } from '@/utils/validations';
 
 const FindContainer = () => {
   const match = useRouteMatch();
@@ -133,11 +132,7 @@ const FindContainer = () => {
     const idValue = id.data;
     const emailValue = email.data;
     const birthDayValue = birthDay.data;
-    if (
-      emptyCheck(idValue) ||
-      emptyCheck(emailValue) ||
-      emptyCheck(birthDayValue)
-    ) {
+    if (emptyCheck(idValue) || emptyCheck(emailValue) || emptyCheck(birthDayValue)) {
       setMessage(messages[0]);
       setIsOpen(prevState => !prevState);
     } else {
@@ -183,23 +178,13 @@ const FindContainer = () => {
           return (
             <Transition duration={duration}>
               <TransitionGroup>
-                <CSSTransition
-                  timeout={duration}
-                  classNames="fade"
-                  key={location.key}
-                >
+                <CSSTransition timeout={duration} classNames="fade" key={location.key}>
                   <Switch location={location}>
                     <Route path={`${match.path}/id`}>
-                      <FindForm
-                        els={els[0]}
-                        handleFindSubmit={handleFindIdSubmit}
-                      />
+                      <FindForm els={els[0]} handleFindSubmit={handleFindIdSubmit} />
                     </Route>
                     <Route path={`${match.path}/pwd`}>
-                      <FindForm
-                        els={els[1]}
-                        handleFindSubmit={handleFindPasswordSubmit}
-                      />
+                      <FindForm els={els[1]} handleFindSubmit={handleFindPasswordSubmit} />
                     </Route>
                     <Route path={`${match.path}/result`}>
                       <Result>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { makeUrl } from '@/utils/urlUtil';
 import MenuBar from '../atoms/MenuBar';
 import SelectBox from '../atoms/SelectBox';
-import { makeUrl } from '@/utils/urlUtil';
 
 const SortMenubar = ({
   id,

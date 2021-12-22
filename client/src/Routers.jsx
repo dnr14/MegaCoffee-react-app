@@ -1,19 +1,21 @@
-import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import MainPage from '@/pages/Main/MainPage';
-import MemberShip from '@/containers/templates/MemberShip';
-import Login from '@/containers/templates/Login';
-import Welcome from '@/containers/templates/Welcome';
-import Logout from '@/containers/templates/Logout';
-import UserInfo from '@/containers/templates/UserInfo';
+
 import Find from '@/containers/templates/Find';
-import RootRedirect from './Routers/RootRedirect';
-import AdminRouter from './Routers/AdminRouter';
-import PublicRouter from './Routers/PublicRouter';
-import PrivateRouter from './Routers/PrivateRouter';
+import Login from '@/containers/templates/Login';
+import Logout from '@/containers/templates/Logout';
+import MemberShip from '@/containers/templates/MemberShip';
+import UserInfo from '@/containers/templates/UserInfo';
+import Welcome from '@/containers/templates/Welcome';
+
+import MainPage from '@/pages/Main/MainPage';
+import NoticeBoardPage from '@/pages/NoticeBoard/NoticeBoardPage';
 import AdminPage from './pages/Admin/AdminPage';
 import CategoryPage from './pages/Category/CategoryPage';
-import NoticeBoardPage from '@/pages/NoticeBoard/NoticeBoardPage';
+
+import AdminRouter from './Routers/AdminRouter';
+import PrivateRouter from './Routers/PrivateRouter';
+import PublicRouter from './Routers/PublicRouter';
+import RootRedirect from './Routers/RootRedirect';
 
 const Routers = () => {
   return (

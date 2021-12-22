@@ -1,23 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { userInfo } from '@/api/users';
+
 import { getAccessToken, removeToken } from '@/utils/localstorege';
 
 const name = 'login';
 // thunk는 condtion ==> padding ==> fullfiled or rejected
 // api error는 rejectWithValue로 rejected한태 넘긴다
 // 그외 error는 dispatch를 호춯 했던 곳에서 error처리
-export const userInfoAsync = createAsyncThunk(
-  `login/userInfoAsync`,
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await userInfo();
-      return response.data;
-    } catch (error) {
-      const message = error?.response?.data ?? '서버에서 에러가 발생';
-      return rejectWithValue(message);
+export const userInfoAsync = createAsyncThunk(`login/userInfoAsync`, async (_, { rejectWithValue }) => {
+  try {
+    const response = await userInfo();
+    return response.data;
+  } catch (error) {
+    if (error?.response) {
+      throw error;
     }
+    const message = error.response.data ?? '서버에서 에러가 발생';
+    return rejectWithValue(message);
   }
-);
+});
 
 // currentRequestId 비동기 고유 id 이걸로 연속 호출을 제어한다.
 const initialState = {
@@ -33,6 +35,7 @@ const initialState = {
   loading: null,
   error: null,
 };
+
 const slice = createSlice({
   name,
   initialState,

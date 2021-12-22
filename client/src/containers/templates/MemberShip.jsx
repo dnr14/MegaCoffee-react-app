@@ -1,6 +1,6 @@
-import React from 'react';
-import MemberShipContainer from '@/containers/organisms/MemberShipContainer';
 import Layout from '@/components/atoms/Layout';
+
+import MemberShipContainer from '@/containers/organisms/MemberShipContainer';
 
 const MemberShip = () => {
   return (

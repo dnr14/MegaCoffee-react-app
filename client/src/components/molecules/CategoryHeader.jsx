@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import CategoryLabel from '../atoms/CategoryLabel';
 import menuCoffee from '@/assets/images/category/menuCoffee.png';
 import menuBeverage from '@/assets/images/category/menuBeverage.png';
 import menuTea from '@/assets/images/category/menuTea.png';
 import menuJuice from '@/assets/images/category/menuJuice.png';
 import menuAde from '@/assets/images/category/menuAde.png';
+import CategoryLabel from '../atoms/CategoryLabel';
 
 const IMG_EUMS = {
   coffee: menuCoffee,

@@ -1,13 +1,14 @@
-import React, { memo } from 'react';
-import styled from 'styled-components';
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
 import noThumbnail from '@/assets/images/noThumbnail.png';
+
 import { toStringByFormatting } from '@/utils/formatUtil';
 import { emptyCheck } from '@/utils/validations';
 
 const Card = props => {
-  const { title, body, thumbnail, createAt, updateAt, writer, id, comments } =
-    props;
+  const { title, body, thumbnail, createAt, updateAt, writer, id, comments } = props;
 
   const date = emptyCheck(updateAt) ? updateAt : createAt;
 

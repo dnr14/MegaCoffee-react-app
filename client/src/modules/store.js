@@ -1,6 +1,6 @@
-import { createBrowserHistory } from 'history';
+import index from '@modules/login/index';
 import { configureStore } from '@reduxjs/toolkit';
-import index from './login/index';
+import { createBrowserHistory } from 'history';
 
 const rootReducer = {
   login: index,

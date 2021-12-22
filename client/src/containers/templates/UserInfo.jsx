@@ -1,7 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
+
 import Layout from '@/components/atoms/Layout';
 import Title from '@/components/atoms/Title';
+
 import UserInfoContainer from '@/containers/organisms/UserInfoContainer';
 
 const UserInfo = () => {

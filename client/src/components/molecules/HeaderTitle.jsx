@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import Title from '../atoms/Title';
 import TopLogo from '@/assets/images/topLogo.png';
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const HeaderTitle = () => {
   return (

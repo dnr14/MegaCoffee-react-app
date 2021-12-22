@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { select } from '@/api/userNoticeBoard';
-import useFetch from '@/hooks/useFetch';
-import Alert from '@/components/atoms/Alert';
-import { selectById } from '@/api/comment';
 import CardsBox from '../../components/molecules/CardsBox';
-import {
-  getCurrentNoticeNumber,
-  setCurrentNoticeNumber,
-} from '@/utils/localstorege';
-import Pagination from '@/components/molecules/Pagination';
-import { emptyCheck } from '@/utils/validations';
+import { useCallback, useEffect, useState } from 'react';
+
+import { selectById } from '@/api/comment';
+import { select } from '@/api/userNoticeBoard';
+
+import Alert from '@/components/atoms/Alert';
 import Card from '@/components/atoms/Card';
+import Pagination from '@/components/molecules/Pagination';
+
+import useFetch from '@/hooks/useFetch';
+
+import { getCurrentNoticeNumber, setCurrentNoticeNumber } from '@/utils/localstorege';
+import { emptyCheck } from '@/utils/validations';
 
 const NoticeBoardContainer = () => {
   const [noticeState, setNoticeState] = useState({});
@@ -85,11 +86,7 @@ const NoticeBoardContainer = () => {
     (page, totalPages) => {
       if (emptyCheck(page) || emptyCheck(totalPages)) return [];
       const makeSpan = (index, text) => (
-        <span
-          key={index}
-          onClick={handleNextPage(index)}
-          className={page === index ? 'current' : ''}
-        >
+        <span key={index} onClick={handleNextPage(index)} className={page === index ? 'current' : ''}>
           {text}
         </span>
       );
@@ -111,10 +108,7 @@ const NoticeBoardContainer = () => {
       const prevPage = (currentPageGroup - 1) * PAGINATION_NUMBER_COUNT;
 
       // 현재 페이지네이션그룹에 몇개의 버튼을 그릴지 계산
-      const length =
-        currentPageGroup === lastPageGroup
-          ? totalPages + 1 - start
-          : PAGINATION_NUMBER_COUNT;
+      const length = currentPageGroup === lastPageGroup ? totalPages + 1 - start : PAGINATION_NUMBER_COUNT;
 
       const pagiNationButtons = Array.from({ length }).map((_, i) => {
         const index = (currentPageGroup - 1) * PAGINATION_NUMBER_COUNT + 1 + i;
@@ -136,9 +130,7 @@ const NoticeBoardContainer = () => {
   );
 
   const pagiNations = emptyCheck(results)
-    ? Array.from({ length: 5 }, (_, idx) => (
-        <span key={idx} className="skeleton-number" />
-      ))
+    ? Array.from({ length: 5 }, (_, idx) => <span key={idx} className="skeleton-number" />)
     : makePagination(page, totalPages);
 
   const cards = emptyCheck(results)

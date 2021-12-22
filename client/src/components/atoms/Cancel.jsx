@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
-import styled from 'styled-components';
 import cancelImg from '@/assets/images/cancel.svg';
+import { memo } from 'react';
+import styled from 'styled-components';
 
 const Cancel = ({ ...rest }) => {
   return <Span {...rest} />;

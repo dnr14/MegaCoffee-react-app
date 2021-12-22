@@ -1,9 +1,10 @@
-import React, { useLayoutEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLayoutEffect } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Button from '@/components/atoms/Button';
-import Title from '@/components/atoms/Title';
 import Layout from '@/components/atoms/Layout';
+import Title from '@/components/atoms/Title';
 
 const Welcome = () => {
   const location = useLocation();

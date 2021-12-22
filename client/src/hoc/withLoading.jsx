@@ -1,4 +1,3 @@
-import React from 'react';
 import Loading from '@/components/atoms/Loading';
 
 const withLoading = Component => {

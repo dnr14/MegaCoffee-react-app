@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import Banner from '@/components/molecules/Banner';
 import MainSlide from '@/components/molecules/MainSlide';
 import Menus from '@/components/molecules/Menus';
-import Banner from '@/components/molecules/Banner';
 
 const Main = () => {
   const [slideList] = useState([
