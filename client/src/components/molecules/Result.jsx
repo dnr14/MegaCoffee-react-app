@@ -1,12 +1,11 @@
-import React from 'react';
+import LoginButton from './LoginButton';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import LoginButton from './LoginButton';
 
 const Result = ({ children }) => {
   return (
     <div>
-      <H2>고객님이 찾으신 입니다.</H2>
+      <H2>고객님이 찾으신 정보입니다.</H2>
       <FlexBox>{children}</FlexBox>
       <div>
         <Link to="/login">

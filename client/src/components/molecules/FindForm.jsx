@@ -1,11 +1,10 @@
-import React from 'react';
+import Error from '@/components/atoms/Error';
 import Form from '@/components/atoms/Form';
+import FormInput from '@/components/atoms/FormInput';
 import FormLabel from '@/components/atoms/FormLabel';
 import Strong from '@/components/atoms/Strong';
-import Relative from '@/components/molecules/Relative';
-import FormInput from '@/components/atoms/FormInput';
 import LoginButton from '@/components/molecules/LoginButton';
-import Error from '@/components/atoms/Error';
+import Relative from '@/components/molecules/Relative';
 
 const FindForm = ({ els, handleFindSubmit }) => {
   return (
@@ -18,11 +17,9 @@ const FindForm = ({ els, handleFindSubmit }) => {
             </FormLabel>
             <Relative>
               <FormInput {...el.props} onChange={el.handleChange} />
-              {el.props.value && (
-                <Relative.Cancel {...el.props} onClick={el.handleClick} />
-              )}
+              {el.props.value && <Relative.Cancel {...el.props} onClick={el.handleClick} />}
+              {el.props.error && <Error>{el.props.error}</Error>}
             </Relative>
-            {el.props.error && <Error>{el.props.error}</Error>}
           </div>
         );
       })}
