@@ -1,12 +1,13 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
 import Button from '@/components/atoms/Button';
+import PropTypes from 'prop-types';
+import { memo, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import styled, { css } from 'styled-components';
 
 const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
   const [visible, setVisible] = useState(false);
   const close = useRef(false);
+  const timerRef = useRef(false);
 
   const modalClose = () => {
     setVisible(false);
@@ -15,11 +16,14 @@ const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
 
   useEffect(() => {
     if (!visible && isOpen && !close.current) {
-      setTimeout(() => setVisible(true), 500);
+      timerRef.current = setTimeout(() => setVisible(true), 500);
     } else if (close.current) {
-      setTimeout(() => setIsOpen(false), 500);
+      timerRef.current = setTimeout(() => setIsOpen(false), 500);
       close.current = false;
     }
+    return () => {
+      clearTimeout(timerRef.current);
+    };
   }, [visible, isOpen, setIsOpen]);
 
   useEffect(() => {
@@ -35,10 +39,7 @@ const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <StyledWrapper
-      visible={visible}
-      backgroundTransparent={backgroundTransparent}
-    >
+    <StyledWrapper visible={visible} backgroundTransparent={backgroundTransparent}>
       <div>
         <div>{children}</div>
         <div>
@@ -54,10 +55,7 @@ Modal.propTypes = {
   backgroundTransparent: PropTypes.bool,
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
 const StyledWrapper = styled.div`
