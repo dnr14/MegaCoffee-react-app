@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { makeUrl } from '@/utils/urlUtil';
 import MenuBar from '../atoms/MenuBar';
 import SelectBox from '../atoms/SelectBox';
+import { makeUrl } from '@/utils/urlUtil';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const AlignmentMenuBar = ({
   id,
@@ -16,7 +15,7 @@ const AlignmentMenuBar = ({
   handleAlignmentMenubarOpen,
 }) => {
   return (
-    <div>
+    <Wrapper>
       <SelectBox onClick={handleAlignmentMenubarOpen}>
         {ALIGNMENT_EUNM[id]}
         <svg
@@ -35,14 +34,8 @@ const AlignmentMenuBar = ({
         <MenuBar isOpen={isOpen} setIsOpen={setIsOpen}>
           <UlWrapper onClick={handleAlignmentStateChange}>
             {Object.keys(ALIGNMENT_EUNM).map(key => (
-              <li
-                key={key}
-                className={crrentQuery.alignment === key ? 'checked' : ''}
-              >
-                <Link
-                  to={makeUrl(match.path, crrentQuery, { alignment: key })}
-                  id={`${key}`}
-                >
+              <li key={key} className={crrentQuery.alignment === key ? 'checked' : ''}>
+                <Link to={makeUrl(match.path, crrentQuery, { alignment: key })} id={`${key}`}>
                   {ALIGNMENT_EUNM[key]}
                 </Link>
               </li>
@@ -50,15 +43,18 @@ const AlignmentMenuBar = ({
           </UlWrapper>
         </MenuBar>
       )}
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  position: relative;
+`;
 
 const UlWrapper = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-
   li {
     cursor: pointer;
     font-weight: 600;

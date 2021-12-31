@@ -4,14 +4,12 @@ import MenusContainer from '../organisms/MenusContainer';
 import UsersContainer from '../organisms/UsersContainer';
 import UsersSearchConatiner from '../organisms/UsersSearchConatiner';
 import UsersSortContainer from '../organisms/UsersSortContainer';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import styled from 'styled-components';
-
+import RootRedirect from '@/Routers/RootRedirect';
 import Layout from '@/components/atoms/Layout';
 import Title from '@/components/atoms/Title';
 import AdminLinks from '@/components/molecules/AdminLinks';
-
-import RootRedirect from '@/Routers/RootRedirect';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Admin = () => {
   const match = useRouteMatch();

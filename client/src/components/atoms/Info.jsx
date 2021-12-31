@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 const Info = ({ isOpen, closeDelay, openDelay, setIsOpen, up, children }) => {

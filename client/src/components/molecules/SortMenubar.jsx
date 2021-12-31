@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { makeUrl } from '@/utils/urlUtil';
 import MenuBar from '../atoms/MenuBar';
 import SelectBox from '../atoms/SelectBox';
+import { makeUrl } from '@/utils/urlUtil';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const SortMenubar = ({
   id,
@@ -16,7 +15,7 @@ const SortMenubar = ({
   handleSortStateChange,
 }) => {
   return (
-    <div>
+    <Wrapper>
       <SelectBox onClick={handleSortMenubarOpen}>
         {SORT_EUNM[id]}
         <svg
@@ -35,14 +34,8 @@ const SortMenubar = ({
         <MenuBar isOpen={isOpen} setIsOpen={setIsOpen}>
           <UlWrapper onClick={handleSortStateChange}>
             {Object.keys(SORT_EUNM).map(key => (
-              <li
-                key={key}
-                className={crrentQuery.keyword === key ? 'checked' : ''}
-              >
-                <Link
-                  to={makeUrl(match.path, crrentQuery, { keyword: key })}
-                  id={`${key}`}
-                >
+              <li key={key} className={crrentQuery.keyword === key ? 'checked' : ''}>
+                <Link to={makeUrl(match.path, crrentQuery, { keyword: key })} id={`${key}`}>
                   {SORT_EUNM[key]}
                 </Link>
               </li>
@@ -50,9 +43,12 @@ const SortMenubar = ({
           </UlWrapper>
         </MenuBar>
       )}
-    </div>
+    </Wrapper>
   );
 };
+const Wrapper = styled.div`
+  position: relative;
+`;
 
 const UlWrapper = styled.ul`
   list-style: none;

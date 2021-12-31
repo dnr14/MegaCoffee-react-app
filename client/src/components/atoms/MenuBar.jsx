@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 const MenuBar = ({ isOpen, setIsOpen, children }) => {
@@ -37,8 +37,9 @@ const MenuWrraperVisible = css`
 
 const Menu = styled.div`
   position: absolute;
-  right: 5%;
   top: 80%;
+  left: 0;
+  right: 0;
   z-index: 0;
   transition: z-index 0.25s ease-in;
   ${({ visible }) => visible && MenuVisible}
@@ -46,7 +47,7 @@ const Menu = styled.div`
 
 const MenuWrraper = styled.div`
   margin-top: 0.5rem;
-  width: 12rem;
+  width: 100%;
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px 0px;
   background: white;
   color: rgb(33, 37, 41);

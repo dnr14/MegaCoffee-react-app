@@ -1,9 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-
 import { login } from '@/api/auth';
-
 import Error from '@/components/atoms/Error';
 import Loading from '@/components/atoms/Loading';
 import Modal from '@/components/atoms/Modal';
@@ -12,14 +7,14 @@ import LoginForm from '@/components/molecules/LoginForm';
 import LoginInput from '@/components/molecules/LoginInput';
 import LoginLabel from '@/components/molecules/LoginLabel';
 import Relative from '@/components/molecules/Relative';
-
 import useFetch from '@/hooks/useFetch';
 import useForm from '@/hooks/useForm';
-
 import { userInfoAsync } from '@/modules/login';
-
 import { setAccessToken, setRole } from '@/utils/localstorege';
 import { emptyCheck } from '@/utils/validations';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const LoginContainer = () => {
   const dispatch = useDispatch();
@@ -97,7 +92,6 @@ const LoginContainer = () => {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       setMessage(
         <>
           <span>{error.message}</span>

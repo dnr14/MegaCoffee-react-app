@@ -1,15 +1,14 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import Menu from '@/components/molecules/Menu';
-import Info from '@/components/atoms/Info';
-import Button from '@/components/atoms/Button';
-import useFetch from '@/hooks/useFetch';
-import { menuSelect, menuDelete } from '@/api/admin';
-import Loading from '@/components/atoms/Loading';
-import Alert from '@/components/atoms/Alert';
 import { MenuContext } from './MenuContextProvider';
-
-let timer;
+import { menuSelect, menuDelete } from '@/api/admin';
+import Alert from '@/components/atoms/Alert';
+import Button from '@/components/atoms/Button';
+import Info from '@/components/atoms/Info';
+import Loading from '@/components/atoms/Loading';
+import Menu from '@/components/molecules/Menu';
+import useFetch from '@/hooks/useFetch';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 
 const MenusContainer = () => {
   const history = useHistory();
@@ -24,14 +23,15 @@ const MenusContainer = () => {
   const { results } = list;
   const { loading, error, success } = state;
   const MenuId = params.id;
+  const timerRef = useRef(null);
 
   const up = useCallback(close => setPopUpCloseEvent({ close }), []);
 
   const historyMove = id => () => {
     if (id === clicked && isOpen) return;
-    if (timer) clearTimeout(timer);
+    if (timerRef.current) clearTimeout(timerRef.current);
     if (params.id && popUpCloseEvent) popUpCloseEvent.close();
-    timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       history.push(`/admin/menu/${id}`);
       setClicked(id);
     }, 400);
@@ -85,25 +85,11 @@ const MenusContainer = () => {
   }, [success, setList]);
 
   const menuList = results?.map(menu => (
-    <Menu
-      key={menu.id}
-      menu={menu}
-      historyMove={historyMove}
-      handleMenuDelete={handleMenuDelete}
-    >
+    <Menu key={menu.id} menu={menu} historyMove={historyMove} handleMenuDelete={handleMenuDelete}>
       {MenuId === menu.id && isOpen && (
-        <Info
-          isOpen={isOpen}
-          openDelay={500}
-          closeDelay={300}
-          setIsOpen={setIsOpen}
-          up={up}
-        >
+        <Info isOpen={isOpen} openDelay={500} closeDelay={300} setIsOpen={setIsOpen} up={up}>
           <div>상세 설명</div>
-          <div
-            dangerouslySetInnerHTML={{ __html: menu.body }}
-            className="info"
-          />
+          <div dangerouslySetInnerHTML={{ __html: menu.body }} className="info" />
         </Info>
       )}
     </Menu>
@@ -117,22 +103,30 @@ const MenusContainer = () => {
         </Alert>
       )}
       <Loading loading={loading} />
-      <div>
-        <div>상품 이미지를 클릭 시 상세 설명이 나옵니다.(*)</div>
+      <Wrapper>
         <div>
-          <span>total {list?.totalResults}개</span>
+          상품 이미지를 클릭 시 상세 설명이 나옵니다.<span className="red">(*)</span>
+        </div>
+        <div>
+          <span>총 {list?.totalResults}개의 메뉴가 등록되어있습니다.</span>
         </div>
         {menuList}
-        <Button
-          type="button"
-          onClick={handleHasMoreMenu}
-          disabled={list.page === list.totalPages}
-        >
+        <Button type="button" onClick={handleHasMoreMenu} disabled={list.page === list.totalPages}>
           더보기
         </Button>
-      </div>
+      </Wrapper>
     </>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .the-red {
+    color: red;
+  }
+`;
 
 export default MenusContainer;

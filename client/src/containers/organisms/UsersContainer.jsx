@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import UsersTable from '@/components/molecules/UsersTable';
-import TableBody from '@/components/atoms/TableBody';
 import { users, userUpdate } from '@/api/admin';
-import useFetch from '@/hooks/useFetch';
+import Button from '@/components/atoms/Button';
 import Loading from '@/components/atoms/Loading';
+import TableBody from '@/components/atoms/TableBody';
 import RoleMenubar from '@/components/molecules/RoleMenubar';
 import StateMenuBar from '@/components/molecules/StateMenuBar';
-import Button from '@/components/atoms/Button';
+import UsersTable from '@/components/molecules/UsersTable';
+import useFetch from '@/hooks/useFetch';
+import queryString from 'query-string';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const STATE_ENUM = {
   normal: '정상',
@@ -21,16 +21,7 @@ const ROLE_EUNM = {
   user: '사용자',
 };
 
-const heads = [
-  '번호',
-  '아이디',
-  '이메일',
-  '생년월일',
-  '권한',
-  '권한 관리',
-  '상태',
-  '관리',
-];
+const heads = ['번호', '아이디', '이메일', '생년월일', '권한', '권한 관리', '상태', '관리'];
 
 const INIT = {
   posts: [],
@@ -47,17 +38,13 @@ const UsersContainer = () => {
   const { loading, error, success } = state;
   const { posts, pageState } = list;
   const { page, totalPages } = pageState;
-  const currentQuery = useMemo(
-    () => queryString.parse(location.search),
-    [location]
-  );
+  const currentQuery = useMemo(() => queryString.parse(location.search), [location]);
 
   const handleUserStateChange = useCallback(
     (currentState, userId) =>
       ({ target }) => {
         const { id } = target;
-        if (id !== currentState)
-          callApi(() => userUpdate({ id: userId, state: id }));
+        if (id !== currentState) callApi(() => userUpdate({ id: userId, state: id }));
       },
     [callApi]
   );
@@ -66,8 +53,7 @@ const UsersContainer = () => {
     (currentRole, userId) =>
       ({ target }) => {
         const { id } = target;
-        if (id !== currentRole)
-          callApi(() => userUpdate({ id: userId, role: id }));
+        if (id !== currentRole) callApi(() => userUpdate({ id: userId, role: id }));
       },
     [callApi]
   );
@@ -150,43 +136,37 @@ const UsersContainer = () => {
       <Loading loading={loading} />
       <UsersTable heads={heads} onClick={handleModalFoucsBlur}>
         {posts &&
-          sort(posts, currentQuery).map(
-            ({ id, email, birthDay, role, state }, idx) => (
-              <TableBody key={idx}>
-                <div>{idx + 1}</div>
-                <div>{id}</div>
-                <div>{email}</div>
-                <div>{birthDay}</div>
-                <div>{ROLE_EUNM[role]}</div>
-                <RoleMenubar
-                  id={id}
-                  role={role}
-                  ROLE_EUNM={ROLE_EUNM}
-                  clickedId={clickedId}
-                  isRoleModalOpen={isRoleModalOpen}
-                  setIsRoleModalOpen={setIsRoleModalOpen}
-                  handleAdminModalClick={handleAdminModalClick}
-                  handleUserRoleStateChange={handleUserRoleStateChange}
-                />
-                <div className={state}>{STATE_ENUM[state]}</div>
-                <StateMenuBar
-                  id={id}
-                  state={state}
-                  STATE_ENUM={STATE_ENUM}
-                  clickedId={clickedId}
-                  isStateModalOpen={isStateModalOpen}
-                  setIsStateModalOpen={setIsStateModalOpen}
-                  handleUserStateChange={handleUserStateChange}
-                  handleStateModalClick={handleStateModalClick}
-                />
-              </TableBody>
-            )
-          )}
-        <div>
-          {page !== totalPages && (
-            <Button onClick={handleAddUsers}>더보기</Button>
-          )}
-        </div>
+          sort(posts, currentQuery).map(({ id, email, birthDay, role, state }, idx) => (
+            <TableBody key={idx}>
+              <div>{idx + 1}</div>
+              <div>{id}</div>
+              <div>{email}</div>
+              <div>{birthDay}</div>
+              <div>{ROLE_EUNM[role]}</div>
+              <RoleMenubar
+                id={id}
+                role={role}
+                ROLE_EUNM={ROLE_EUNM}
+                clickedId={clickedId}
+                isRoleModalOpen={isRoleModalOpen}
+                setIsRoleModalOpen={setIsRoleModalOpen}
+                handleAdminModalClick={handleAdminModalClick}
+                handleUserRoleStateChange={handleUserRoleStateChange}
+              />
+              <div className={state}>{STATE_ENUM[state]}</div>
+              <StateMenuBar
+                id={id}
+                state={state}
+                STATE_ENUM={STATE_ENUM}
+                clickedId={clickedId}
+                isStateModalOpen={isStateModalOpen}
+                setIsStateModalOpen={setIsStateModalOpen}
+                handleUserStateChange={handleUserStateChange}
+                handleStateModalClick={handleStateModalClick}
+              />
+            </TableBody>
+          ))}
+        <div>{page !== totalPages && <Button onClick={handleAddUsers}>더보기</Button>}</div>
       </UsersTable>
     </div>
   );

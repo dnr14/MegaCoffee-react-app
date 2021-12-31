@@ -1,17 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
 import MenuBar from '../atoms/MenuBar';
 import SelectBox from '../atoms/SelectBox';
 import UlWrapper from '../atoms/UlWrapper';
+import styled from 'styled-components';
 
-const InsertMenubar = ({
-  currentId,
-  ENUMS,
-  isOpen,
-  setIsOpen,
-  menuClick,
-  menuClicked,
-}) => {
+const InsertMenubar = ({ currentId, ENUMS, isOpen, setIsOpen, menuClick, menuClicked }) => {
   return (
     <Layout>
       <SelectBox onClick={menuClick}>
@@ -32,11 +24,7 @@ const InsertMenubar = ({
         <MenuBar isOpen={isOpen} setIsOpen={setIsOpen}>
           <UlWrapper onClick={menuClicked}>
             {Object.keys(ENUMS).map(key => (
-              <li
-                key={key}
-                id={`${key}`}
-                className={key === currentId ? 'checked' : ''}
-              >
+              <li key={key} id={`${key}`} className={key === currentId ? 'checked' : ''}>
                 {ENUMS[key]}
               </li>
             ))}
