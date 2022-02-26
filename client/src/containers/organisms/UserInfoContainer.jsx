@@ -129,6 +129,7 @@ const UserInfoContainer = () => {
     const { value: pwd } = e.target.pwd;
     const { value: pwdConfirm } = e.target.pwdConfirm;
     const formData = new FormData();
+    formData.append('pwd', pwd);
     if (!validations.emptyCheck(nickName)) {
       formData.append('nickName', nickName);
     }

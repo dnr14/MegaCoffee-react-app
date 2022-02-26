@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useReducer } from 'react';
 import * as validations from '@/utils/validations';
+import { useCallback, useEffect, useReducer } from 'react';
 
 const ID_ADD = 'ID_ADD';
 const PWD_ADD = 'PWD_ADD';
@@ -157,11 +157,7 @@ const useForm = (isConfirmPasswordCheck = true) => {
     ) {
       const { data: pwdConfirm } = form.pwdConfirm;
       const { data: pwd } = form.pwd;
-      if (
-        pwdConfirm === pwd &&
-        String(pwdConfirm).length >= PWD_MIN_LENG &&
-        String(pwd).length >= PWD_MIN_LENG
-      ) {
+      if (pwdConfirm === pwd && String(pwdConfirm).length >= PWD_MIN_LENG && String(pwd).length >= PWD_MIN_LENG) {
         let result = pwdValidation(isConfirmPasswordCheck, pwdConfirm, pwd);
         dispatch(pwdAddAction(result));
         result = pwdConfirmValidation(isConfirmPasswordCheck, pwd, pwdConfirm);
@@ -182,7 +178,7 @@ const PWD_MIN_LENG = 6;
 const BIRTH_DAY_MIN_LENG = 6;
 const NAME_MAX_LENG = 10;
 const NAME_MIN_LENG = 3;
-const EMAIL_MAX_LENG = 15;
+const EMAIL_MAX_LENG = 30;
 const ERROR_MESSAGES = Object.freeze({
   whiteSpaceCheck: '🚫 공백문자는 입력하지 못합니다.',
   koreaLengCheck: '🚫 한글은 입력하지 못합니다.',

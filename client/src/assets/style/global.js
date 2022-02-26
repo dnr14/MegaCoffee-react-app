@@ -24,7 +24,7 @@ html{
 }
 body {
   line-height: 1;
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {

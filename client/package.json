@@ -15,6 +15,7 @@
     "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -72,7 +73,7 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "dev": "webpack serve --mode=development",
+    "start": "webpack serve --mode=development",
     "lint": "eslint \"./src/**/*.{js,jsx}\"",
     "lint:fix": "eslint --fix --fix-type suggestion \"./src/**/*.{js,jsx}\""
   }

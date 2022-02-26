@@ -89,6 +89,7 @@ router.patch("/:id", jwt.verify, (req, res) => {
       const { id } = req.params;
       const { nickName } = req.body;
       const { pwd } = req.body;
+
       const { newPwd } = req.body;
       const user = await UsersSchma.findOne().where("id").equals(id);
       const update = {};
@@ -127,8 +128,6 @@ router.patch("/:id", jwt.verify, (req, res) => {
         },
         { new: true }
       );
-
-      console.log(newUser);
 
       res.json({ message: "정보가 수정되었습니다." });
     } catch (error) {

@@ -1,17 +1,13 @@
-import CardsBox from '../../components/molecules/CardsBox';
-import { useCallback, useEffect, useState } from 'react';
-
 import { selectById } from '@/api/comment';
 import { select } from '@/api/userNoticeBoard';
-
 import Alert from '@/components/atoms/Alert';
 import Card from '@/components/atoms/Card';
+import CardsBox from '@/components/molecules/CardsBox';
 import Pagination from '@/components/molecules/Pagination';
-
 import useFetch from '@/hooks/useFetch';
-
 import { getCurrentNoticeNumber, setCurrentNoticeNumber } from '@/utils/localstorege';
 import { emptyCheck } from '@/utils/validations';
+import { useCallback, useEffect, useState } from 'react';
 
 const NoticeBoardContainer = () => {
   const [noticeState, setNoticeState] = useState({});

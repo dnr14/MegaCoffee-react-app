@@ -3,6 +3,7 @@ const { makeError, emptyCheck } = require("../utils/error");
 const verify = require("../middleware/jwt").verify;
 const UserNoticeBoard = require("../models/UserNoticeBoardSchema");
 const router = express.Router();
+const { s3upload, s3FileDelete } = require("../middleware/multer");
 
 router.get("/", async (req, res) => {
   let page = Number(req.query.page ?? 1);
@@ -36,42 +37,38 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", verify, async (req, res) => {
-  try {
-    const {
-      title,
-      body,
-      writer,
-      category,
-      thumbnail = "",
-      categoryThumbnail,
-    } = req.body;
-    if (emptyCheck(title)) throw makeError("제목은 필수입니다.", 400);
-    if (emptyCheck(body)) throw makeError("내용은 필수입니다.", 400);
-    if (emptyCheck(writer)) throw makeError("작성자는 필수입니다.", 400);
-    if (emptyCheck(category)) throw makeError("카테고리는 필수입니다.", 400);
-    if (emptyCheck(categoryThumbnail))
-      throw makeError("카테고리 사진은 필수입니다.", 400);
+  s3upload("image", "notice")(req, res, async (err) => {
+    try {
+      if (err) throw err;
+      const { title, body, writer, category, categoryThumbnail } = req.body;
+      if (emptyCheck(title)) throw makeError("제목은 필수입니다.", 400);
+      if (emptyCheck(body)) throw makeError("내용은 필수입니다.", 400);
+      if (emptyCheck(writer)) throw makeError("작성자는 필수입니다.", 400);
+      if (emptyCheck(category)) throw makeError("카테고리는 필수입니다.", 400);
+      if (emptyCheck(categoryThumbnail))
+        throw makeError("카테고리 사진은 필수입니다.", 400);
 
-    const prefix = Math.random().toString(36).slice(6);
-    const suffix = Math.random().toString(8).slice(5);
+      const prefix = Math.random().toString(36).slice(6);
+      const suffix = Math.random().toString(8).slice(5);
+      const { location, key } = req.file;
+      const userNoticeBoard = await new UserNoticeBoard({
+        id: prefix + suffix,
+        title,
+        body,
+        writer,
+        thumbnail: location,
+        category,
+        categoryThumbnail,
+        createAt: new Date().toLocaleString(),
+        timeStemp: new Date().getTime(),
+      }).save();
 
-    const userNoticeBoard = await new UserNoticeBoard({
-      id: prefix + suffix,
-      title,
-      body,
-      writer,
-      thumbnail,
-      category,
-      categoryThumbnail,
-      createAt: new Date().toLocaleString(),
-      timeStemp: new Date().getTime(),
-    }).save();
-
-    res.status(201).json({ userNoticeBoard });
-  } catch (error) {
-    const { message, status = 504 } = error;
-    res.json({ code: status, message });
-  }
+      res.status(201).json({ userNoticeBoard });
+    } catch (error) {
+      const { message, status = 504 } = error;
+      res.status(status).json({ code: status, message });
+    }
+  });
 });
 
 router.delete("/:id", verify, async (req, res) => {

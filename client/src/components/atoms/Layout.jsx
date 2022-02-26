@@ -1,17 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const Layout = ({ children }) => {
-  return (
-    <main>
-      <section>
-        <Container>{children}</Container>
-      </section>
-    </main>
-  );
-};
+const Layout = ({ children }) => (
+  <main>
+    <Container>{children}</Container>
+  </main>
+);
 
-const Container = styled.div`
+const Container = styled.article`
   max-width: ${({ theme }) => theme.maxWidth};
   padding: 1px 0;
   margin: 0 auto;

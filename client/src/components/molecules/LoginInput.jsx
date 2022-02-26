@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
-import styled from 'styled-components';
 import FormInput from '@/components/atoms/FormInput';
+import { memo } from 'react';
+import styled from 'styled-components';
 
 const LoginInput = ({ ...rest }) => {
   return <ExtensionInput {...rest} />;

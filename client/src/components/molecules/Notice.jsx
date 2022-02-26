@@ -1,13 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link, useRouteMatch } from 'react-router-dom';
 import withLoading from '@/hoc/withLoading';
 import { isEmptyObject } from '@/utils/validations';
+import React from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Notice = ({ post, userInfo, noticeDelete }) => {
   const { url } = useRouteMatch();
-  const { id, body, category, categoryThumbnail, writer, createAt, updateAt } =
-    post;
+  const { id, body, category, categoryThumbnail, writer, createAt, updateAt } = post;
 
   if (isEmptyObject(post)) {
     return (
@@ -61,10 +60,7 @@ const Notice = ({ post, userInfo, noticeDelete }) => {
       <div>
         <span>문의한 음료 : {category}</span>
       </div>
-      <CKContent
-        className="ck-content"
-        dangerouslySetInnerHTML={{ __html: body }}
-      />
+      <CKContent className="ck-content" dangerouslySetInnerHTML={{ __html: body }} />
     </Container>
   );
 };
@@ -142,17 +138,16 @@ const ModifyBox = styled.div`
 
   span {
     display: inline-block;
-    padding: 0.5rem 0.8rem;
+    padding: 0.5rem;
     cursor: pointer;
     border: 1px solid transparent;
     border-radius: 5px;
     color: ${({ theme }) => theme.color.white1};
     background-color: ${({ theme }) => theme.color.magacoffeColor1};
     box-shadow: ${({ theme }) => theme.boxShadow1};
-    font-weight: bold;
 
     &:hover {
-      border: 1px solid ${({ theme }) => theme.color.shadowColor};
+      opacity: 0.8;
     }
 
     ${({ theme }) => theme.media.tab} {

@@ -1,8 +1,5 @@
 import { MenuContext } from './MenuContextProvider';
-import { useContext, useEffect, useState } from 'react';
-
 import { menuInsert } from '@/api/admin';
-
 import Alert from '@/components/atoms/Alert';
 import Button from '@/components/atoms/Button';
 import Form from '@/components/atoms/Form';
@@ -14,10 +11,9 @@ import CoustomEditor from '@/components/molecules/CustomEditor';
 import InsertMenubar from '@/components/molecules/InsertMenubar';
 import MenuEditor from '@/components/molecules/MenuEditor';
 import ThumbnailBox from '@/components/molecules/ThumbnailBox';
-
 import useFetch from '@/hooks/useFetch';
-
 import { emptyCheck } from '@/utils/validations';
+import { useContext, useEffect, useState } from 'react';
 
 const CATEGORY_ENUMS = {
   coffee: '커피',
@@ -185,7 +181,7 @@ const MenuInsertContainer = () => {
         <MenuEditor>
           <CoustomEditor id="body" data={editorValue} onChange={handleEditorOnChange} />
         </MenuEditor>
-        <Button>제출하기</Button>
+        <Button>등록하기</Button>
       </Form>
     </>
   );

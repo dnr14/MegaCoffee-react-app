@@ -1,10 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
 import Form from '../atoms/Form';
+import styled from 'styled-components';
 
-const LoginForm = ({ children, ...rest }) => (
-  <ExtentionForm {...rest}>{children}</ExtentionForm>
-);
+const LoginForm = ({ children, ...rest }) => <ExtentionForm {...rest}>{children}</ExtentionForm>;
 
 const ExtentionForm = styled(Form)`
   margin: 0;

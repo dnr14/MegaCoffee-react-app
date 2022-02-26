@@ -27,7 +27,7 @@ const CATEGORY_ENUMS = {
 const NoticeBoardInsertContainer = () => {
   const [list, setList] = useState([]);
   const history = useHistory();
-  const userInfo = useSelector(({ login }) => login);
+  const { user } = useSelector(({ login }) => login);
   const [checked, setChecked] = useState(null);
   const [base64, setBase64] = useState(null);
   const [fileValue, setFileValue] = useState(null);
@@ -85,21 +85,14 @@ const NoticeBoardInsertContainer = () => {
     }
 
     const { category, thumbnail } = categoryObj;
-    const data = {
-      title: titleValue,
-      body: bodyValue,
-      writer: userInfo.id,
-      category,
-      categoryThumbnail: thumbnail,
-    };
-
-    // const formData = new FormData();
-    // formData.append('title', titleValue);
-    // formData.append('category', categoryValue);
-    // formData.append('temperature', temperatureValue);
-    // formData.append('body', editorValue);
-    // formData.append('image', fileValue);
-    callApi(() => insert(data));
+    const formData = new FormData();
+    formData.append('title', titleValue);
+    formData.append('category', category);
+    formData.append('categoryThumbnail', thumbnail);
+    formData.append('writer', user.id);
+    formData.append('body', bodyValue);
+    formData.append('image', fileValue);
+    callApi(() => insert(formData));
     setBase64(null);
     setEditorValue('');
     target.title.value = '';
@@ -189,9 +182,10 @@ const NoticeBoardInsertContainer = () => {
       </Layout>
       <Slide list={list} slideCardClickEevent={handleClick} />
       <Form onSubmit={handleOnSubmit}>
-        <Layout>
-          <input type="text" id="title" maxLength={100} />
-        </Layout>
+        <div>
+          <h6>제목</h6>
+          <TitleInput type="text" id="title" maxLength={100} placeholder="제목을 입력해주세요." />
+        </div>
         <div>
           <ThumbnailBox>
             <Thumbnail>
@@ -226,10 +220,16 @@ const Layout = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  input {
-    width: 100%;
-    padding: 0.3rem;
-  }
+`;
+
+const TitleInput = styled.input`
+  width: 100%;
+  padding: 0.5rem;
+  height: 45px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  margin-top: 10px;
+  ${({ theme }) => theme.boxShadow3};
 `;
 
 export default NoticeBoardInsertContainer;

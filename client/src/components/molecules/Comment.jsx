@@ -1,9 +1,9 @@
-import React, { forwardRef } from 'react';
-import moment from 'moment';
-import styled, { css } from 'styled-components';
-import { useSelector } from 'react-redux';
 import CommentEditor from './CommentEditor';
 import CommentModify from './CommentModify';
+import moment from 'moment';
+import { forwardRef } from 'react';
+import { useSelector } from 'react-redux';
+import styled, { css } from 'styled-components';
 
 const Comment = (
   {
@@ -22,7 +22,7 @@ const Comment = (
   },
   ref
 ) => {
-  const userInfo = useSelector(({ login }) => login);
+  const { user } = useSelector(({ login }) => login);
   const { _id, body, timeStemp, updateTimeStemp, writer } = comment;
 
   const formatDate = updateTimeStemp !== '' ? updateTimeStemp : timeStemp;
@@ -31,11 +31,7 @@ const Comment = (
   const truthy = currentModifyCommentId === _id && isOpen;
   const button = (
     <>
-      <span
-        onClick={
-          truthy ? commentModifyEditorClose : handleCommentModifyOnClick(_id)
-        }
-      >
+      <span onClick={truthy ? commentModifyEditorClose : handleCommentModifyOnClick(_id)}>
         {truthy ? '닫기' : '수정'}
       </span>
       <span onClick={commentDelete(_id)}>삭제</span>
@@ -57,20 +53,12 @@ const Comment = (
             {updateTimeStemp !== '' && <span>업데이트됨</span>}
           </div>
         </div>
-        {writer === userInfo.id && (
-          <div className="modifyAndRemoveBox">{button}</div>
-        )}
+        {writer === user.id && <div className="modifyAndRemoveBox">{button}</div>}
         <div dangerouslySetInnerHTML={{ __html: body }} />
       </Layout>
       <CommentsBox isOpen={isOpen}>
         {truthy && (
-          <CommentModify
-            ref={ref}
-            openDelay={500}
-            closeDelay={500}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-          >
+          <CommentModify ref={ref} openDelay={500} closeDelay={500} isOpen={isOpen} setIsOpen={setIsOpen}>
             <span>
               들여쓰기
               <span>( {indent} )</span>
@@ -81,11 +69,7 @@ const Comment = (
               onUpdate={handleCommentModifyEditorOnUpdate}
             />
             <div>
-              <button
-                type="button"
-                disabled={modifyDisabled}
-                onClick={handleCommentModify(_id)}
-              >
+              <button type="button" disabled={modifyDisabled} onClick={handleCommentModify(_id)}>
                 수정하기
               </button>
             </div>
@@ -130,7 +114,7 @@ const Layout = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    padding: 1rem 0;
+    margin-bottom: 10px;
   }
   & > div:last-child {
     line-height: 1.5;
@@ -152,7 +136,7 @@ const Layout = styled.div`
       transition: color 0.25s ease-in-out;
       border-radius: 5px;
       &:hover {
-        color: ${({ theme }) => theme.color.black1};
+        opacity: 0.8;
       }
     }
   }

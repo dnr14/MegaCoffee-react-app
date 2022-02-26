@@ -39,14 +39,14 @@ const Modal = ({ isOpen, backgroundTransparent, setIsOpen, children }) => {
   if (!isOpen) return null;
 
   return createPortal(
-    <StyledWrapper visible={visible} backgroundTransparent={backgroundTransparent}>
+    <ModalWrapper visible={visible} backgroundTransparent={backgroundTransparent}>
       <div>
         <div>{children}</div>
         <div>
           <ModelButton onClick={modalClose}>닫기</ModelButton>
         </div>
       </div>
-    </StyledWrapper>,
+    </ModalWrapper>,
     document.querySelector('#modal')
   );
 };
@@ -58,7 +58,7 @@ Modal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
-const StyledWrapper = styled.div`
+const ModalWrapper = styled.div`
   position: fixed;
   display: flex;
   justify-content: center;
@@ -99,7 +99,8 @@ const StyledWrapper = styled.div`
     padding: 1rem;
     border-radius: 10px;
     background-color: ${({ theme }) => theme.color.magacoffeColor1};
-    box-shadow: 2px 2px 2px ${({ theme }) => theme.color.shadowColor};
+    ${({ theme }) => theme.boxShadow2};
+
     ${({ visible }) =>
       visible &&
       css`
@@ -110,7 +111,6 @@ const StyledWrapper = styled.div`
 
     & > div {
       color: ${({ theme }) => theme.color.black1};
-      font-weight: 600;
       text-align: center;
       line-height: 2rem;
     }

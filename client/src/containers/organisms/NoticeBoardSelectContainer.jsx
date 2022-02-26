@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import * as comment from '@/api/comment';
+import { selectById, deleteById } from '@/api/userNoticeBoard';
+import Alert from '@/components/atoms/Alert';
+import Button from '@/components/atoms/Button';
+import FlexBox from '@/components/atoms/FlexBox';
+import Form from '@/components/atoms/Form';
+import Strong from '@/components/atoms/Strong';
+import Comment from '@/components/molecules/Comment';
+import CommentEditor from '@/components/molecules/CommentEditor';
+import NoComments from '@/components/molecules/NoComments';
+import Notice from '@/components/molecules/Notice';
+import useFetch from '@/hooks/useFetch';
+import { emptyCheck } from '@/utils/validations';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import { selectById, deleteById } from '@/api/userNoticeBoard';
-import useFetch from '@/hooks/useFetch';
-import Alert from '@/components/atoms/Alert';
-import Notice from '@/components/molecules/Notice';
-import { emptyCheck } from '@/utils/validations';
-import CommentEditor from '@/components/molecules/CommentEditor';
-import Button from '@/components/atoms/Button';
-import Form from '@/components/atoms/Form';
-import * as comment from '@/api/comment';
-import Comment from '@/components/molecules/Comment';
-import NoComments from '@/components/molecules/NoComments';
-import FlexBox from '@/components/atoms/FlexBox';
-import Strong from '@/components/atoms/Strong';
 
 const CLOSE_TIME = 600;
 const COMMENT_VALUE_MAX_LENG = 300;
@@ -26,7 +26,11 @@ const ALERT_CLASS_NAME_ENUM = {
 const NoticeBoardSelectContainer = () => {
   const [post, setPost] = useState({});
   const [currentModifyCommentId, setCurrentModifyCommentId] = useState(null);
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState({
+    page: 0,
+    totalPages: 0,
+    results: [],
+  });
   const [disabled, setDisabled] = useState(false);
   const [modifyDisabled, setModifyDisabled] = useState(false);
   const [commentValue, setCommentValue] = useState('');
@@ -35,14 +39,14 @@ const NoticeBoardSelectContainer = () => {
   const [modifyCommentValueLength, setModifyCommentValueLength] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
-  const userInfo = useSelector(({ login }) => login);
+  const { user } = useSelector(({ login }) => login);
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const param = useParams();
   const { state, callApi } = useFetch();
   const { loading, error, success } = state;
   const { page, totalPages, results } = comments;
-  const { id } = userInfo;
+  const { id } = user;
   const up = useRef();
 
   const setAlert = (text, className) => {
@@ -84,20 +88,14 @@ const NoticeBoardSelectContainer = () => {
   const handleCommentModifyOnChange = useCallback(
     (_, editor) => {
       const value = editor.getData();
-      const isDisabled = commentValueValidation(
-        modifyCommentValueLength,
-        value
-      );
+      const isDisabled = commentValueValidation(modifyCommentValueLength, value);
       setModifyDisabled(isDisabled);
       setModifyCommentValue(value);
     },
     [modifyCommentValueLength]
   );
   // commentEditor에서 html태그를 제외한 text 개수 가져오기
-  const handleEditorOnUpdate = useCallback(
-    ({ characters }) => setCommentValueLength(characters),
-    []
-  );
+  const handleEditorOnUpdate = useCallback(({ characters }) => setCommentValueLength(characters), []);
 
   const handleCommentModifyEditorOnUpdate = useCallback(
     ({ characters }) => setModifyCommentValueLength(characters),
@@ -106,7 +104,7 @@ const NoticeBoardSelectContainer = () => {
 
   // 댓글 입력하기 api
   const handleOnSubmit = useCallback(
-    e => {
+    async e => {
       e.preventDefault();
       if (emptyCheck(commentValue)) {
         setAlert('댓글을 입력해주세요.', ALERT_CLASS_NAME_ENUM.error);
@@ -124,16 +122,14 @@ const NoticeBoardSelectContainer = () => {
         body: commentValue,
       };
 
-      (async () => {
-        const response = await comment.insert(obj);
-        const { data } = response;
-        setAlert('댓글이 등록되었습니다.', ALERT_CLASS_NAME_ENUM.success);
-        setCommentValue('');
-        setComments(prev => ({
-          ...prev,
-          results: [data, ...prev.results],
-        }));
-      })();
+      const response = await comment.insert(obj);
+      const { data } = response;
+      setAlert('댓글이 등록되었습니다.', ALERT_CLASS_NAME_ENUM.success);
+      setCommentValue('');
+      setComments(prev => ({
+        ...prev,
+        results: [data, ...prev.results],
+      }));
     },
     [commentValue, param, id]
   );
@@ -193,10 +189,7 @@ const NoticeBoardSelectContainer = () => {
   }, [comments, param]);
 
   // 게시글 삭제
-  const noticeDelete = useCallback(
-    currentId => () => callApi(() => deleteById(currentId)),
-    [callApi]
-  );
+  const noticeDelete = useCallback(currentId => () => callApi(() => deleteById(currentId)), [callApi]);
 
   // 댓글 삭제
   const commentDelete = currentId => async () => {
@@ -208,10 +201,7 @@ const NoticeBoardSelectContainer = () => {
         results: comments.results.filter(({ _id }) => _id !== id),
       });
     } catch (error) {
-      setAlert(
-        '댓글 삭제 중  오류가 발생했습니다.',
-        ALERT_CLASS_NAME_ENUM.error
-      );
+      setAlert('댓글 삭제 중  오류가 발생했습니다.', ALERT_CLASS_NAME_ENUM.error);
     }
   };
 
@@ -225,10 +215,7 @@ const NoticeBoardSelectContainer = () => {
         const { data } = await comment.select(1, 10, id);
         setComments(data);
       } catch (error) {
-        setAlert(
-          '서버 호출 중 오류가 발생했습니다.',
-          ALERT_CLASS_NAME_ENUM.error
-        );
+        setAlert('서버 호출 중 오류가 발생했습니다.', ALERT_CLASS_NAME_ENUM.error);
       }
     })();
   }, [param, callApi]);
@@ -252,28 +239,29 @@ const NoticeBoardSelectContainer = () => {
     }
   }, [error]);
 
-  const notice = emptyCheck(results) ? (
-    <NoComments />
-  ) : (
-    results.map(comment => (
-      <Comment
-        ref={up}
-        key={comment.id}
-        comment={comment}
-        currentModifyCommentId={currentModifyCommentId}
-        isOpen={isOpen}
-        modifyCommentValue={modifyCommentValue}
-        modifyDisabled={modifyDisabled}
-        setIsOpen={setIsOpen}
-        commentDelete={commentDelete}
-        handleCommentModify={handleCommentModify}
-        commentModifyEditorClose={commentModifyEditorClose}
-        handleCommentModifyOnClick={handleCommentModifyOnClick}
-        handleCommentModifyOnChange={handleCommentModifyOnChange}
-        handleCommentModifyEditorOnUpdate={handleCommentModifyEditorOnUpdate}
-      />
-    ))
-  );
+  const notice =
+    results.length === 0 ? (
+      <NoComments />
+    ) : (
+      results.map(comment => (
+        <Comment
+          ref={up}
+          key={comment.id}
+          comment={comment}
+          currentModifyCommentId={currentModifyCommentId}
+          isOpen={isOpen}
+          modifyCommentValue={modifyCommentValue}
+          modifyDisabled={modifyDisabled}
+          setIsOpen={setIsOpen}
+          commentDelete={commentDelete}
+          handleCommentModify={handleCommentModify}
+          commentModifyEditorClose={commentModifyEditorClose}
+          handleCommentModifyOnClick={handleCommentModifyOnClick}
+          handleCommentModifyOnChange={handleCommentModifyOnChange}
+          handleCommentModifyEditorOnUpdate={handleCommentModifyEditorOnUpdate}
+        />
+      ))
+    );
 
   const commentValueMatch = commentValue.match(COMMENT_VALUE_REGEX);
 
@@ -284,24 +272,17 @@ const NoticeBoardSelectContainer = () => {
           {alertMessage}
         </Alert>
       )}
-      <Notice
-        post={post}
-        loading={loading}
-        userInfo={userInfo}
-        noticeDelete={noticeDelete}
-      />
+      <Notice post={post} loading={loading} userInfo={user} noticeDelete={noticeDelete} />
       <div>
         <Form onSubmit={handleOnSubmit}>
           <FlexBox>
             <div>
               <span>들여쓰기</span>
-              <span>
-                ({commentValueMatch === null ? 0 : commentValueMatch.length})
-              </span>
+              <span>({commentValueMatch === null ? 0 : commentValueMatch.length})</span>
             </div>
             <div>
               <span>최대</span>
-              <spsan>({commentValueLength} / 300)</spsan>
+              <span>({commentValueLength} / 300)</span>
             </div>
             <div>
               {emptyCheck(id) ? (
@@ -313,16 +294,8 @@ const NoticeBoardSelectContainer = () => {
               )}
             </div>
           </FlexBox>
-          <CommentEditor
-            data={commentValue}
-            onChange={handleEditorOnChange}
-            onUpdate={handleEditorOnUpdate}
-          />
-          <Button
-            disabled={emptyCheck(commentValue) || emptyCheck(id) || disabled}
-          >
-            등록하기
-          </Button>
+          <CommentEditor data={commentValue} onChange={handleEditorOnChange} onUpdate={handleEditorOnUpdate} />
+          <Button disabled={emptyCheck(commentValue) || disabled}>등록하기</Button>
         </Form>
       </div>
       {notice}

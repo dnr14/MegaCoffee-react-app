@@ -6,7 +6,7 @@ import { customHistory } from '@modules/store';
 import { getAccessToken } from '@utils/localstorege';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const App = () => {
   const login = useSelector(loginSelector);
@@ -27,11 +27,11 @@ const App = () => {
   }, [error]);
 
   return (
-    <BrowserRouter history={customHistory}>
+    <Router history={customHistory}>
       <Top />
       <Routers />
       <Bottom />
-    </BrowserRouter>
+    </Router>
   );
 };
 

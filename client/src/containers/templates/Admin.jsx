@@ -15,7 +15,7 @@ const Admin = () => {
   const match = useRouteMatch();
 
   return (
-    <Layout>
+    <AdminWrapper>
       <Container>
         <Title>관리자페이지</Title>
         <AdminLinks match={match} />
@@ -34,12 +34,17 @@ const Admin = () => {
           <RootRedirect />
         </Switch>
       </Container>
-    </Layout>
+    </AdminWrapper>
   );
 };
 
+const AdminWrapper = styled.div`
+  width: 1200px;
+  margin: 0 auto;
+`;
+
 const Container = styled.div`
-  padding: 2rem 1rem;
+  padding: 1rem 0.5rem;
   background-color: rgb(248, 249, 250);
   box-shadow: 2px 2px 2px rgb(248, 249, 250);
 `;

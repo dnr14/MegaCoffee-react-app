@@ -4,6 +4,7 @@ const UlWrapper = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  ${({ theme }) => theme.boxShadow3};
 
   li {
     cursor: pointer;

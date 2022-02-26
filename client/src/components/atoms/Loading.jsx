@@ -1,15 +1,15 @@
-import React, { memo } from 'react';
-import { createPortal } from 'react-dom';
+import loadingImg from '@/assets/images/loading.gif';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import loding from '@/assets/images/loading.gif';
 
 const Loading = ({ loading }) => {
   return createPortal(
     <>
       {loading && (
         <StyledDiv>
-          <img src={loding} alt="loading" />
+          <img src={loadingImg} alt="loading" />
         </StyledDiv>
       )}
     </>,
@@ -29,13 +29,13 @@ const StyledDiv = styled.div`
   z-index: 10;
 
   img {
-    width: 20%;
+    width: 200px;
     -webkit-user-drag: none;
   }
 
   ${({ theme }) => theme.media.mobile} {
     img {
-      width: 50%;
+      width: 100px;
     }
   }
 `;

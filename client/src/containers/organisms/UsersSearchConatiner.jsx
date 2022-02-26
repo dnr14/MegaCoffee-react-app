@@ -1,7 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-
 import { userSearch, userUpdate } from '@/api/admin';
-
 import Loading from '@/components/atoms/Loading';
 import TableBody from '@/components/atoms/TableBody';
 import Title from '@/components/atoms/Title';
@@ -9,9 +6,9 @@ import RoleMenubar from '@/components/molecules/RoleMenubar';
 import Search from '@/components/molecules/Search';
 import StateMenuBar from '@/components/molecules/StateMenuBar';
 import UsersTable from '@/components/molecules/UsersTable';
-
 import useFetch from '@/hooks/useFetch';
 import useForm, { idAddAction } from '@/hooks/useForm';
+import { useCallback, useEffect, useState } from 'react';
 
 const STATE_ENUM = {
   normal: '정상',
@@ -46,6 +43,7 @@ const UsersSearchConatiner = () => {
         error: form.id.error,
         onChange: handleChange,
         onClick: handleClick,
+        isSignup: true,
       },
     },
   ];

@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
 import noComments from '@/assets/images/noComments.png';
+import styled from 'styled-components';
 
 const NoComments = () => {
   return (
@@ -20,7 +19,7 @@ const Layout = styled.div`
   gap: 10px;
 
   img {
-    width: 50%;
+    width: 200px;
   }
 `;
 

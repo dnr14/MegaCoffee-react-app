@@ -1,7 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
 import Cancel from '@/components/atoms/Cancel';
 import FormInput from '@/components/atoms/FormInput';
+import styled from 'styled-components';
 
 // 설계 이유
 // 1. 자신이 쓰고 싶은 input 컴포넌트가 있다면 children을 통해서 주입받으면된다.

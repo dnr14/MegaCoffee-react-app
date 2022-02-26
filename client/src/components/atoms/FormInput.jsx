@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import styled, { css } from 'styled-components';
 
 const FormInput = ({ ...rest }) => {
@@ -10,18 +10,21 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   margin-top: 0.7rem;
-  line-height: 1.5;
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
   font-size: 0.7rem;
-  padding: 0.4rem;
-  letter-spacing: 0.123rem;
+  padding: 0.7rem 0.5rem;
   border-radius: ${({ theme }) => theme.borderRadius};
-  transition: border 0.35s ease-in;
-  ${({ error, theme, value }) => {
+
+  ${({ error, theme, value, isSignup }) => {
     if (value === '' && error === null) {
+      if (isSignup) {
+        return css`
+          ${({ theme }) => theme.boxShadow3};
+          border: 2px solid transparent;
+        `;
+      }
+
       return css`
-        border: 2px solid rgba(45, 52, 54, 0.8);
+        border: 2px solid;
       `;
     }
     if (error) {

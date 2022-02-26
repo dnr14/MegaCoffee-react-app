@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-const Form = ({ children, ...rest }) => {
-  return <StyledForm {...rest}>{children}</StyledForm>;
-};
+const Form = ({ children, ...rest }) => <StyledForm {...rest}>{children}</StyledForm>;
 
 const StyledForm = styled.form`
   width: 100%;
@@ -14,7 +12,7 @@ const StyledForm = styled.form`
 
   ${({ theme }) => theme.media.mobile} {
     gap: 0.5rem;
-    padding: 1rem;
+    /* padding: 1rem; */
   }
 `;
 

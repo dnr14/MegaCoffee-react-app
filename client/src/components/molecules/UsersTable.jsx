@@ -1,4 +1,3 @@
-import React from 'react';
 import TableHead from '../atoms/TableHead';
 import TableLayout from '../atoms/TableLayout';
 

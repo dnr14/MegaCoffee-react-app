@@ -47,14 +47,10 @@ module.exports = (_, { mode }) => {
               ['@babel/preset-react', { runtime: 'automatic' }],
               ['@babel/preset-env', { modules: false }],
             ],
-            env: {
-              development: {
-                plugins: ['@babel/plugin-transform-runtime', require.resolve('react-refresh/babel')],
-              },
-              production: {
-                plugins: ['@babel/plugin-transform-runtime'],
-              },
-            },
+            plugins:
+              mode === PRODUCTION
+                ? ['@babel/plugin-transform-runtime']
+                : ['@babel/plugin-transform-runtime', 'react-refresh/babel'],
           },
         },
         {
@@ -141,7 +137,7 @@ module.exports = (_, { mode }) => {
 
     devServer: {
       port: PORT,
-      open: true,
+      // open: true,
       //hmr 있으니 안해도된다고 경고뜬다 해결
       hot: true,
       historyApiFallback: true,
@@ -153,6 +149,14 @@ module.exports = (_, { mode }) => {
       },
     },
   };
+
+  // new HtmlWebpackPlugin({
+  //   template: './public/index.ejs',
+  //   favicon: './public/favicon.png',
+  //   templateParameters: {
+  //     title: mode === PRODUCTION ? 'megacoffeClone' : '(개발용)',
+  //   },
+  // }),
 
   const htmlWebpackPluginConfig = {
     template: './public/index.ejs',
@@ -166,14 +170,14 @@ module.exports = (_, { mode }) => {
   if (mode === PRODUCTION && config.plugins) {
     htmlWebpackPluginConfig.filename = '../index.html';
     config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
-    config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
+    // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }));
     config.plugins.push(new HtmlWebpackPlugin(htmlWebpackPluginConfig));
   }
   if (mode !== PRODUCTION && config.plugins) {
     // webpack v4 이상 부턴 hmr이 기본으로 들어가있다.
     // config.plugins.push(new webpack.HotModuleReplacementPlugin());
     config.plugins.push(new ReactRefreshWebpackPlugin());
-    config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true }));
+    // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: false }));
     config.plugins.push(new HtmlWebpackPlugin(htmlWebpackPluginConfig));
   }
 

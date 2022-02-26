@@ -36,7 +36,8 @@ const Layout = styled.div`
     input {
       height: 1rem;
       flex: 1;
-      border: 2px solid black;
+      border: 2px solid transparent;
+      ${({ theme }) => theme.boxShadow3};
       padding: 10px 0 10px 10px;
       letter-spacing: 1px;
     }

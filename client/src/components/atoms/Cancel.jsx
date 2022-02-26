@@ -2,9 +2,7 @@ import cancelImg from '@/assets/images/cancel.svg';
 import { memo } from 'react';
 import styled from 'styled-components';
 
-const Cancel = ({ ...rest }) => {
-  return <Span {...rest} />;
-};
+const Cancel = ({ ...rest }) => <Span {...rest} />;
 
 const Span = styled.span`
   position: absolute;
@@ -23,10 +21,11 @@ const Span = styled.span`
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 50%;
+
   transition: background-color 0.35s ease-in;
   &:hover {
     background-color: ${({ theme }) => theme.color.red1};
-    opacity: 0.5;
+    opacity: 0.8;
     box-shadow: 2px 2px 0px ${({ theme }) => theme.color.shadowColor};
   }
 `;

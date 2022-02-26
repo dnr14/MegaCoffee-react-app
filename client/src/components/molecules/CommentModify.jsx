@@ -1,18 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-const CommentModify = (
-  { isOpen, closeDelay, openDelay, setIsOpen, children },
-  ref
-) => {
+const CommentModify = ({ isOpen, closeDelay, openDelay, setIsOpen, children }, ref) => {
   const close = useRef(false);
   const [visible, setVisible] = useState(false);
   const OPENDELAY = useMemo(() => openDelay, [openDelay]);
@@ -71,11 +60,11 @@ const CommentsContainer = styled.div`
       background-color: ${({ theme }) => theme.color.magacoffeColor1};
       color: ${({ theme }) => theme.color.white1};
       box-shadow: ${({ theme }) => theme.boxShadow1};
-      font-weight: bold;
       transition: color 0.25s ease-in-out;
       border-radius: 5px;
+      border: none;
       &:hover {
-        color: ${({ theme }) => theme.color.black1};
+        opacity: 0.8;
       }
     }
 

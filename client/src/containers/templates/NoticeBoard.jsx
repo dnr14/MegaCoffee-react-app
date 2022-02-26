@@ -16,7 +16,7 @@ const NoticeBoard = () => {
 
   return (
     <Layout>
-      <section>
+      <article>
         <Switch>
           <PrivateRouter path={`${url}/insert`} component={NoticeBoardInsertContainer} />
           <PrivateRouter path={`${url}/modify`} component={NoticeBoardModifyContainer} />
@@ -24,14 +24,14 @@ const NoticeBoard = () => {
           <Route path={`${url}`} component={NoticeBoardContainer} />
           <RootRedirect />
         </Switch>
-      </section>
+      </article>
     </Layout>
   );
 };
 
 const Layout = styled.main`
   max-width: 1300px;
-  width: 80%;
+  width: 90%;
   margin: 2rem auto;
   ${({ theme }) => theme.media.pc} {
     width: 90%;

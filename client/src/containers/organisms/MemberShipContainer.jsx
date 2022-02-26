@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import Button from '@/components/atoms/Button';
-import useForm from '@/hooks/useForm';
-import Modal from '@/components/atoms/Modal';
-import Loading from '@/components/atoms/Loading';
-import { emptyCheck } from '@/utils/validations';
 import * as users from '@/api/users';
-import useFetch from '@/hooks/useFetch';
+import Button from '@/components/atoms/Button';
 import Form from '@/components/atoms/Form';
+import Loading from '@/components/atoms/Loading';
+import Modal from '@/components/atoms/Modal';
 import MemberShipLabel from '@/components/molecules/MemberShipLabel';
 import Relative from '@/components/molecules/Relative';
+import useFetch from '@/hooks/useFetch';
+import useForm from '@/hooks/useForm';
+import { emptyCheck } from '@/utils/validations';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const MemberShipContainer = () => {
   const history = useHistory();
@@ -62,12 +62,10 @@ const MemberShipContainer = () => {
 
   const setMessages = useCallback(
     metas =>
-      metas.map(meta => (
-        <>
-          <div>
-            <span>{meta}</span>
-          </div>
-        </>
+      metas.map((meta, idx) => (
+        <div key={idx}>
+          <span>{meta}</span>
+        </div>
       )),
     []
   );
@@ -139,10 +137,9 @@ const MemberShipContainer = () => {
                 error={form[el.id].error}
                 value={form[el.id].data}
                 onChange={handleChange}
+                isSignup
               />
-              {form[el.id].data && (
-                <Relative.Cancel id={el.id} onClick={handleClick} />
-              )}
+              {form[el.id].data && <Relative.Cancel id={el.id} onClick={handleClick} />}
             </Relative>
           </div>
         ))}

@@ -1,9 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import Cards from '@/components/molecules/Cards';
-import { getAccessToken } from '@/utils/localstorege';
 import withLoading from '@/hoc/withLoading';
+import { getAccessToken } from '@/utils/localstorege';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const CardsBox = ({ cards }) => {
   const createButton = !!getAccessToken() && (
@@ -27,13 +26,15 @@ const CardsBox = ({ cards }) => {
 
 const CardsBoxContainer = styled.div`
   min-height: 700px;
-  div:first-child {
+  & > div:first-child {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+    align-items: center;
 
     h2 {
       font-size: 1.2rem;
+      margin: 10px;
     }
 
     span {

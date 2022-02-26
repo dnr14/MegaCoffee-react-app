@@ -1,7 +1,6 @@
-import React from 'react';
+import AdminLink from '../atoms/AdminLink';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import AdminLink from '../atoms/AdminLink';
 
 const AdminLinks = ({ match }) => {
   return (

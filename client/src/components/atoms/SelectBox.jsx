@@ -13,7 +13,7 @@ const SelectBox = styled.div`
   font-weight: 600;
   color: rgb(73, 80, 87);
   font-size: 0.875rem;
-  box-shadow: rgb(0 0 0 / 5%) 0px 0px 4px;
+  ${({ theme }) => theme.boxShadow3};
   cursor: pointer;
 
   & > svg {

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import styled from 'styled-components';
 
 const FormLabel = ({ children, ...rest }) => {
@@ -8,6 +8,7 @@ const FormLabel = ({ children, ...rest }) => {
 const Label = styled.label`
   font-weight: bold;
   font-size: 0.8rem;
+  color: ${({ theme }) => theme.color.coffee1};
   cursor: pointer;
 `;
 

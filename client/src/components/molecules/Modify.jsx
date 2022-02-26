@@ -1,15 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
 import Button from '../atoms/Button';
 import Form from '../atoms/Form';
 import CoustomEditor from './CustomEditor';
+import React from 'react';
+import styled from 'styled-components';
 
-const Modify = ({
-  post,
-  editorValue,
-  handleOnSubmit,
-  handleEditorOnChange,
-}) => {
+const Modify = ({ post, editorValue, handleOnSubmit, handleEditorOnChange }) => {
   const { title, categoryThumbnail } = post;
 
   return (

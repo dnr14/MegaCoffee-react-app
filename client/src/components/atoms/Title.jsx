@@ -1,10 +1,8 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import styled from 'styled-components';
 
-const Title = ({ children }) => {
-  return <H2>{children}</H2>;
-};
-const H2 = styled.h2`
+const Title = ({ children }) => <TitleWrapper>{children}</TitleWrapper>;
+const TitleWrapper = styled.h2`
   line-height: 2.5rem;
   font-size: 1.75rem;
   letter-spacing: 0.2rem;
