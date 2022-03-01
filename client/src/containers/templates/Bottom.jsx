@@ -1,6 +1,5 @@
-import styled from 'styled-components';
-
 import logo from '@/assets/images/topLogo.png';
+import styled from 'styled-components';
 
 const Bottom = () => {
   return (
@@ -36,10 +35,13 @@ const Footer = styled.footer`
 
   & > div > div {
     width: 30%;
-    max-width: 400px;
+    max-width: 300px;
     ${({ theme }) => theme.media.mobile} {
       width: 60%;
     }
+  }
+  span {
+    font-size: 12px;
   }
 
   img {

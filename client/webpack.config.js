@@ -123,7 +123,7 @@ module.exports = (_, { mode }) => {
       new MomentLocalesPlugin({ localesToKeep: ['ko'] }),
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(mode),
-        PATH: JSON.stringify(mode === 'production' ? 'http://15.165.133.236:9500' : 'http://localhost:5000'),
+        PATH: JSON.stringify(mode === 'production' ? 'http://15.165.133.236' : 'http://localhost:5000'),
       }),
     ],
 
