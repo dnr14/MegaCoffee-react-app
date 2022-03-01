@@ -123,7 +123,7 @@ module.exports = (_, { mode }) => {
       new MomentLocalesPlugin({ localesToKeep: ['ko'] }),
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(mode),
-        PATH: JSON.stringify(mode === 'production' ? 'not setting' : 'http://localhost:5000'),
+        PATH: JSON.stringify(mode === 'production' ? 'http://15.165.133.236:9500' : 'http://localhost:5000'),
       }),
     ],
 
@@ -149,14 +149,6 @@ module.exports = (_, { mode }) => {
       },
     },
   };
-
-  // new HtmlWebpackPlugin({
-  //   template: './public/index.ejs',
-  //   favicon: './public/favicon.png',
-  //   templateParameters: {
-  //     title: mode === PRODUCTION ? 'megacoffeClone' : '(개발용)',
-  //   },
-  // }),
 
   const htmlWebpackPluginConfig = {
     template: './public/index.ejs',

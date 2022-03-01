@@ -1,7 +1,9 @@
-import axios from 'axios';
 import { getAccessToken } from '@/utils/localstorege';
+import axios from 'axios';
 
+const baseURL = PATH;
 const instance = axios.create({
+  baseURL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
